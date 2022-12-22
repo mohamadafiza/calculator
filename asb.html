@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Kalkulator Pengiraan Dividen ASB 2022</h1>
+<h2>ASB 2022 Dividend Calculation Calculator</h2>
+
+<p>Jumlah purata minima pelaburan setahun (RM):</p>
+
+<input id="pelaburan" type="text">
+
+<button type="button" onclick="kiraASB()">Kira / Calculate</button>
+<p>Dividen ASB 2022:</p>
+<p id="calculatorasb"></p>
+
+<script>
+function kiraASB() {
+  var x, y, text;
+	y = 'RM'
+  x = document.getElementById("pelaburan").value;  
+  if (isNaN(x) || x < 1 || x > 30000) {
+ 	let totalPrice2 = ((x-30000)*0.046)+1530;
+	let fixedPrice2 = totalPrice2.toFixed(2);
+	text = y + fixedPrice2 ;
+  } else {
+  	let totalPrice = x*0.051;
+	let fixedPrice = totalPrice.toFixed(2);
+	text = y + fixedPrice ;
+
+  }
+  document.getElementById("calculatorasb").innerHTML = text;
+}
+</script>
+
+<br>
+<hr>
+<p><sub>Coded by Pja</sub></p>
+</body>
+</html> 
