@@ -20,17 +20,17 @@
 
 <script>
 function kiraASB() {
-  var x, y, text;
-	y = 'RM'
+  var x, text;
+	
   x = document.getElementById("pelaburan").value;  
   if (isNaN(x) || x < 1 || x > 30000) {
  	let totalPrice2 = ((x-30000)*0.046)+1530;
 	let fixedPrice2 = totalPrice2.toFixed(2);
-	text = y + fixedPrice2 ;
+	text = "RM" + fixedPrice2 ;
   } else {
   	let totalPrice = x*0.051;
 	let fixedPrice = totalPrice.toFixed(2);
-	text = y + fixedPrice ;
+	text = "RM" + fixedPrice ;
 
   }
   document.getElementById("calculatorasb").innerHTML = text;
