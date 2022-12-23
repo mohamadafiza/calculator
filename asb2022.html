@@ -11,29 +11,50 @@
 <h2>ASB 2022 Dividend Calculator</h2>
 
 <p>Jumlah purata baki minima pelaburan setahun (RM):</p>
-
+<p><sup>(Campur baki akhir terendah setiap bulan & bahagi 12)<sup></p>
 <input id="pelaburan" type="text">
 
 <button type="button" onclick="kiraASB()">Kira / Calculate</button>
-<p>Dividen ASB 2022:</p>
 <p id="calculatorasb"></p>
+<br>
+<p id="zakatkira"></p>
+<p id="zakatasbfi"></p>
+<p><sup>*Zakat dikeluarkan jika cukup nisab simpanan RM lain + ASB = lebih kurang 21k+-.</sup></p>
 
 <script>
 function kiraASB() {
-  var x, text;
-	
+  var x, dividen, zakatown, zakatasbf;
   x = document.getElementById("pelaburan").value;  
   if (isNaN(x) || x < 1 || x > 30000) {
- 	let totalPrice2 = ((x-30000)*0.046)+1530;
-	let fixedPrice2 = totalPrice2.toFixed(2);
-	text = "RM" + fixedPrice2 ;
+ 	let totalDiv = ((x-30000)*0.046)+1530;
+	let fixedDiv = totalDiv.toFixed(2);
+    dividen = "Dividen ASB 2022: RM" + fixedDiv;
+    
+    let zakat = ((((x-30000)*0.046)+1530)+parseInt(x))*0.025;
+    let zakatprice = zakat.toFixed(2);   
+    zakatown = "Zakat Modal Sendiri: RM" + zakatprice;
+    
+    let zakat2 = fixedDiv*0.025;
+    let zakatprice2 = zakat2.toFixed(2);   
+    zakatasbf = "Zakat ASBF (compounding): RM" + zakatprice2;
+	
   } else {
-  	let totalPrice = x*0.051;
-	let fixedPrice = totalPrice.toFixed(2);
-	text = "RM" + fixedPrice ;
+  	let totalDiv = x*0.051;
+	let fixedDiv = totalDiv.toFixed(2);
+	dividen = "Dividen ASB 2022: RM" + fixedDiv ;
+    
+    let zakat = ((x*0.051)+parseInt(x))*0.025;
+    let zakatprice = zakat.toFixed(2);   
+    zakatown = "Zakat Modal Sendiri: RM" + zakatprice;
+    
+    let zakat2 = fixedDiv*0.025;
+    let zakatprice2 = zakat2.toFixed(2);   
+    zakatasbf = "Zakat ASBF (compounding): RM" + zakatprice2;
 
   }
-  document.getElementById("calculatorasb").innerHTML = text;
+  document.getElementById("calculatorasb").innerHTML = dividen;
+  document.getElementById("zakatkira").innerHTML = zakatown;
+  document.getElementById("zakatasbfi").innerHTML = zakatasbf;
 }
 </script>
 
