@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Kalkulator Pengiraan Manfaat PAKKP</title>
+	<link rel="icon" type="image/x-icon" href="favicon.ico">
+	</head>
+<body>
+
+<h1>Kalkulator Pengiraan Manfaat PAKKP</h1>
+<h2>& Zakat</h2>
+
+<p><sup>Masukkan nilai gandaan RM250<sup></p>
+<input id="manfaat" type="text">
+
+<button type="button" onclick="kirapakkp()">Kira / Calculate</button>
+<p id="calculatorpakkp"></p>
+<p id="calculatorpakkpyearly"></p>
+<p id="zakatkira"></p>
+
+<script>
+function kirapakkp() {
+  var x, y, z, error, zakatown;
+  x = document.getElementById("manfaat").value;  
+  if (isNaN(x) || x < 250 || x > 250000) {
+ 	error = "<b><i>Error - Masukkan nilai RM250 ~ RM250000 sahaja.</i></b>";
+    y = error.fontcolor("red")
+    z = "";
+    zakatown = "";
+   
+  } else {
+ 	let total = x*0.052;
+	let fixed = total.toFixed(2);
+    let totalyear = fixed*12;
+	let fixedyear = totalyear.toFixed(2);
+    y = "Manfaat bulanan: RM" + fixed;
+    z = "Manfaat terkumpul setahun: RM" + fixedyear;
+    
+    let zakat = parseInt(fixed)*0.025*12;
+    let zakatprice = zakat.toFixed(2);   
+    zakatown = "Zakat tahunan: RM" + zakatprice + "<br> <br>" +
+    "<sup><i>*Zakat dikeluarkan jika cukup nisab lebih kurang RM20k+-(**mengikut negeri) = jumlah simpanan RM lain + manfaat PAKKP</i></sup>"
+    ;
+  }
+  document.getElementById("calculatorpakkp").innerHTML = y;
+  document.getElementById("calculatorpakkpyearly").innerHTML = z;
+  document.getElementById("zakatkira").innerHTML = zakatown;
+}
+</script>
+
+	<img src="pakkp.jpg" width="50%" height="50%">
+<p><sub>By Pja</sub></p>
+<img src="https://counter5.optistats.ovh/private/freecounterstat.php?c=w9kcshbekn17c6s8kagruez2glsg6jhf" border="0" >
+</html> 
