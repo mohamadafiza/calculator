@@ -32,11 +32,11 @@ function kiraASB() {
     
     let zakat = ((((x-30000)*0.046)+1530)+parseInt(x))*0.025;
     let zakatprice = zakat.toFixed(2);   
-    zakatown = "Zakat Modal Sendiri: RM" + zakatprice;
+    zakatown = "Zakat ASB Modal Sendiri: RM" + zakatprice;
     
     let zakat2 = fixedDiv*0.025;
     let zakatprice2 = zakat2.toFixed(2);   
-    zakatasbf = "Zakat ASBF (compounding): RM" + zakatprice2;
+    zakatasbf = "Zakat ASBFinancing (compounding): RM" + zakatprice2;
 	
   } else {
   	let totalDiv = x*0.051;
@@ -45,11 +45,11 @@ function kiraASB() {
     
     let zakat = ((x*0.051)+parseInt(x))*0.025;
     let zakatprice = zakat.toFixed(2);   
-    zakatown = "Zakat Modal Sendiri: RM" + zakatprice;
+    zakatown = "Zakat ASB Modal Sendiri: RM" + zakatprice;
     
     let zakat2 = fixedDiv*0.025;
     let zakatprice2 = zakat2.toFixed(2);   
-    zakatasbf = "Zakat ASBF (compounding): RM" + zakatprice2;
+    zakatasbf = "Zakat ASBFinancing (compounding): RM" + zakatprice2;
 
   }
   document.getElementById("calculatorasb").innerHTML = dividen;
