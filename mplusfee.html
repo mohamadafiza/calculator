@@ -2,6 +2,18 @@
 <html> 
 <head> 
 	<title>Stock Calculator</title> 
+	<style>
+		label {
+			display:inline-block;
+			width:150px;
+			text-align:right;
+			margin-right:10px;
+		}
+		input[type="number","text"] {
+			width:150px;
+			margin-bottom:10px;
+		}
+	</style>
 </head> 
 <body> 
 	<form> 
@@ -21,20 +33,28 @@
 		<input type="number" id="sellPrice" step="0.01" min="0"> 
 		<br> 
 		<label>Total Sell Price:</label> 
-		<input type="number" id="totalSellPrice" step="0.01" min="0" readonly> 
-		<br> 
-		<label>Total Sell Fee:</label> 
-		<input type="number" id="totalSellFee" step="0.01" min="0" readonly> 
-	</form> 
-	<script> 
-		// Get input fields
-		const buyPrice = document.getElementById("buyPrice");
-		const lot = document.getElementById("lot");
-		const totalBuyPrice = document.getElementById("totalBuyPrice");
-		const totalBuyFee = document.getElementById("totalBuyFee");
-		const sellPrice = document.getElementById("sellPrice");
-		const totalSellPrice = document.getElementById("totalSellPrice");
-		const totalSellFee = document.getElementById("totalSellFee");
+		<input type="number" id="totalSellPrice" step="0.01" min="0" readonly>
+<br>
+<label>Total Sell Fee:</label>
+<input type="number" id="totalSellFee" step="0.01" min="0" readonly>
+<br>
+<label>Profit:</label>
+<input type="number" id="profit" step="0.01" min="0" readonly>
+<br>
+<label>Profit Percentage:</label>
+<input type="text" id="profitPercentage" readonly>
+</form>
+<script>
+// Get input fields
+const buyPrice = document.getElementById("buyPrice");
+const lot = document.getElementById("lot");
+const totalBuyPrice = document.getElementById("totalBuyPrice");
+const totalBuyFee = document.getElementById("totalBuyFee");
+const sellPrice = document.getElementById("sellPrice");
+const totalSellPrice = document.getElementById("totalSellPrice");
+const totalSellFee = document.getElementById("totalSellFee");
+const profit = document.getElementById("profit");
+const profitPercentage = document.getElementById("profitPercentage");
 	// Event listeners for input fields
 	buyPrice.addEventListener("input", calculateTotalBuyPrice);
 	lot.addEventListener("input", calculateTotalBuyPrice);
@@ -42,26 +62,28 @@
 
 	// Function to calculate total buy price and fee
 	function calculateTotalBuyPrice() {
-		const buyPriceValue = buyPrice.value
-const lotValue = lot.value;
-const totalBuyPriceValue = buyPriceValue * lotValue;
-totalBuyPrice.value = totalBuyPriceValue;
-calculateTotalBuyFee(totalBuyPriceValue);
-}
+		const buyPriceValue = buyPrice.value;
+		const lotValue = lot.value;
+		const totalBuyPriceValue = buyPriceValue * lotValue;
+		totalBuyPrice.value = totalBuyPriceValue;
+		calculateTotalBuyFee(totalBuyPriceValue);
+		calculateProfit();
+	}
+
 	// Function to calculate total buy fee
 	function calculateTotalBuyFee(totalBuyPriceValue) {
-		let brokerageFee = (totalBuyPriceValue * 0.05 / 100).toFixed(3);
-		let clearingFee = (totalBuyPriceValue * 0.03 / 100).toFixed(3);
-		let dutyStamp = (Math.ceil(totalBuyPriceValue/1000) * 1.50).toFixed(3);
+		let brokerageFee = (totalBuyPriceValue * 0.05 / 100).toFixed(2);
+		let clearingFee = (totalBuyPriceValue * 0.03 / 100).toFixed(2);
+		let dutyStamp = (Math.ceil(totalBuyPriceValue/1000) * 1.50).toFixed(2);
 
 		if (brokerageFee < 8) {
 			brokerageFee = 8;
 		}
 
-		const totalBuyFeeValue = (parseFloat(brokerageFee) + parseFloat(clearingFee) + parseFloat(dutyStamp)).toFixed(3);
+		const totalBuyFeeValue = (parseFloat(brokerageFee) + parseFloat(clearingFee) + parseFloat(dutyStamp));
 		totalBuyFee.value = totalBuyFeeValue;
-	}
-
+		calculateProfit();
+}
 	// Function to calculate total sell price and fee
 	function calculateTotalSellPrice() {
 		const sellPriceValue = sellPrice.value;
@@ -69,20 +91,36 @@ calculateTotalBuyFee(totalBuyPriceValue);
 		const totalSellPriceValue = sellPriceValue * lotValue;
 		totalSellPrice.value = totalSellPriceValue;
 		calculateTotalSellFee(totalSellPriceValue);
+		calculateProfit();
 	}
 
 	// Function to calculate total sell fee
 	function calculateTotalSellFee(totalSellPriceValue) {
-		let brokerageFee = (totalSellPriceValue * 0.05 / 100).toFixed(3);
-		let clearingFee = (totalSellPriceValue * 0.03 / 100).toFixed(3);
-		let dutyStamp = (Math.ceil(totalSellPriceValue/1000) * 1.50).toFixed(3);
+		let brokerageFee = (totalSellPriceValue * 0.05 / 100).toFixed(2);
+		let clearingFee = (totalSellPriceValue * 0.03 / 100).toFixed(2);
+		let dutyStamp = (Math.ceil(totalSellPriceValue/1000) * 1.50).toFixed(2);
 
 		if (brokerageFee < 8) {
 			brokerageFee = 8;
-}
-		const totalSellFeeValue = (parseFloat(brokerageFee) + parseFloat(clearingFee) + parseFloat(dutyStamp)).toFixed(3);
+		}
+
+		const totalSellFeeValue = (parseFloat(brokerageFee) + parseFloat(clearingFee) + parseFloat(dutyStamp));
 		totalSellFee.value = totalSellFeeValue;
+		calculateProfit();
 	}
-</script> 
+	//Function to calculate profit and profit percentage
+	function calculateProfit(){
+		const totalBuyPriceValue = parseFloat(totalBuyPrice.value);
+		const totalSellPriceValue = parseFloat(totalSellPrice.value);
+		const totalBuyFeeValue = parseFloat(totalBuyFee.value);
+		const totalSellFeeValue = parseFloat(totalSellFee.value
+);
+const profitValue = (totalSellPriceValue - totalBuyPriceValue - totalBuyFeeValue - totalSellFeeValue);
+const profitPercentageValue = (profitValue/totalBuyPriceValue)*100;
+profit.value = profitValue.toFixed(2);
+profitPercentage.value = (profitPercentageValue.toFixed(2))+'%';
+}
+</script>
+
 </body> 
 </html>
