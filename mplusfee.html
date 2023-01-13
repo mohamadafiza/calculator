@@ -1,0 +1,88 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+	<title>Stock Calculator</title> 
+</head> 
+<body> 
+	<form> 
+		<label>Buy Price:</label> 
+		<input type="number" id="buyPrice" step="0.01" min="0"> 
+		<br> 
+		<label>Lot:</label> 
+		<input type="number" id="lot" step="1" min="0"> 
+		<br> 
+		<label>Total Buy Price:</label> 
+		<input type="number" id="totalBuyPrice" step="0.01" min="0" readonly> 
+		<br> 
+		<label>Total Buy Fee:</label> 
+		<input type="number" id="totalBuyFee" step="0.01" min="0" readonly> 
+		<br> 
+		<label>Sell Price:</label> 
+		<input type="number" id="sellPrice" step="0.01" min="0"> 
+		<br> 
+		<label>Total Sell Price:</label> 
+		<input type="number" id="totalSellPrice" step="0.01" min="0" readonly> 
+		<br> 
+		<label>Total Sell Fee:</label> 
+		<input type="number" id="totalSellFee" step="0.01" min="0" readonly> 
+	</form> 
+	<script> 
+		// Get input fields
+		const buyPrice = document.getElementById("buyPrice");
+		const lot = document.getElementById("lot");
+		const totalBuyPrice = document.getElementById("totalBuyPrice");
+		const totalBuyFee = document.getElementById("totalBuyFee");
+		const sellPrice = document.getElementById("sellPrice");
+		const totalSellPrice = document.getElementById("totalSellPrice");
+		const totalSellFee = document.getElementById("totalSellFee");
+	// Event listeners for input fields
+	buyPrice.addEventListener("input", calculateTotalBuyPrice);
+	lot.addEventListener("input", calculateTotalBuyPrice);
+	sellPrice.addEventListener("input", calculateTotalSellPrice);
+
+	// Function to calculate total buy price and fee
+	function calculateTotalBuyPrice() {
+		const buyPriceValue = buyPrice.value
+const lotValue = lot.value;
+const totalBuyPriceValue = buyPriceValue * lotValue;
+totalBuyPrice.value = totalBuyPriceValue;
+calculateTotalBuyFee(totalBuyPriceValue);
+}
+	// Function to calculate total buy fee
+	function calculateTotalBuyFee(totalBuyPriceValue) {
+		let brokerageFee = (totalBuyPriceValue * 0.05 / 100).toFixed(3);
+		let clearingFee = (totalBuyPriceValue * 0.03 / 100).toFixed(3);
+		let dutyStamp = (Math.ceil(totalBuyPriceValue/1000) * 1.50).toFixed(3);
+
+		if (brokerageFee < 8) {
+			brokerageFee = 8;
+		}
+
+		const totalBuyFeeValue = (parseFloat(brokerageFee) + parseFloat(clearingFee) + parseFloat(dutyStamp)).toFixed(3);
+		totalBuyFee.value = totalBuyFeeValue;
+	}
+
+	// Function to calculate total sell price and fee
+	function calculateTotalSellPrice() {
+		const sellPriceValue = sellPrice.value;
+		const lotValue = lot.value;
+		const totalSellPriceValue = sellPriceValue * lotValue;
+		totalSellPrice.value = totalSellPriceValue;
+		calculateTotalSellFee(totalSellPriceValue);
+	}
+
+	// Function to calculate total sell fee
+	function calculateTotalSellFee(totalSellPriceValue) {
+		let brokerageFee = (totalSellPriceValue * 0.05 / 100).toFixed(3);
+		let clearingFee = (totalSellPriceValue * 0.03 / 100).toFixed(3);
+		let dutyStamp = (Math.ceil(totalSellPriceValue/1000) * 1.50).toFixed(3);
+
+		if (brokerageFee < 8) {
+			brokerageFee = 8;
+}
+		const totalSellFeeValue = (parseFloat(brokerageFee) + parseFloat(clearingFee) + parseFloat(dutyStamp)).toFixed(3);
+		totalSellFee.value = totalSellFeeValue;
+	}
+</script> 
+</body> 
+</html>
