@@ -15,26 +15,30 @@
 			width:150px;
 			margin-bottom:10px;
 		}
+        
+		.my-button {
+    	margin: 18px;
+		}
 	</style>
 </head> 
 <body> 
 <center>
 <h1>Mplus Fees Calculator / Kalkulator Caj M+ 2023</h1>
 	<form> 
-		<label><b>Buy Price:</b></label> 
-		<input type="number" id="buyPrice" step="0.01" min="0"> 
+    	<label><b>Unit:</b></label> 
+		<input type="number" id="lot" step="1" min="0" title="Enter the lotx100 here. Example 30 lot, then x100 & input: 3000"> 
 		<br> 
-		<label><b>Unit:</b></label> 
-		<input type="number" id="lot" step="1" min="0"> 
+		<label><b>Buy Price:</b></label> 
+	    <input type="number" id="buyPrice" step="0.001" min="0" title="Enter the buy price here. Example 30sen, then input: 0.30">
+		<br> 
+		<label><b>Sell Price:</b></label> 
+		<input type="number" id="sellPrice" step="0.001" min="0" title="Enter the sell price here. Example RM1.20, then input: 1.20"> 
 		<br> 
 		<label>Total Buy Price:</label> 
 		<input type="number" id="totalBuyPrice" step="0.01" min="0" readonly> 
 		<br> 
 		<label>Total Buy Fee:</label> 
 		<input type="number" id="totalBuyFee" step="0.01" min="0" readonly> 
-		<br> 
-		<label><b>Sell Price:</b></label> 
-		<input type="number" id="sellPrice" step="0.01" min="0"> 
 		<br> 
 		<label>Total Sell Price:</label> 
 		<input type="number" id="totalSellPrice" step="0.01" min="0" readonly>
@@ -48,17 +52,20 @@
 <label>Profit Percentage:</label>
 <input type="text" id="profitPercentage" readonly>
 <br>
-		<label>Net Withdraw:</label> 
-		<input type="number" id="withdraw" step="0.01" min="0" readonly> 
+		<label>*Estimate Withdraw:</label> 
+		<input type="number" id="withdraw" step="0.01" min="0" title="*Withdraw total value estimation only." readonly> 
 		<br>
 <label>Zakat:</label>
-<input type="number" id="zakat" step="0.01" min="0" readonly>
+<input type="number" id="zakat" step="0.01" min="0" title="2.5% from profit" readonly>
 <br>
 <label>Profit After Zakat:</label>
 <input type="number" id="netProfit" step="0.01" min="0" readonly>
 <br>
-<button onclick="resetForm()">Reset</button>
-<button onclick="copyAllToClipboard()">Copy All Data</button>
+<button class="my-button" onclick="resetForm()">Reset</button>
+<button class="my-button" onclick="copyAllToClipboard()">Copy All Data</button>
+
+
+
 </form>
 </center>
 <script>
@@ -81,16 +88,16 @@ function resetForm() {
 //copy all to clipboard
 function copyAllToClipboard() {
     let outputValues = 
+    "Unit: " + lot.value + "\n" +
     "Buy Unit: RM" + buyPrice.value + "\n" +
     "Sell Unit: RM" + sellPrice.value + "\n" +
     "Buy Price: RM" + totalBuyPrice.value + "\n" +
-    "Unit: " + lot.value + "\n" +
     "Buy Fee: RM" + totalBuyFee.value + "\n" +
     "Sell Price: RM" + totalSellPrice.value + "\n" +
     "Sell Fee: RM" + totalSellFee.value + "\n" +
     "Profit: RM" + profit.value + "\n" +
     "Profit Percentage: " + profitPercentage.value + "\n" +
-    "Available Withdraw: RM" + withdraw.value + "\n" +
+    "Estimate Withdraw: RM" + withdraw.value + "\n" +
     "Zakat: RM" + zakat.value + "\n" +
     "Profit After Zakat: RM" + netProfit.value;
     navigator.clipboard.writeText(outputValues);
