@@ -1,0 +1,194 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Kalkulator IPO : Untung / Rugi & Caj (Mplus M+)</title> 
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+	<style>
+		label {
+			display:inline-block;
+			width:150px;
+			text-align:right;
+			margin-right:10px;
+		}
+		input[type="number", "text"] {
+			width:150px;
+			margin-bottom:10px;
+		}
+        
+		.my-button {
+    	margin: 18px;
+		}
+	</style>
+</head> 
+<body> 
+<center>
+<h1>IPO Calculator : Profit / Loss & Charge (Mplus M+)</h1>
+	<form> 
+    	<label><b>Unit:</b></label> 
+		<input type="number" id="lot" step="1" min="0" title="Enter the lotx100 here. Example 30 lot, then x100 & input: 3000"> 
+		<br> 
+		<label><b>Buy Price:</b></label> 
+	    <input type="number" id="buyPrice" step="0.001" min="0" title="Enter the buy price here. Example 30sen, then input: 0.30">
+		<br> 
+		<label><b>Sell Price:</b></label> 
+		<input type="number" id="sellPrice" step="0.001" min="0" title="Enter the sell price here. Example RM1.20, then input: 1.20"> 
+		<br> 
+		<label>Total Buy Price:</label> 
+		<input type="number" id="totalBuyPrice" step="0.01" min="0" readonly> 
+		<br> 
+		<label>Total Sell Price:</label> 
+		<input type="number" id="totalSellPrice" step="0.01" min="0" readonly>
+<br>
+<label>Total Sell Fee:</label>
+<input type="number" id="totalSellFee" step="0.01" min="0" readonly>
+<br>
+<label>Profit:</label>
+<input type="number" id="profit" step="0.01" min="0" readonly>
+<br>
+<label>Profit Percentage:</label>
+<input type="text" id="profitPercentage" readonly>
+<br>
+		<label>Net Withdraw +-:</label> 
+		<input type="number" id="withdraw" step="0.01" min="0" title="Withdraw total value." readonly> 
+		<br>
+<label>Zakat:</label>
+<input type="number" id="zakat" step="0.01" min="0" title="2.5% from profit" readonly>
+<br>
+<label>Profit After Zakat:</label>
+<input type="number" id="netProfit" step="0.01" min="0" readonly>
+<br>
+<button class="my-button" onclick="resetForm()">Reset</button>
+<button class="my-button" onclick="copyAllToClipboard()">Copy All Data</button>
+
+
+
+</form>
+</center>
+<script>
+// Reset button
+function resetForm() {
+    buyPrice.value = "";
+    lot.value = "";
+    totalBuyPrice.value = "";
+    sellPrice.value = "";
+    totalSellPrice.value = "";
+    totalSellFee.value = "";
+    profit.value = "";
+    zakat.value = "";
+    netProfit.value = "";
+    profitPercentage.value = "";
+    withdraw.value = "";
+}
+
+//copy all to clipboard
+function copyAllToClipboard() {
+    let outputValues = 
+    "Unit: " + lot.value + "\n" +
+    "Buy Unit: RM" + buyPrice.value + "\n" +
+    "Sell Unit: RM" + sellPrice.value + "\n" +
+    "Buy Price: RM" + totalBuyPrice.value + "\n" +
+    "Sell Price: RM" + totalSellPrice.value + "\n" +
+    "Sell Fee: RM" + totalSellFee.value + "\n" +
+    "Profit: RM" + profit.value + "\n" +
+    "Profit Percentage: " + profitPercentage.value + "\n" +
+    "Net Withdraw +-: RM" + withdraw.value + "\n" +
+    "Zakat: RM" + zakat.value + "\n" +
+    "Profit After Zakat: RM" + netProfit.value;
+    navigator.clipboard.writeText(outputValues);
+    alert("All data copied to clipboard, just paste anywhere.");
+}
+
+
+// Get input fields
+const buyPrice = document.getElementById("buyPrice");
+const lot = document.getElementById("lot");
+const totalBuyPrice = document.getElementById("totalBuyPrice");
+const sellPrice = document.getElementById("sellPrice");
+const totalSellPrice = document.getElementById("totalSellPrice");
+const totalSellFee = document.getElementById("totalSellFee");
+const profit = document.getElementById("profit");
+const zakat = document.getElementById("zakat");
+const netProfit = document.getElementById("netProfit");
+const profitPercentage = document.getElementById("profitPercentage");
+const withdraw = document.getElementById("withdraw");
+
+// Event listeners for input fields
+buyPrice.addEventListener("input", calculateTotalBuyPrice);
+buyPrice.addEventListener("input", calculateTotalSellPrice);
+
+lot.addEventListener("input", calculateTotalBuyPrice);
+lot.addEventListener("input", calculateTotalSellPrice);
+
+totalSellFee.addEventListener("input", calculateProfit);
+
+sellPrice.addEventListener("input", calculateTotalSellPrice);
+
+
+totalSellPrice.addEventListener("input", calculateTotalSellFee);
+
+profit.addEventListener("input", calculateProfitPercentage);
+profit.addEventListener("input", calculateZakat);
+profit.addEventListener("input", calculateNetProfit);
+profit.addEventListener("input", calculateWithdraw);
+
+// Function to calculate total buy price and fee
+function calculateTotalBuyPrice() {
+const buyPriceValue = buyPrice.value;
+const lotValue = lot.value;
+const totalBuyPriceValue = buyPriceValue * lotValue;
+totalBuyPrice.value = totalBuyPriceValue.toFixed(2);
+}
+
+// Function to calculate total sell price
+function calculateTotalSellPrice() {
+const sellPriceValue = sellPrice.value;
+const lotValue = lot.value;
+const totalSellPriceValue = sellPriceValue * lotValue;
+totalSellPrice.value = totalSellPriceValue.toFixed(2);
+calculateTotalSellFee(totalSellPriceValue);
+}
+
+// Function to calculate total sell fee
+function calculateTotalSellFee(totalSellPrice) {
+let brokerageFee = totalSellPrice * 0.0005;
+if(brokerageFee < 8) {
+brokerageFee = 8;
+}
+let clearingFee = totalSellPrice * 0.0003;
+let dutyStamp = 1.5;
+if (totalSellPrice > 1000) {
+dutyStamp = Math.ceil(totalSellPrice/1000) * 1.5;
+}
+const totalSellFeeValue = brokerageFee + clearingFee + dutyStamp;
+totalSellFee.value = totalSellFeeValue.toFixed(2);
+calculateProfit();
+}
+
+//Function to calculate profit and profit percentage
+function calculateProfit() {
+const totalBuyPriceValue = totalBuyPrice.value;
+const totalSellPriceValue = totalSellPrice.value;
+const totalSellFeeValue = totalSellFee.value;
+const profitValue = totalSellPriceValue - totalBuyPriceValue - totalSellFeeValue;
+profit.value = profitValue.toFixed(2);
+const profitPercentageValue = (profitValue / totalBuyPriceValue) * 100;
+profitPercentage.value = profitPercentageValue.toFixed(2) + '%';
+withdraw.value = (totalSellPriceValue - totalSellFeeValue).toFixed(2);
+calculateZakat(profitValue);
+}
+
+//Function to calculate zakat
+function calculateZakat(profit) {
+const zakatValue = profit * 0.025;
+zakat.value = zakatValue.toFixed(2);
+const netProfitValue = profit - zakatValue;
+netProfit.value = netProfitValue.toFixed(2);
+}
+
+</script>
+<br>
+	<br>
+	<p><sub>By Pja</sub></p>
+</body> 
+</html>
