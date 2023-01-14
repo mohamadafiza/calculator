@@ -111,19 +111,35 @@ const zakat = document.getElementById("zakat");
 const netProfit = document.getElementById("netProfit");
 const profitPercentage = document.getElementById("profitPercentage");
 const withdraw = document.getElementById("withdraw");
+
 // Event listeners for input fields
 buyPrice.addEventListener("input", calculateTotalBuyPrice);
+buyPrice.addEventListener("input", calculateTotalSellPrice);
+
 lot.addEventListener("input", calculateTotalBuyPrice);
+lot.addEventListener("input", calculateTotalSellPrice);
+
 totalBuyFee.addEventListener("input", calculateProfit);
+
 totalSellFee.addEventListener("input", calculateProfit);
+
 sellPrice.addEventListener("input", calculateTotalSellPrice);
+
+totalBuyPrice.addEventListener("input", calculateTotalBuyFee);
+
+totalSellPrice.addEventListener("input", calculateTotalSellFee);
+
+profit.addEventListener("input", calculateProfitPercentage);
+profit.addEventListener("input", calculateZakat);
+profit.addEventListener("input", calculateNetProfit);
+profit.addEventListener("input", calculateWithdraw);
 
 // Function to calculate total buy price and fee
 function calculateTotalBuyPrice() {
 const buyPriceValue = buyPrice.value;
 const lotValue = lot.value;
 const totalBuyPriceValue = buyPriceValue * lotValue;
-totalBuyPrice.value = totalBuyPriceValue;
+totalBuyPrice.value = totalBuyPriceValue.toFixed(2);
 calculateTotalBuyFee(totalBuyPriceValue);
 }
 
@@ -148,7 +164,7 @@ function calculateTotalSellPrice() {
 const sellPriceValue = sellPrice.value;
 const lotValue = lot.value;
 const totalSellPriceValue = sellPriceValue * lotValue;
-totalSellPrice.value = totalSellPriceValue;
+totalSellPrice.value = totalSellPriceValue.toFixed(2);
 calculateTotalSellFee(totalSellPriceValue);
 }
 
