@@ -7,10 +7,10 @@
     function calculate() {
       var productCost = parseFloat(document.getElementById("productCost").value);
       var totalSale = parseFloat(document.getElementById("totalSale").value);
+      
+      var eastMalaysiaFee = document.getElementById("eastMalaysia").checked ? 10 : 4.9;
+      var transactionFee = (totalSale + eastMalaysiaFee) * 0.0212;
 
-      var eastMalaysiaFee = document.getElementById("eastMalaysia").checked ? 10 : 0;
-
-      var transactionFee = (totalSale + eastMalaysiaFee + 4.9) * 0.0212;
       var marketplaceCommission = totalSale * 0.0424;
       var serviceFee = totalSale * 0.053;
 
