@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Product Sale Calculator</title>
+  <script>
+    function calculate() {
+      var productCost = parseFloat(document.getElementById("productCost").value);
+      var totalSale = parseFloat(document.getElementById("totalSale").value);
+
+      var transactionFee = (totalSale + 4.9) * 0.0212;
+      var marketplaceCommission = totalSale * 0.0424;
+      var serviceFee = totalSale * 0.053;
+
+      var totalFee = (transactionFee.toFixed(2) - 0) + (marketplaceCommission.toFixed(2) - 0) + (serviceFee.toFixed(2) - 0);
+      var netSale = totalSale - totalFee;
+      var netProfit = netSale - productCost;
+
+      document.getElementById("transactionFee").innerHTML = "RM" + transactionFee.toFixed(2);
+      document.getElementById("marketplaceCommission").innerHTML = "RM" + marketplaceCommission.toFixed(2);
+      document.getElementById("serviceFee").innerHTML = "RM" + serviceFee.toFixed(2);
+      document.getElementById("totalFee").innerHTML = "RM" + totalFee.toFixed(2);
+      document.getElementById("netSale").innerHTML = "RM" + netSale.toFixed(2);
+      document.getElementById("netProfit").innerHTML = "RM" + netProfit.toFixed(2);
+    }
+  </script>
+  <style>
+    /* Add some basic styling for the page */
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    /* Center the calculator on the page */
+    .calculator {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* Style the input fields and labels */
+    input[type="text"] {
+      padding: 12px 20px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      border: 2px solid #ccc;
+      border-radius: 4px;
+    }
+
+    label {
+      width: 150px;
+      text-align: right;
+      margin-right: 10px;
+      padding-top: 12px;
+    }
+
+    /* Style the calculate button */
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    /* Style the output labels */
+    .output {
+      display: flex;
+      margin: 10px 0;
+    }
+
+    .output label {
+      width: 150px;
+      text-align: right;
+      margin-right: 10px;
+    }
+
+    .output span {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Shopee Free Shipping RM15 Fees Calculator</h1>
+
+  <div class="calculator">
+    <label for="productCost">Product Cost: RM</label>
+    <input type="text" id="productCost" placeholder="Enter Product Cost">
+    <br>
+    <label for="totalSale">Total Sale: RM</label>
+    <input type="text" id="totalSale" placeholder="Enter Total Sale">
+    <br>
+    <button onclick="calculate()">Calculate</button>
+    <br>
+    <br>
+    <div class="output">
+      <label>Transaction Fee: </label>
+      <span id="transactionFee"></span>
+    </div>
+    <div class="output">
+      <label>Marketplace Commission: </label>
+      <span id="marketplaceCommission"></span>
+    </div>
+    <div class="output">
+      <label>Service Fee: </label>
+      <span id="serviceFee"></span>
+    </div>
+    <div class="output">
+      <label>Total Fee: </label>
+      <span id="totalFee"></span>
+    </div>
+    <div class="output">
+      <label>Net Sale: </label>
+      <span id="netSale"></span>
+    </div>
+    <div class="output">
+      <label>Net Profit: </label>
+      <span id="netProfit"></span>
+    </div>
+  </div>
+</body>
+</html>
