@@ -65,10 +65,17 @@
           break;
       }
 
+	function calculateProfitPercentage(netProfit, productCost) {
+  	return (netProfit / productCost) * 100;
+	}
       var transactionFee = (totalSale + eastMalaysiaFee) * 0.0212;
       var totalFee = (transactionFee.toFixed(2) - 0) + (marketplaceCommission.toFixed(2) - 0) + (serviceFee.toFixed(2) - 0);
       var netSale = totalSale - totalFee;
 	var netProfit = netSale - productCost;
+	    
+	var productCost = document.getElementById("productCost").value;
+	var totalSale = document.getElementById("totalSale").value;
+	var profitPercentage = calculateProfitPercentage(netProfit, productCost);
     
       document.getElementById("transactionFee").innerHTML = "RM" + transactionFee.toFixed(2);
   document.getElementById("marketplaceCommission").innerHTML = "RM" + marketplaceCommission.toFixed(2);
@@ -76,6 +83,7 @@
   document.getElementById("totalFee").innerHTML = "RM" + totalFee.toFixed(2);
   document.getElementById("netSale").innerHTML = "RM" + netSale.toFixed(2);
   document.getElementById("netProfit").innerHTML = "RM" + netProfit.toFixed(2);
+document.getElementById("profitPercentage").innerHTML = profitPercentage.toFixed(2) + "%";
 }
 
  </script>
@@ -192,6 +200,10 @@ width: 100%;
       <label>Net Profit:</label>
       <span id="netProfit"></span>
     </div>
+    <div class="output">
+  	<label>Profit Percentage:</label>
+  	<span id="profitPercentage"></span>
+	</div>
   </div>
 <br><br><br><br><br><br><br><br>
 <footer><sup>
