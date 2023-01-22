@@ -3,7 +3,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <title>Product Sale Calculator</title>
+  <title>Shopee Fees & Profit Calculator</title>
   <script>
     function calculate() {
       var productCost = parseFloat(document.getElementById("productCost").value);
@@ -109,14 +109,14 @@ input[type="text"] {
 }
 /* Align the labels and inputs */
 .calculator label, .output label{
-  width: 150px;
+  width: 200px;
   text-align: right;
   margin-right: 1px;
   padding-top: 1px; 
 }
 /* Align the checkbox 
 .calculator input[type="checkbox"] {
-  margin-top: 8px;
+  margin-top: 1px;
 }*/
 /* Style the dropdown menus*/
 select {
@@ -145,17 +145,18 @@ width: 100%;
   margin: 0px 0;
 } */
 
-/* Style the output labels and values 
+/* Style the output labels and values
 .output label {
   width: 100px;
   text-align: right;
   margin-right: 0px;
-}*/
-/*
+} */
+
+
 .output span {
   font-weight: bold;
   line-height: 0;
-}/*
+}
 
 /* Add some spacing between elements
 .calculator > * {
@@ -164,11 +165,11 @@ width: 100%;
 </style>
 </head>
 <body>
-  <h1>Product Sale Calculator</h1>
+  <h1>Shopee Fees & Profit Calculator</h1>
   <div class="calculator">
     <label for="productCost">Product Cost: RM</label>
     <input type="text" id="productCost" placeholder="Enter Product Cost"><br>
-    <label for="totalSale">Total Sale: RM</label>
+    <label for="totalSale">Product Sale: RM</label>
 <input type="text" id="totalSale" placeholder="Enter Total Sale">
 <br>
 <label for="eastMalaysia">East Malaysia:</label>
