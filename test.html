@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <title>Product Sale Calculator</title>
   <script>
@@ -83,7 +83,7 @@
     /* Add some basic styling for the page */
     body {
       font-family: Arial, sans-serif;
-    }
+    }*/
     
 /* Center the calculator on the page */
 .calculator {
@@ -111,7 +111,7 @@ input[type="text"] {
 .calculator input[type="checkbox"] {
   margin-top: 8px;
 }*/
-/* Style the dropdown menus */
+/* Style the dropdown menus
 select {
   width: 200px;
   padding: 5px 10px;
@@ -119,7 +119,7 @@ select {
   box-sizing: border-box;
   border: 2px solid #ccc;
   border-radius: 4px;
-}
+}*/
 
 /* Style the calculate button */
 button {
@@ -150,23 +150,23 @@ width: 100%;
   line-height: 0;
 }/*
 
-/* Add some spacing between elements*/ 
+/* Add some spacing between elements
 .calculator > * {
   margin: 5px;
-}
+}*/ 
 </style>
 </head>
 <body>
   <h1>Product Sale Calculator</h1>
   <div class="calculator">
     <label for="productCost">Product Cost: RM</label>
-    <input type="text" id="productCost" placeholder="Enter Product Cost">
+    <input type="text" id="productCost" placeholder="Enter Product Cost"><br>
     <label for="totalSale">Total Sale: RM</label>
 <input type="text" id="totalSale" placeholder="Enter Total Sale">
-
+<br>
 <label for="eastMalaysia">East Malaysia:</label>
 <input type="checkbox" id="eastMalaysia">
-
+<br>
 <label for="serviceFeeOption">Service Fee:</label>
 <select id="serviceFeeOption">
   <option value="Normal Seller">Normal Seller</option>
@@ -181,7 +181,7 @@ width: 100%;
   <option value="10% Rebate + FS40 + 10%CB">10% Rebate + FS40 + 10%CB</option>
   <option value="10% Rebate + FS15 + 10%CB">10% Rebate + FS15 + 10%CB</option>
 </select>
-
+<br>
 <label for="marketplaceCommissionOption">Marketplace Commission:</label>
 <select id="marketplaceCommissionOption">
   <option value="Default Category 4.0%">Default Category 4.0%</option>
@@ -196,23 +196,23 @@ width: 100%;
     <div class="output">
       <label>Transaction Fee:</label>
       <span id="transactionFee"></span>
-    </div>
+    </div><br>
     <div class="output">
       <label>Marketplace Commission:</label>
       <span id="marketplaceCommission"></span>
-    </div>
+    </div><br>
     <div class="output">
       <label>Service Fee:</label>
       <span id="serviceFee"></span>
-    </div>
+    </div><br>
     <div class="output">
       <label>Total Fee:</label>
       <span id="totalFee"></span>
-    </div>
+    </div><br>
     <div class="output">
       <label>Net Sale:</label>
       <span id="netSale"></span>
-    </div>
+    </div><br>
     <div class="output">
       <label>Net Profit:</label>
       <span id="netProfit"></span>
