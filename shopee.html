@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <title>Shopee Fees Calculator</title>
+  <title>Shopee Fees & Profit Calculator</title>
   <script>
     function calculate() {
       var productCost = parseFloat(document.getElementById("productCost").value);
@@ -42,81 +42,76 @@
           break;
         case "10% Rebate + FS15 + 10%CB":
           serviceFee = totalSale * 0.0742;
-break;
-}
-var marketplaceCommission = 0;
-var marketplaceCommissionOption = document.getElementById("marketplaceCommissionOption").value;
-switch (marketplaceCommissionOption) {
-  case "Default Category 4.0%":
-    marketplaceCommission = totalSale * 0.0424;
-    break;
-  case "Category 2.5%":
-    marketplaceCommission = totalSale * 0.0265;
-    break;
-  case "Category 3.0%":
-    marketplaceCommission = totalSale * 0.0318;
-    break;
-  case "Category 3.5%":
-    marketplaceCommission = totalSale * 0.0371;
-    break;
-  case "Virtual Goods 5.0%":
-    marketplaceCommission = totalSale * 0.053;
-    break;
+          break;
+      }
+
+      var marketplaceCommission = 0;
+      var marketplaceCommissionOption = document.getElementById("marketplaceCommissionOption").value;
+      switch (marketplaceCommissionOption) {
+        case "Default Category 4.0%":
+          marketplaceCommission = totalSale * 0.0424;
+          break;
+        case "Category 2.5%":
+          marketplaceCommission = totalSale * 0.0265;
+          break;
+        case "Category 3.0%":
+          marketplaceCommission = totalSale * 0.0318;
+          break;
+        case "Category 3.5%":
+          marketplaceCommission = totalSale * 0.0371;
+          break;
+        case "Virtual Goods 5.0%":
+          marketplaceCommission = totalSale * 0.053;
+          break;
+      }
+
+      var transactionFee = (totalSale + eastMalaysiaFee) * 0.0212;
+      var totalFee = (transactionFee.toFixed(2) - 0) + (marketplaceCommission.toFixed(2) - 0) + (serviceFee.toFixed(2) - 0);
+      var netSale = totalSale - totalFee;
+	var netProfit = netSale - productCost;
+    
+      document.getElementById("transactionFee").innerHTML = "RM" + transactionFee.toFixed(2);
+  document.getElementById("marketplaceCommission").innerHTML = "RM" + marketplaceCommission.toFixed(2);
+  document.getElementById("serviceFee").innerHTML = "RM" + serviceFee.toFixed(2);
+  document.getElementById("totalFee").innerHTML = "RM" + totalFee.toFixed(2);
+  document.getElementById("netSale").innerHTML = "RM" + netSale.toFixed(2);
+  document.getElementById("netProfit").innerHTML = "RM" + netProfit.toFixed(2);
 }
 
-var transactionFee = (totalSale + eastMalaysiaFee) * 0.0212;
-var totalFee = (transactionFee.toFixed(2) - 0) + (marketplaceCommission.toFixed(2) - 0) + (serviceFee.toFixed(2) - 0);
-var netSale = totalSale - totalFee;
-var netProfit = netSale - productCost;
-
-document.getElementById("transactionFee").innerHTML = "RM" + transactionFee.toFixed(2);
-document.getElementById("marketplaceCommission").innerHTML = "RM" + marketplaceCommission.toFixed(2);
-document.getElementById("serviceFee").innerHTML = "RM" + serviceFee.toFixed(2);
-document.getElementById("totalFee").innerHTML = "RM" + totalFee.toFixed(2);
-document.getElementById("netSale").innerHTML = "RM" + netSale.toFixed(2);
-document.getElementById("netProfit").innerHTML = "RM" + netProfit.toFixed(2);
-}
-</script>
-
+ </script>
 <style>
-  /* Add some basic styling for the page */
-  body {
-    font-family: Arial, sans-serif;
-  }
+		label {
+			display:inline-block;
+			width:150px;
+			text-align:right;
+			margin-right:10px;
+            }
+            
+    /* Add some basic styling for the page*/ 
+    body {
+      font-family: Arial, sans-serif;
+    }
+    
 
-  /* Center the calculator on the page */
-  .calculator {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+/* Style the input fields and labels*/ 
+input[type="text"] {
+  padding: 1px 1px;
+  margin: 1px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 1px; 
+}
 
-  /* Style the input fields and labels */
-  input[type="text"] {
-    padding: 10px 10px;
-    margin: 1px 0;
-    box-sizing: border-box;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-  }
+/* Style the dropdown menus*/
+select {
+  width: 200px;
+  padding: 1px 1px;
+  margin: 1px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 1px;
+}
 
-  label {
-    width: 150px;
-    text-align: right;
-    margin-right: 10px;
-    padding-top: 12px;
-  }
-
-  /* Style the dropdown menus */
-  select {
-    width: 250px;
-    padding: 12px 20px;
-    margin: 8px 0;
-    box-sizing: border-box;
-	border: 2px solid #ccc;
-	border-radius: 4px;
-	}
-   
 /* Style the calculate button */
 button {
   background-color: #4CAF50;
@@ -124,91 +119,79 @@ button {
   padding: 14px 20px;
   margin: 8px 0;
   border: none;
-  cursor: pointer;
-  width: 100%;
+cursor: pointer;
+width: 100%;
 }
 
-/* Style the output labels */
-.output {
-  display: flex;
-  margin: 10px 0;
-}
-
-.output label {
-  width: 150px;
-  text-align: right;
-  margin-right: 10px;
-}
 
 .output span {
   font-weight: bold;
-  line-height: 2.7;
+  line-height: 0;
 }
+
 </style>
 </head>
 <body>
-  <center><h1>Shopee Fees & Product Sale Calculator</h1></center>
+  <center><h1>Shopee Fees & Profit Calculator</h1></center>
   <div class="calculator">
     <label for="productCost">Product Cost: RM</label>
-    <input type="text" id="productCost" placeholder="Enter Product Cost">
-    <br>
-    <label for="totalSale">Total Sale: RM</label>
-    <input type="text" id="totalSale" placeholder="Enter Total Sale">
-    <br>
-    <label for="eastMalaysia">East Malaysia:</label>
-    <input type="checkbox" id="eastMalaysia">
-    <br>
-    <label for="serviceFeeOption">Service Fee:</label>
-    <select id="serviceFeeOption">
-      <option value="Normal Seller">Normal Seller</option>
-      <option value="Free Shipping RM40">Free Shipping RM40</option>
-      <option value="Free Shipping RM15">Free Shipping RM15</option>
-      <option value="FS40 + 10% Cashback">FS40 + 10% Cashback</option>
-      <option value="FS15 + 10% Cashback">FS15 + 10% Cashback</option>
-      <option value="Cashback 10%">Cashback 10%</option>
-      <option value="10% Rebate Now">10% Rebate Now</option>
-      <option value="Mall Seller">Mall Seller</option>
-      <option value="10% Rebate + 10%CB">10% Rebate + 10%CB</option>
-      <option value="10% Rebate + FS40 + 10%CB">10% Rebate + FS40 + 10%CB</option>
-      <option value="10% Rebate + FS15 + 10%CB">10% Rebate + FS15 + 10%CB</option>
-    </select>
-    <br>
-    <label for="marketplaceCommissionOption">Marketplace Commission:</label>
-    <select id="marketplaceCommissionOption">
-      <option value="Default Category 4.0%">Default Category 4.0%</option>
-      <option value="Category 2.5%">Category 2.5%</option>
-<option value="Category 3.0%">Category 3.0%</option>
-<option value="Category 3.5%">Category 3.5%</option>
-<option value="Virtual Goods 5.0%">Virtual Goods 5.0%</option>
+    <input type="text" id="productCost" placeholder="Enter Product Cost"><br>
+    <label for="totalSale">Product Sale: RM</label>
+<input type="text" id="totalSale" placeholder="Enter Product Sale">
+<br>
+<label for="eastMalaysia">East Malaysia:</label>
+<input type="checkbox" id="eastMalaysia">
+<br>
+<label for="serviceFeeOption">Service Fee:</label>
+<select id="serviceFeeOption">
+  <option value="Normal Seller">Normal Seller</option>
+  <option value="Free Shipping RM40">Free Shipping RM40</option>
+  <option value="Free Shipping RM15">Free Shipping RM15</option>
+  <option value="FS40 + 10% Cashback">FS40 + 10% Cashback</option>
+  <option value="FS15 + 10% Cashback">FS15 + 10% Cashback</option>
+  <option value="Cashback 10%">Cashback 10%</option>
+  <option value="10% Rebate Now">10% Rebate Now</option>
+  <option value="Mall Seller">Mall Seller</option>
+  <option value="10% Rebate + 10%CB">10% Rebate + 10%CB</option>
+  <option value="10% Rebate + FS40 + 10%CB">10% Rebate + FS40 + 10%CB</option>
+  <option value="10% Rebate + FS15 + 10%CB">10% Rebate + FS15 + 10%CB</option>
 </select>
 <br>
-<button onclick="calculate()">Calculate</button>
-<br><br>
-<div class="output">
-<label>Transaction Fee:</label>
-<span id="transactionFee"></span>
-</div>
-<div class="output">
-<label>Marketplace Commission:</label>
-<span id="marketplaceCommission"></span>
-</div>
-<div class="output">
-<label>Service Fee:</label>
-<span id="serviceFee"></span>
-</div>
-<div class="output">
-<label>Total Fee:</label>
-<span id="totalFee"></span>
-</div>
-<div class="output">
-<label>Net Sale:</label>
-<span id="netSale"></span>
-</div>
-<div class="output">
-<label>Net Profit:</label>
-<span id="netProfit"></span>
-</div>
-
+<label for="marketplaceCommissionOption">Category Fee:</label>
+<select id="marketplaceCommissionOption">
+  <option value="Default Category 4.0%">Default Category 4.0%</option>
+  <option value="Category 2.5%">Category 2.5%</option>
+  <option value="Category 3.0%">Category 3.0%</option>
+  <option value="Category 3.5%">Category 3.5%</option>
+  <option value="Virtual Goods 5.0%">Virtual Goods 5.0%</option>
+    </select>
+    <br>
+    <button onclick="calculate()">Calculate</button>
+    <br><br>
+    <div class="output">
+      <label>Transaction Fee:</label>
+      <span id="transactionFee"></span>
+    </div>
+    <div class="output">
+      <label>Category Fee:</label>
+      <span id="marketplaceCommission"></span>
+    </div>
+    <div class="output">
+      <label>Service Fee:</label>
+      <span id="serviceFee"></span>
+    </div>
+    <div class="output">
+      <label>Total Fee:</label>
+      <span id="totalFee"></span>
+    </div>
+    <div class="output">
+      <label>Net Sale:</label>
+      <span id="netSale"></span>
+    </div>
+    <div class="output">
+      <label>Net Profit:</label>
+      <span id="netProfit"></span>
+    </div>
   </div>
 </body>
 </html>
