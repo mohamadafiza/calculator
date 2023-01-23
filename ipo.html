@@ -26,13 +26,16 @@
 <h1>IPO Calculator : Profit / Loss & Charge (Mplus M+)</h1>
 	<form> 
     	<label><b>Unit:</b></label> 
-		<input type="number" id="lot" step="1" min="0" title="Enter the lotx100 here. Example 30 lot, then x100 & input: 3000"> 
+		<input type="number" id="lot" step="1" min="0" title="Enter the lotx100 here. Example 30 lot, 
+		then x100 & input: 3000" placeholder="Unit adalah lot x100"> 
 		<br> 
 		<label><b>Buy Price:</b></label> 
-	    <input type="number" id="buyPrice" step="0.001" min="0" title="Enter the buy price here. Example 30sen, then input: 0.30">
+	    <input type="number" id="buyPrice" step="0.001" min="0" title="Enter the buy price here. Example 30sen, then input: 0.30"
+		   placeholder="Contoh 0.30 jika 30 sen">
 		<br> 
 		<label><b>Sell Price:</b></label> 
-		<input type="number" id="sellPrice" step="0.001" min="0" title="Enter the sell price here. Example RM1.20, then input: 1.20"> 
+		<input type="number" id="sellPrice" step="0.001" min="0" title="Enter the sell price here. 
+			Example RM1.20, then input: 1.20" placeholder="Contoh 1.20 jika RM1.20"> 
 		<br> 
 		<label>Total Buy Price:</label> 
 		<input type="number" id="totalBuyPrice" step="0.01" min="0" readonly> 
