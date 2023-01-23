@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <title>Shopee Shipping Weight Calculator</title>
+</head>
+<body>
+<center><h1>Shopee Shipping Weight Calculator</h1></center>
+  <form>
+    <label>Weight (kg): <input type="number" id="weight" step="0.01"></label>
+    <br><br>
+    <label>Destination:</label>
+    <br>
+    <input type="radio" name="destination" value="WM" checked> West Malaysia
+    <br>
+    <input type="radio" name="destination" value="EM"> East Malaysia
+    <br>
+    <input type="radio" name="destination" value="SS"> Sabah or Sarawak
+    <br>
+    <input type="radio" name="destination" value="ECO"> Economy Delivery
+    <br><br>
+    <button onclick="calculate()">Calculate</button>
+  </form>
+
+  <p id="result"></p>
+
+  <script>
+    function calculate() {
+      var weight = document.getElementById("weight").value;
+      var destination = document.querySelector('input[name="destination"]:checked').value;
+      
+      var rate = 0;
+      if (weight <= 1) {
+        if (destination === "WM") rate = 4.90;
+        if (destination === "EM") rate = 10;
+        if (destination === "SS") rate = 4.50;
+        if (destination === "ECO") rate = 5;
+      } else if (weight <= 2) {
+        if (destination === "WM") rate = 4.90;
+        if (destination === "EM") rate = 18;
+        if (destination === "SS") rate = 4.50;
+        if (destination === "ECO") rate = 7;
+      } else if (weight <= 3) {
+        if (destination === "WM") rate = 5.60;
+        if (destination === "EM") rate = 26;
+        if (destination === "SS") rate = 5.20;
+        if (destination === "ECO") rate = 9;
+      } else if (weight <= 4) {
+        if (destination === "WM") rate = 6.30;
+        if (destination === "EM") rate = 33;
+        if (destination === "SS") rate = 5.90;
+        if (destination === "ECO") rate = 11;
+      } else if (weight <= 5) {
+        if (destination === "WM") rate = 7.00;
+        if (destination === "EM") rate = 40;
+        if (destination === "SS") rate = 6.60;
+        if (destination === "ECO") rate = 13;
+      } else if (weight <= 6) {
+        if (destination === "WM") rate = 8.00;
+        if (destination === "EM") rate = 47;
+        if (destination === "SS") rate = 7.60;
+        if (destination === "ECO") rate = 15;
+      } else if (weight <= 7) {
+        if (destination === "WM") rate = 9.00;
+        if (destination === "EM") rate = 54;
+        if (destination === "SS") rate = 8.60;
+if (destination === "ECO") rate = 17;
+} else if (weight <= 8) {
+if (destination === "WM") rate = 10.00;
+if (destination === "EM") rate = 61;
+if (destination === "SS") rate = 9.60;
+if (destination === "ECO") rate = 19;
+} else if (weight <= 9) {
+if (destination === "WM") rate = 11.00;
+if (destination === "EM") rate = 68;
+if (destination === "SS") rate = 10.60;
+if (destination === "ECO") rate = 21;
+} else if (weight <= 10) {
+if (destination === "WM") rate = 12.00;
+if (destination === "EM") rate = 75;
+if (destination === "SS") rate = 11.60;
+if (destination === "ECO") rate = 23;
+} else if (weight <= 11) {
+if (destination === "WM") rate = 13.00;
+if (destination === "EM") rate = 82;
+if (destination === "SS") rate = 12.60;
+if (destination === "ECO") rate = 25;
+} else if (weight <= 12) {
+if (destination === "WM") rate = 14.00;
+if (destination === "EM") rate = 89;
+if (destination === "SS") rate = 13.60;
+if (destination === "ECO") rate = 27;
+} else if (weight <= 13) {
+if (destination === "WM") rate = 15.00;
+if (destination === "EM") rate = 96;
+if (destination === "SS") rate = 14.60;
+if (destination === "ECO") rate = 29;
+} else if (weight <= 14) {
+if (destination === "WM") rate = 16.00;
+if (destination === "EM") rate = 103;
+if (destination === "SS") rate = 15.60;
+if (destination === "ECO") rate = 31;
+} else if (weight <= 15) {
+if (destination === "WM") rate = 17.00;
+if (destination === "EM") rate = 110;
+if (destination === "SS") rate = 16.60;
+if (destination === "ECO") rate = 33;
+} else {
+if (destination === "WM") rate = 1.10 * weight;
+if (destination === "EM") rate = 7.00 * weight;
+if (destination === "SS") rate = 1.10 * weight;
+if (destination === "ECO") rate = 2.00 * weight;
+}
+
+  document.getElementById("result").innerHTML = "Cost: RM " + rate.toFixed(2);
+}
+  </script>
+</body>
+</html>
