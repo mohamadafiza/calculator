@@ -7,36 +7,77 @@
 </head>
 <body>
 <center><h1>Shopee Shipping Weight Calculator</h1></center>
-  <form>
-    <label>Weight (kg): <input type="number" id="weight" step="0.01" title="In kilogram, example: 1.20 for 1.2kg" placeholder="weight in kilogram"></label>
+<form>
+    <label><b>Weight (kg):</b> <input type="number" id="weight" step="0.01" title="In kilogram, example: 1.20 for 1.2kg" placeholder="Weight in kilogram"></label>
     <br><br>
-    <label>Destination:</label>
+    <label><b>Destination:</b></label>
     <br>
-    <input type="radio" name="destination" value="WM" title="Semenanjung" checked> West Malaysia
+    <input type="radio" id="WM" name="destination" value="WM" title="Semenanjung" checked>
+    <label for="WM"><span></span>West Malaysia</label>
     <br>
-    <input type="radio" name="destination" value="EM" title="Sabah/Sarawak/Labuan"> East Malaysia (SS)
+    <input type="radio" id="EM" name="destination" value="EM" title="Sabah/Sarawak/Labuan">
+    <label for="EM"><span></span>East Malaysia</label>
     <br>
-    <input type="radio" name="destination" value="SS" title="Delivery in Sabah-Sabah or Sarawak-Sarawak"> In Sabah or In Sarawak
+    <input type="radio" id="SS" name="destination" value="SS" title="Delivery in Sabah-Sabah or Sarawak-Sarawak">
+    <label for="SS"><span></span>In Sabah or In Sarawak</label>
     <br>
-    <input type="radio" name="destination" value="ECO"> Economy Delivery
+    <input type="radio" id="ECO" name="destination" value="ECO">
+    <label for="ECO"><span></span>Economy Delivery</label>
     <br><br>
-    <button onclick="calculate(); return false;">Calculate Shipping Cost</button>
-    <button onclick="resetForm(); return false;">Reset</button>
+<button onclick="calculate(); return false;" style="background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 12px;">Calculate</button>
+
+<button onclick="resetForm(); return false;" style="background-color: #f44336; /* Red */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 12px;">Reset</button>
+
   </form>
 
   <center><p id="result"></p></center>
   
 
 <style>
-  /* Style for the radio buttons */
-  input[type="radio"] {
-    margin-right: 10px; /* Add some space between buttons */
-  }
-  
-  /* Style for the label */
-  label {
-    display: inline-block; /* Display label as an inline block */
-  }
+input[type="radio"] {
+  display: none;
+}
+
+input[type="radio"] + label {
+  color: #333;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+input[type="radio"] + label span {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin: -1px 4px 0 0;
+  vertical-align: middle;
+  cursor: pointer;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+}
+
+input[type="radio"]:checked + label span {
+  background: #4CAF50;
+}
 </style>
 
 
