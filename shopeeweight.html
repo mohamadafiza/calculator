@@ -8,7 +8,7 @@
 <body>
 <center><h1>Shopee Shipping Weight Calculator</h1></center>
   <form>
-    <label>Weight (kg): <input type="number" id="weight" step="0.01"></label>
+    <label>Weight (kg): <input type="number" id="weight" step="0.01" title="In kilogram, example: 1.20 for 1.2kg" placeholder="weight in kilogram"></label>
     <br><br>
     <label>Destination:</label>
     <br>
@@ -16,16 +16,38 @@
     <br>
     <input type="radio" name="destination" value="EM"> East Malaysia
     <br>
-    <input type="radio" name="destination" value="SS"> Sabah or Sarawak
+    <input type="radio" name="destination" value="SS"> In Sabah or In Sarawak
     <br>
     <input type="radio" name="destination" value="ECO"> Economy Delivery
     <br><br>
-    <button onclick="calculate()">Calculate</button>
+    <button onclick="calculate(); return false;">Calculate Shipping Cost</button>
+    <button onclick="resetForm(); return false;">Reset</button>
   </form>
 
-  <p id="result"></p>
+  <center><p id="result"></p></center>
+  
+
+<style>
+  /* Style for the radio buttons */
+  input[type="radio"] {
+    margin-right: 10px; /* Add some space between buttons */
+  }
+  
+  /* Style for the label */
+  label {
+    display: inline-block; /* Display label as an inline block */
+  }
+</style>
+
 
   <script>
+    function resetForm() {
+document.getElementById("weight").value = "";
+document.querySelector('input[name="destination"]:checked').checked = false;
+document.getElementById("result").innerHTML = "";
+}
+
+
     function calculate() {
       var weight = document.getElementById("weight").value;
       var destination = document.querySelector('input[name="destination"]:checked').value;
@@ -113,7 +135,7 @@ if (destination === "SS") rate = 1.10 * weight;
 if (destination === "ECO") rate = 2.00 * weight;
 }
 
-  document.getElementById("result").innerHTML = "Cost: RM " + rate.toFixed(2);
+  document.getElementById("result").innerHTML = "Shopee Shipping Cost: RM" + rate.toFixed(2);
 }
   </script>
 </body>
