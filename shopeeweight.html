@@ -7,7 +7,7 @@
 </head>
 <body>
 <center><h1>Shopee Shipping Weight Calculator</h1></center>
-  <center><marquee><h3>Calculation above 15kg in maintenance.</h3></marquee></center>
+
 <form>
     <label><b>Weight (kg):</b> <input type="number" id="weight" step="0.01" title="In kilogram, example: 1.20 for 1.2kg" placeholder="Weight in kilogram"></label>
     <br><br>
@@ -170,16 +170,29 @@ if (destination === "WM") rate = 16.00;
 if (destination === "EM") rate = 103;
 if (destination === "SS") rate = 15.60;
 if (destination === "ECO") rate = 31;
+
 } else if (weight <= 15) {
-if (destination === "WM") rate = 17.00;
-if (destination === "EM") rate = 110;
-if (destination === "SS") rate = 16.60;
-if (destination === "ECO") rate = 33;
-} else {
-if (destination === "WM") rate = 1.10 * weight;
-if (destination === "EM") rate = 7.00 * weight;
-if (destination === "SS") rate = 1.10 * weight;
-if (destination === "ECO") rate = 2.00 * weight;
+  if (destination === "WM") rate = 17.00;
+  if (destination === "EM") rate = 110;
+  if (destination === "SS") rate = 16.60;
+  if (destination === "ECO") rate = 33;
+} else if (weight <= 15.99){
+  if (destination === "WM") rate = 18.10;
+  if (destination === "EM") rate = 117;
+  if (destination === "SS") rate = 17.70;
+  if (destination === "ECO") rate = 35;
+}
+
+else {
+  let additionalWeight = Math.floor(weight) - 14;
+  let additionalRate = 0;
+  for(let i = 0; i < additionalWeight; i++) {
+    additionalRate += 1.10;
+  }
+  if (destination === "WM") rate = 17.00 + additionalRate;
+  if (destination === "EM") rate = 110 + (7.00 * additionalWeight);
+  if (destination === "SS") rate = 16.60 + additionalRate;
+  if (destination === "ECO") rate = 33 + (2.00 * additionalWeight);
 }
 
   document.getElementById("result").innerHTML = "Shopee Shipping Cost: <span class='bold'>RM" + rate.toFixed(2) + "</span>";
