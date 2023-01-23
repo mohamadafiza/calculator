@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <title>Shopee Fees & Profit Calculator Include Custom Weight</title>
+  <script>
+    function calculate() {
+      var productCost = parseFloat(document.getElementById("productCost").value);
+      var totalSale = parseFloat(document.getElementById("totalSale").value);
+
+      var serviceFee = 0;
+      var serviceFeeOption = document.getElementById("serviceFeeOption").value;
+      switch (serviceFeeOption) {
+        case "Free Shipping RM40":
+          serviceFee = totalSale * 0.0318;
+          break;
+        case "Free Shipping RM15":
+          serviceFee = totalSale * 0.053;
+          break;
+        case "FS40 + 10% Cashback":
+          serviceFee = totalSale * 0.0636;
+          break;
+        case "FS15 + 10% Cashback":
+          serviceFee = totalSale * 0.0742;
+          break;
+        case "Cashback 10%":
+          serviceFee = totalSale * 0.0318;
+          break;
+        case "10% Rebate Now":
+          serviceFee = totalSale * 0.0424;
+          break;
+        case "Mall Seller":
+          serviceFee = totalSale * 0.0636;
+          break;
+        case "10% Rebate + 10%CB":
+          serviceFee = totalSale * 0.0424;
+          break;
+        case "10% Rebate + FS40 + 10%CB":
+          serviceFee = totalSale * 0.0848;
+          break;
+        case "10% Rebate + FS15 + 10%CB":
+          serviceFee = totalSale * 0.0742;
+          break;
+      }
+
+      var marketplaceCommission = 0;
+      var marketplaceCommissionOption = document.getElementById("marketplaceCommissionOption").value;
+      switch (marketplaceCommissionOption) {
+        case "Default Category 4.0%":
+          marketplaceCommission = totalSale * 0.0424;
+          break;
+        case "Category 2.5%":
+          marketplaceCommission = totalSale * 0.0265;
+          break;
+        case "Category 3.0%":
+          marketplaceCommission = totalSale * 0.0318;
+          break;
+        case "Category 3.5%":
+          marketplaceCommission = totalSale * 0.0371;
+          break;
+        case "Virtual Goods 5.0%":
+          marketplaceCommission = totalSale * 0.053;
+          break;
+      }
+
+	function calculateProfitPercentage(netProfit, productCost) {
+  	return (netProfit / productCost) * 100;
+	}
+      var transactionFee = totalSale * 0.0212;
+      var totalFee = (transactionFee.toFixed(2) - 0) + (marketplaceCommission.toFixed(2) - 0) + (serviceFee.toFixed(2) - 0);
+      var netSale = totalSale - totalFee;
+	var netProfit = netSale - productCost;
+	    
+	var productCost = document.getElementById("productCost").value;
+	var totalSale = document.getElementById("totalSale").value;
+	var profitPercentage = calculateProfitPercentage(netProfit, productCost);
+    
+  document.getElementById("transactionFee").innerHTML = "RM" + transactionFee.toFixed(2);
+  document.getElementById("marketplaceCommission").innerHTML = "RM" + marketplaceCommission.toFixed(2);
+  document.getElementById("serviceFee").innerHTML = "RM" + serviceFee.toFixed(2);
+  document.getElementById("totalFee").innerHTML = "RM" + totalFee.toFixed(2);
+  document.getElementById("netSale").innerHTML = "RM" + netSale.toFixed(2);
+  document.getElementById("netProfit").innerHTML = "RM" + netProfit.toFixed(2);
+  document.getElementById("profitPercentage").innerHTML = profitPercentage.toFixed(2) + "%";
+}
+
+ </script>
+<style>
+		label {
+			display:inline-block;
+			width:150px;
+			text-align:right;
+			margin-right:10px;
+            }
+            
+    /* Add some basic styling for the page*/ 
+    body {
+      font-family: Arial, sans-serif;
+    }
+    
+
+/* Style the input fields and labels*/ 
+input[type="text"] {
+  padding: 1px 1px;
+  margin: 1px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 1px; 
+}
+
+/* Style the dropdown menus*/
+select {
+  width: 200px;
+  padding: 1px 1px;
+  margin: 1px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 1px;
+}
+
+/* Style the calculate button */
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+cursor: pointer;
+width: 100%;
+}
+
+
+.output span {
+  font-weight: bold;
+  line-height: 0;
+}
+
+</style>
+</head>
+<body>
+  <center><h1>Shopee Fees & Profit Calculator</h1>
+<h2>Digital Goods & Custom Weight Cost</h2></center>
+  <div class="calculator">
+    <label for="productCost">Product Cost: RM</label>
+    <input type="text" id="productCost" placeholder="Enter Product Cost"><br>
+    <label for="totalSale">Product Sale: RM</label>
+<input type="text" id="totalSale" placeholder="Price Include Buyer Shipping Cost">
+<br>
+<label for="serviceFeeOption">Service Fee:</label>
+<select id="serviceFeeOption">
+  <option value="Normal Seller">Normal Seller</option>
+  <option value="Free Shipping RM40">Free Shipping RM40</option>
+  <option value="Free Shipping RM15">Free Shipping RM15</option>
+  <option value="FS40 + 10% Cashback">FS40 + 10% Cashback</option>
+  <option value="FS15 + 10% Cashback">FS15 + 10% Cashback</option>
+  <option value="Cashback 10%">Cashback 10%</option>
+  <option value="10% Rebate Now">10% Rebate Now</option>
+  <option value="Mall Seller">Mall Seller</option>
+  <option value="10% Rebate + 10%CB">10% Rebate + 10%CB</option>
+  <option value="10% Rebate + FS40 + 10%CB">10% Rebate + FS40 + 10%CB</option>
+  <option value="10% Rebate + FS15 + 10%CB">10% Rebate + FS15 + 10%CB</option>
+</select>
+<br>
+<label for="marketplaceCommissionOption">Category Fee:</label>
+<select id="marketplaceCommissionOption">
+  <option value="Default Category 4.0%">Default Category 4.0%</option>
+  <option value="Category 2.5%">Category 2.5%</option>
+  <option value="Category 3.0%">Category 3.0%</option>
+  <option value="Category 3.5%">Category 3.5%</option>
+  <option value="Virtual Goods 5.0%">Virtual Goods 5.0%</option>
+    </select>
+    <br>
+    <button onclick="calculate()">Calculate</button>
+    <br><br>
+    <div class="output">
+      <label>Transaction Fee:</label>
+      <span id="transactionFee"></span>
+    </div>
+    <div class="output">
+      <label>Category Fee:</label>
+      <span id="marketplaceCommission"></span>
+    </div>
+    <div class="output">
+      <label>Service Fee:</label>
+      <span id="serviceFee"></span>
+    </div>
+    <div class="output">
+      <label>Total Fee:</label>
+      <span id="totalFee"></span>
+    </div>
+    <div class="output">
+      <label>Net Sale:</label>
+      <span id="netSale"></span>
+    </div>
+    <div class="output">
+      <label>Net Profit:</label>
+      <span id="netProfit"></span>
+    </div>
+    <div class="output">
+  	<label>Profit Percentage:</label>
+  	<span id="profitPercentage"></span>
+	</div>
+  </div>
+<br><br>
+<p><a href="https://mohamadafiza.github.io/calculator/shopee.html">Click here for if you use default shipping rates [WM:RM4.90/EM:RM10.00] by Shopee.</a></p>
+<p><a href="https://mohamadafiza.github.io/calculator/shopeecategoryfee.html">Click here for all category fees percentage.</a></p>
+<details>
+  <summary>Click here to read notes</summary>
+<sup><p>*For "Transaction Fee" calculation, assume buyer did not apply voucher or coin to make calculation easier.</p>
+<p>**For "Product Sale"; please include your shipping cost that buyer paid to make it more accurate calculating the "Transaction Fee".</p>
+</sup>
+</details>
+</body>
+</html>
