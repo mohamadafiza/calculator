@@ -79,6 +79,10 @@ input[type="radio"] + label span {
 input[type="radio"]:checked + label span {
   background: #4CAF50;
 }
+  
+   .bold {
+      font-weight: bold;
+    }
 </style>
 
 
@@ -177,7 +181,7 @@ if (destination === "SS") rate = 1.10 * weight;
 if (destination === "ECO") rate = 2.00 * weight;
 }
 
-  document.getElementById("result").innerHTML = "Shopee Shipping Cost: RM" + rate.toFixed(2);
+  document.getElementById("result").innerHTML = "Shopee Shipping Cost: <span class='bold'>RM" + rate.toFixed(2) + "</span>";
 }
   </script>
 </body>
