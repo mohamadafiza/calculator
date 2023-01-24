@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <title>Seller Packing Cost Calculator</title>
+    <style>
+      /* CSS styles for form and input fields */
+      form {
+        border: 2px solid red;
+        padding: 35px;
+        width: 50%;
+        margin: 0 auto;
+      }
+      input[type=text] {
+        border: 1px solid gray;
+        padding: 5px;
+        margin: 5px 0;
+        width: 100%;
+      }
+      /* CSS styles for buttons */
+      .button {
+        background-color: #EE4B2B; /* Red */
+        border: none;
+        color: white;
+        font-weight: bold;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+      }
+      /* CSS styles for output */
+      .output {
+        margin: 5px 0;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+  <center><h1>Seller Packing Cost Calculator</h1></center>
+    <form>
+      <label for="airwaybill">Airwaybill Paper (RM):</label>
+      <input type="text" id="airwaybill" name="airwaybill">
+      <br>
+      <label for="electric">Electric for Printing (RM):</label>
+      <input type="text" id="electric" name="electric">
+      <br>
+      <label for="ink">Printing Ink (RM):</label>
+      <input type="text" id="ink" name="ink">
+      <br>
+      <label for="bubblewrap">Bubblewrap (RM):</label>
+      <input type="text" id="bubblewrap" name="bubblewrap">
+      <br>
+      <label for="tape">Tape (RM):</label>
+      <input type="text" id="tape" name="tape">
+      <br>
+      <label for="plastic">Plastic Packaging/Box (RM):</label>
+      <input type="text" id="plastic" name="plastic">
+      <br>
+      <label for="petrol">Petrol Fuel to Drop Off Parcel (RM):</label>
+      <input type="text" id="petrol" name="petrol">
+      <br>
+      <label for="labor">Labor Cost (RM):</label>
+      <input type="text" id="labor" name="labor">
+      <br>
+      <center><button class="button" onclick="event.preventDefault(); calculate();">Calculate</button>
+<button class="button" onclick="event.preventDefault(); reset();">Reset</button>
+      <br>
+      <div class="output" id="output"></div></center>
+    </form>
+
+    <script>
+function calculate() {
+  // Get the values from the input fields
+  var airwaybill = Number(document.getElementById("airwaybill").value);
+  var electric = Number(document.getElementById("electric").value);
+  var ink = Number(document.getElementById("ink").value);
+  var bubblewrap = Number(document.getElementById("bubblewrap").value);
+  var tape = Number(document.getElementById("tape").value);
+  var plastic = Number(document.getElementById("plastic").value);
+  var petrol = Number(document.getElementById("petrol").value);
+   var labor = Number(document.getElementById("labor").value);
+  
+    // Convert the values to numbers
+    airwaybill = parseFloat(airwaybill);
+    electric = parseFloat(electric);
+    ink = parseFloat(ink);
+    bubblewrap = parseFloat(bubblewrap);
+    tape = parseFloat(tape);
+    plastic = parseFloat(plastic);
+    petrol = parseFloat(petrol);
+    labor = parseFloat(labor);
+
+    // Add the values
+    var total = airwaybill + electric + ink + bubblewrap + tape + plastic + petrol + labor;
+
+    // Display the total
+    document.getElementById("output").innerHTML = "Total Cost RM" + total.toFixed(2);
+  }
+
+  function reset() {
+    // Clear the input fields
+    document.getElementById("airwaybill").value = "";
+    document.getElementById("electric").value = "";
+    document.getElementById("ink").value = "";
+    document.getElementById("bubblewrap").value = "";
+    document.getElementById("tape").value = "";
+    document.getElementById("plastic").value = "";
+    document.getElementById("petrol").value = "";
+    document.getElementById("labor").value = "";
+
+    // Clear the output
+    document.getElementById("output").innerHTML = "";
+  }
+</script>
+  </body>
+</html>
