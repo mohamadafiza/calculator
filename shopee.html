@@ -105,6 +105,13 @@ document.getElementById("profitMargin").innerHTML = profitMargin.toFixed(2) + "%
 
  </script>
 <style>
+      /* CSS styles for form and input fields */
+      form {
+        border: 5px solid green;
+        padding: 35px;
+        width: 80%;
+        margin: 0 auto;
+      }
 body {
   background-color: #FFFFE8;
 }
@@ -161,6 +168,7 @@ width: 100%;
 </style>
 </head>
 <body>
+<form>
   <center><h1>Shopee Fees & Profit Calculator</h1></center>
   <div class="calculator">
     <label for="productCost">Product Cost: RM</label>
@@ -197,7 +205,7 @@ width: 100%;
   <option value="Virtual Goods 5.0%">Virtual Goods 5.0%</option>
     </select>
     <br>
-    <button onclick="calculate()">Calculate</button>
+    <button class="button" onclick="event.preventDefault(); calculate();">Calculate</button>
     <br><br>
     <div class="output">
       <label>Transaction Fee:</label>
@@ -232,6 +240,7 @@ width: 100%;
   	<span id="profitMargin"></span>
 	</div>
   </div>
+	</form>
 <br><br>
 <p><a href="https://mohamadafiza.github.io/calculator/shopeecategoryfee.html">Click here for all category fees percentage.</a></p>
 	<p><a href="https://mohamadafiza.github.io/calculator/shopeefee.html">Click here if your product 
