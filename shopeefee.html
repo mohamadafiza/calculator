@@ -95,6 +95,13 @@
 
  </script>
 <style>
+      /* CSS styles for form and input fields */
+      form {
+        border: 5px solid green;
+        padding: 35px;
+        width: 80%;
+        margin: 0 auto;
+      }
 		label {
 			display:inline-block;
 			width:150px;
@@ -148,6 +155,7 @@ width: 100%;
 </style>
 </head>
 <body>
+<form>
   <center><h1>Shopee Fees & Profit Calculator</h1>
 <h2>Digital Goods & Custom Weight Cost</h2></center>
   <div class="calculator">
@@ -181,7 +189,7 @@ width: 100%;
   <option value="Virtual Goods 5.0%">Virtual Goods 5.0%</option>
     </select>
     <br>
-    <button onclick="calculate()">Calculate</button>
+    <button class="button" onclick="event.preventDefault(); calculate();">Calculate</button>
     <br><br>
     <div class="output">
       <label>Transaction Fee:</label>
@@ -216,6 +224,7 @@ width: 100%;
   	<span id="profitMargin"></span>
 	</div>
   </div>
+	</form>
 <br><br>
 <p><a href="https://mohamadafiza.github.io/calculator/shopeeweight.html">Click here for Shopee Shipping Weight Calculator.</a></p>
 <p><a href="https://mohamadafiza.github.io/calculator/shopee.html">Click here if you use default shipping rates [WM:RM4.90/EM:RM10.00] by Shopee.</a></p>
