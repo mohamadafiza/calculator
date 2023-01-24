@@ -9,6 +9,8 @@
       var productCost = parseFloat(document.getElementById("productCost").value);
       var totalSale = parseFloat(document.getElementById("totalSale").value);
       var eastMalaysiaFee = document.getElementById("eastMalaysia").checked ? 10 : 4.9;
+      var select = document.getElementById("marketplaceCommissionOption");
+      var marketplaceCommissionOption = select.options[select.selectedIndex].value;
 
       var serviceFee = 0;
       var serviceFeeOption = document.getElementById("serviceFeeOption").value;
@@ -65,6 +67,7 @@
           break;
         case "Virtual Goods 5.0%":
           marketplaceCommission = totalSale * 0.053;
+	  eastMalaysiaFee = 0;
           break;
       }
 
@@ -214,15 +217,15 @@ width: 100%;
   </div>
 <br><br>
 <p><a href="https://mohamadafiza.github.io/calculator/shopeecategoryfee.html">Click here for all category fees percentage.</a></p>
-	<p><a href="https://mohamadafiza.github.io/calculator/shopeefee.html">Click here if you are selling Digital Goods or your product 
+	<p><a href="https://mohamadafiza.github.io/calculator/shopeefee.html">Click here if your product 
 		shipping cost exceed normal rates [WM:RM4.90|EM:RM10]</a></p>
 <details>
   <summary>Click here to read notes</summary>
 <sup><p>*For "Transaction Fee" calculation, assume buyer did not apply voucher or coin to make calculation easier.</p>
 <p>**Tick "East Malaysia" if buyer from Sabah/Sarawak/Labuan</p>
-<p>***Digital Goods category or product with exceed standard shipping charges will get imprecise calculation in Transaction Fee 
+<p>***Product with exceed standard shipping charges will get imprecise calculation in Transaction Fee 
 	because this calculator does not read your shipping charges.
-	<a href="https://mohamadafiza.github.io/calculator/shopeefee.html">Click here to use another calculator.</p>
+	<a href="https://mohamadafiza.github.io/calculator/shopeefee.html">Click here to use another type of calculator.</p>
 </sup>
  <img src="https://counter10.optistats.ovh/private/freecounterstat.php?c=um96xe2u7frfrh9lhsglmn8ba7mr5khb" border="0">
 </details>
