@@ -12,6 +12,9 @@
       var serviceFee = 0;
       var serviceFeeOption = document.getElementById("serviceFeeOption").value;
       switch (serviceFeeOption) {
+	case "Normal Seller":
+          serviceFee = totalSale * 0.0212;
+          break;
         case "Free Shipping RM40":
           serviceFee = totalSale * 0.0318;
           break;
@@ -151,6 +154,7 @@ width: 100%;
 <label for="serviceFeeOption">Service Fee:</label>
 <select id="serviceFeeOption">
   <option value="Normal Seller">Normal Seller</option>
+  <option value="New Seller">New Seller (Below 100 order)</option>
   <option value="Free Shipping RM40">Free Shipping RM40</option>
   <option value="Free Shipping RM15">Free Shipping RM15</option>
   <option value="FS40 + 10% Cashback">FS40 + 10% Cashback</option>
