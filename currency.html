@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Currency Converter</title>
+</head>
+<body>
+  <h1>Currency Converter</h1>
+  <form>
+    <label>Enter amount in RM:</label>
+    <input type="text" id="rm-amount">
+    <br>
+    <label>Enter Exchange Rate:</label>
+    <input type="text" id="exchange-rate">
+    <br>
+    <button type="button" onclick="calculate()">Convert</button>
+  </form>
+  <p>THB: <span id="thb-amount"></span></p>
+  <script>
+    function calculate() {
+      var rmAmount = document.getElementById("rm-amount").value;
+      var exchangeRate = document.getElementById("exchange-rate").value;
+      var thbAmount = rmAmount * exchangeRate;
+      document.getElementById("thb-amount").innerHTML = thbAmount;
+    }
+  </script>
+</body>
+</html>
