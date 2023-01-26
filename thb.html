@@ -20,6 +20,7 @@
     <br>
     <button type="button" onclick="resetValues()">Reset</button>
   </center></form>
+<div id="exchange-rate"></div>
   <script>
     function calculate() {
       var rmAmount = parseFloat(document.getElementById("rm-amount").value);
@@ -81,5 +82,14 @@ width: 100%;
 }
 </style>
 <script type="text/javascript" src="https://mohamadafiza.github.io/calculator/timethai.js"></script>
+<script>
+  let app_id = 'fc09336f0ad94b5ea4dacad7b106f98a';
+  fetch(`https://openexchangerates.org/api/latest.json?app_id=${app_id}&symbols=THB,MYR`)
+  .then(response => response.json())
+  .then(data => {
+    let exchangeRate = parseFloat((data.rates.THB / data.rates.MYR).toFixed(2));
+    document.getElementById("exchange-rate").innerHTML = "World Rates: " + exchangeRate;
+  });
+</script>
 </body>
 </html>
