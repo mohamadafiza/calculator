@@ -11,9 +11,10 @@
     <br>
     <label>Rate:</label>
     <input type="number" id="exchange-rate" value="7.52"  oninput="calculate()">
-  <label>Baht:</label> <input type="number" id="thb-amount"  oninput="convertBack()">
-      <button type="button" onclick="resetValues()">Reset</button>
-        </form>
+    <br>
+    <label>Baht:</label> <input type="number" id="thb-amount"  oninput="convertBack()">
+    <button type="button" onclick="resetValues()">Reset</button>
+  </form>
   <script>
     function calculate() {
       var rmAmount = parseFloat(document.getElementById("rm-amount").value);
