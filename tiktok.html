@@ -1,92 +1,136 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <title>Tik Tok Seller Fees Calculator</title>
+    <meta charset="UTF-8">
+    <title>Tik Tok Seller Fees Calculator</title>
     <center><h1>Tik Tok Seller Fees Calculator</h1></center>
-</head>
-<body>
-  <div>
-    <p>Product Supplier Cost: <input type="number" id="supplierCost"></p>
-    <p>Product Selling Price: <input type="number" id="sellingPrice"></p>
-  </div>
-  <div>
-    <p><input type="checkbox" id="shippingFeeCheckbox"> Include shipping fee programme</p>
-  </div>
-  <div id="results">
-    <p>Transaction fee: <span id="transactionFee"></span></p>
-    <p>Commission fee: <span id="commissionFee"></span></p>
-    <p>Shipping fee: <span id="shippingFee"></span></p>
-    <p>Total fee: <span id="totalFee"></span></p>
-    <p>Net profit: <span id="netProfit"></span></p>
-    <p>Net sale: <span id="netSale"></span></p>
-    <p>Profit percentage: <span id="profitPercentage"></span></p>
-    <p>Margin percentage: <span id="marginPercentage"></span></p>
-  </div>
-  <div>
-    <button id="resetBtn">Reset</button>
-    <button id="copyBtn">Copy to Clipboard</button>
-  </div>
-  <script>
-    const supplierCostInput = document.getElementById('supplierCost');
-    const sellingPriceInput = document.getElementById('sellingPrice');
-    const shippingFeeCheckbox = document.getElementById('shippingFeeCheckbox');
-    const transactionFeeSpan = document.getElementById('transactionFee');
-    const commissionFeeSpan = document.getElementById('commissionFee');
-    const shippingFeeSpan = document.getElementById('shippingFee');
-    const totalFeeSpan = document.getElementById('totalFee');
-    const netProfitSpan = document.getElementById('netProfit');
-    const netSaleSpan = document.getElementById('netSale');
-    const profitPercentageSpan = document.getElementById('profitPercentage');
-    const marginPercentageSpan = document.getElementById('marginPercentage');
-    const resetBtn = document.getElementById('resetBtn');
-    const copyBtn = document.getElementById('copyBtn');
+    <style>
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 50px;
+      }
 
-    function calculateFees() {
-      const supplierCost = parseFloat(supplierCostInput.value) || 0;
-      const sellingPrice = parseFloat(sellingPriceInput.value) || 0;
-      const includeShippingFee = shippingFeeCheckbox.checked;
+      label {
+        font-size: 18px;
+        margin: 10px 0;
+      }
 
-      const transactionFee = (sellingPrice * 2.12) / 100;
-      const commissionFee = (sellingPrice * 2.12) / 100;
-      const shippingFee = includeShippingFee ? (sellingPrice * 2.5) / 100 : 0;
-      const totalFee = transactionFee + commissionFee + shippingFee;
-      const netProfit = sellingPrice - supplierCost - totalFee;
-const netSale = sellingPrice - totalFee;
-const profitPercentage = (netProfit / sellingPrice) * 100;
-const marginPercentage = (netProfit / supplierCost) * 100;
-  transactionFeeSpan.textContent = "RM" + transactionFee.toFixed(2);
-  commissionFeeSpan.textContent = "RM" + commissionFee.toFixed(2);
-  shippingFeeSpan.textContent = "RM" + shippingFee.toFixed(2);
-  totalFeeSpan.textContent = "RM" + totalFee.toFixed(2);
-  netProfitSpan.textContent = "RM" + netProfit.toFixed(2);
-  netSaleSpan.textContent = "RM" + netSale.toFixed(2);
-  profitPercentageSpan.textContent = profitPercentage.toFixed(2) + '%';
-  marginPercentageSpan.textContent = marginPercentage.toFixed(2) + '%';
-}
+      input[type="number"] {
+        font-size: 18px;
+        padding: 5px 10px;
+        width: 200px;
+      }
 
-supplierCostInput.addEventListener('input', calculateFees);
-sellingPriceInput.addEventListener('input', calculateFees);
-shippingFeeCheckbox.addEventListener('change', calculateFees);
+      input[type="checkbox"] {
+        margin-right: 10px;
+      }
 
-resetBtn.addEventListener('click', function (event) {
-  event.preventDefault();
-  supplierCostInput.value = '';
-  sellingPriceInput.value = '';
-  shippingFeeCheckbox.checked = false;
-  calculateFees();
-});
+      .output {
+        margin-top: 20px;
+        font-size: 18px;
+      }
 
-copyBtn.addEventListener('click', function (event) {
-  event.preventDefault();
-  const results = document.getElementById('results').innerText;
-  navigator.clipboard.writeText(results).then(function () {
-    console.log('Copied to clipboard');
-  }, function (err) {
-    console.error('Failed to copy to clipboard: ', err);
-  });
-});
-</script>
-</body>
+      .btn {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: lightblue;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <label>Product Supplier Cost:</label>
+      <input type="number" id="supplierCost" oninput="calculate()">
+      <label>Product Selling Price:</label>
+      <input type="number" id="sellingPrice" oninput="calculate()">
+      <label>
+        <input type="checkbox" id="shippingFeeCheckbox" oninput="calculate()">
+        Include Shipping Fee
+      </label>
+      <div class="output">
+        <p id="transactionFee"></p>
+        <p id="commissionFee"></p>
+        <p id="shippingFee"></p>
+        <p id="totalFee"></p>
+        <p id="netProfit"></p>
+        <p id="netSale"></p>
+        <p id="profitPercentage"></p>
+        <p id="marginPercentage"></p>
+      </div>
+      <button class="btn" onclick="reset()">Reset</button>
+      <button class="btn" onclick="copyToClipboard()">Copy to Clipboard</button>
+    </div>
+    <script>
+      function calculate() {
+        const supplierCost = Number(document.getElementById("supplierCost").value);
+        const sellingPrice = Number(document.getElementById("sellingPrice").value);
+        const shippingFeeCheckbox = document.getElementById("shippingFeeCheckbox").checked;
+
+        const transactionFee = supplierCost * 0.0212;
+        const commissionFee = sellingPrice * 0.0212;
+        let shippingFee = 0;
+        if (shippingFeeCheckbox) {
+          shippingFee = sellingPrice * 0.025;
+        }
+        const totalFee = transactionFee + commissionFee + shippingFee;
+        const netProfit = sellingPrice - supplierCost - totalFee;
+        const netSale = sellingPrice - totalFee;
+        const profitPercentage = (netProfit / supplierCost) * 100;
+        const marginPercentage = (netProfit / sellingPrice) * 100;
+
+        document.getElementById("transactionFee").innerHTML = `Transaction fee: RM${transactionFee.toFixed(2)}`;
+        document.getElementById("commissionFee").innerHTML = `Commission fee: RM${commissionFee.toFixed(2)}`;
+        document.getElementById("shippingFee").innerHTML = `Shipping fee: RM${shippingFee.toFixed(2)}`;
+        document.getElementById("totalFee").innerHTML = `Total fee: RM${totalFee.toFixed(2)}`;
+        document.getElementById("netProfit").innerHTML = `Net profit: RM${netProfit.toFixed(2)}`;
+        document.getElementById("netSale").innerHTML = `Net sale: RM${netSale.toFixed(2)}`;
+        document.getElementById("profitPercentage").innerHTML = `Profit percentage: ${profitPercentage.toFixed(2)}%`;
+        document.getElementById("marginPercentage").innerHTML = `Margin percentage: ${marginPercentage.toFixed(2)}%`;
+      }
+
+      function reset() {
+        document.getElementById("supplierCost").value = "";
+        document.getElementById("sellingPrice").value = "";
+        document.getElementById("shippingFeeCheckbox").checked = false;
+        document.getElementById("transactionFee").innerHTML = "";
+        document.getElementById("commissionFee").innerHTML = "";
+        document.getElementById("shippingFee").innerHTML = "";
+        document.getElementById("totalFee").innerHTML = "";
+        document.getElementById("netProfit").innerHTML = "";
+        document.getElementById("netSale").innerHTML = "";
+        document.getElementById("profitPercentage").innerHTML = "";
+        document.getElementById("marginPercentage").innerHTML = "";
+      }
+
+      function copyToClipboard() {
+        const output = [
+          document.getElementById("transactionFee").innerHTML,
+          document.getElementById("commissionFee").innerHTML,
+          document.getElementById("shippingFee").innerHTML,
+          document.getElementById("totalFee").innerHTML,
+          document.getElementById("netProfit").innerHTML,
+          document.getElementById("netSale").innerHTML,
+          document.getElementById("profitPercentage").innerHTML,
+          document.getElementById("marginPercentage").innerHTML,
+        ];
+
+        const outputText = output.join("\n");
+
+        const textArea = document.createElement("textarea");
+        textArea.value = outputText;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+      }
+    </script>
+  </body>
 </html>
