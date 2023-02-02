@@ -56,12 +56,12 @@
 const netSale = sellingPrice - totalFee;
 const profitPercentage = (netProfit / sellingPrice) * 100;
 const marginPercentage = (netProfit / supplierCost) * 100;
-  transactionFeeSpan.textContent = transactionFee.toFixed(2);
-  commissionFeeSpan.textContent = commissionFee.toFixed(2);
-  shippingFeeSpan.textContent = shippingFee.toFixed(2);
-  totalFeeSpan.textContent = totalFee.toFixed(2);
-  netProfitSpan.textContent = netProfit.toFixed(2);
-  netSaleSpan.textContent = netSale.toFixed(2);
+  transactionFeeSpan.textContent = "RM" + transactionFee.toFixed(2);
+  commissionFeeSpan.textContent = "RM" + commissionFee.toFixed(2);
+  shippingFeeSpan.textContent = "RM" + shippingFee.toFixed(2);
+  totalFeeSpan.textContent = "RM" + totalFee.toFixed(2);
+  netProfitSpan.textContent = "RM" + netProfit.toFixed(2);
+  netSaleSpan.textContent = "RM" + netSale.toFixed(2);
   profitPercentageSpan.textContent = profitPercentage.toFixed(2) + '%';
   marginPercentageSpan.textContent = marginPercentage.toFixed(2) + '%';
 }
