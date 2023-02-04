@@ -93,6 +93,7 @@
       `;
       
       // Loop to display monthly payment details
+      var rem = totalPayment;
       var remainingBalance = loanAmount;
       var cumulativeTotal = 0;
       for (var i = 1; i <= numberOfPayments; i++) {
@@ -100,13 +101,14 @@
         var principalPaid = monthlyPayment - interestPaid;
         remainingBalance -= principalPaid;
         cumulativeTotal += monthlyPayment;
+        rem = totalPayment - cumulativeTotal;
         output += `
           <tr>
             <td>${i}</td>
             <td>${principalPaid.toFixed(2)}</td>
             <td>${interestPaid.toFixed(2)}</td>
             <td>${cumulativeTotal.toFixed(2)}</td>
-            <td>${remainingBalance.toFixed(2)}</td>
+            <td>${rem.toFixed(2)}</td>
           </tr>
         `;
       }
