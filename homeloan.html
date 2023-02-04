@@ -15,14 +15,10 @@
 <body>
   <h1>Home Loan Calculator</h1>
   <form>
-    <label>House Price (RM): </label>
-    <input type="text" id="housePrice"><br><br>
-    <label>Down Payment (%): </label>
-    <input type="text" value="0" id="downPaymentPercentage"><br><br>
-    <label>Loan Tenure (Years): </label>
-    <input type="text" id="loanTenure"><br><br>
-    <label>Interest Rate (%): </label>
-    <input type="text" id="interestRate"><br><br>
+    House Price (RM): <input type="text" id="housePrice"><br>
+    Down Payment (%): <input type="text" id="downPaymentPercentage"><br>
+    Loan Tenure (Years): <input type="text" id="loanTenure"><br>
+    Interest Rate (%): <input type="text" id="interestRate"><br>
     <button type="button" onclick="calculate()">Calculate</button>
   </form>
   <br>
@@ -32,67 +28,63 @@
   <script>
     function calculate() {
       // Get user inputs
-      var housePrice = document.getElementById("housePrice").value;
-      var downPaymentPercentage = document.getElementById("downPaymentPercentage").value;
-      var loanTenure = document.getElementById("loanTenure").value;
-      var interestRate = document.getElementById("interestRate").value;
+      var housePrice = parseFloat(document.getElementById("housePrice").value);
+      var downPaymentPercentage = parseFloat(document.getElementById("downPaymentPercentage").value);
+      var loanTenure = parseFloat(document.getElementById("loanTenure").value);
+      var interestRate = parseFloat(document.getElementById("interestRate").value);
       
-      // Calculate down payment
-      var downPayment = housePrice * downPaymentPercentage / 100;
-      
-      // Calculate loan amount
+      // Calculate down payment and loan amount
+      var downPayment = housePrice * (downPaymentPercentage / 100);
       var loanAmount = housePrice - downPayment;
       
-      // Calculate monthly payment
-      var monthlyRate = interestRate / 100 / 12;
+      // Calculate monthly payment and total payment
+      var monthlyRate = interestRate / 12 / 100;
       var numberOfPayments = loanTenure * 12;
-      var monthlyPayment = loanAmount * monthlyRate / (1 - (Math.pow(1 / (1 + monthlyRate), numberOfPayments)));
-      
-      // Calculate total interest paid
-      var totalInterestPaid = (monthlyPayment * numberOfPayments) - loanAmount;
-      
-      // Calculate total payment
+      var monthlyPayment = loanAmount * (monthlyRate / (1 - Math.pow(1 + monthlyRate, -numberOfPayments)));
       var totalPayment = monthlyPayment * numberOfPayments;
+      var totalInterestPaid = totalPayment - loanAmount;
       
-      // Show results
+      // Initialize result table
       var output = `
         <tr>
           <td>Monthly Payment</td>
-                    <td colspan="4">RM ${monthlyPayment.toFixed(2)}</td>
+          <td colspan="4">RM${monthlyPayment.toFixed(2)}</td>
         </tr>
         <tr>
           <td>Total Interest Paid</td>
-          <td colspan="4">RM ${totalInterestPaid.toFixed(2)}</td>
+          <td colspan="4">RM${totalInterestPaid.toFixed(2)}</td>
         </tr>
         <tr>
           <td>Total Payment</td>
-          <td colspan="4">RM ${totalPayment.toFixed(2)}</td>
+          <td colspan="4">RM${totalPayment.toFixed(2)}</td>
         </tr>
         <tr>
           <td>Downpayment Value</td>
-          <td colspan="4">RM ${downPayment.toFixed(2)}</td>
+          <td colspan="4">RM${downPayment.toFixed(2)}</td>
         </tr>
-          <tr>
+            <tr>
       <th>Month</th>
       <th>Principal Paid (RM)</th>
       <th>Interest Paid (RM)</th>
       <th>Total Paid (RM)</th>
       <th>Remaining Balance (RM)</th>
-          </tr>
+    </tr>
       `;
       
       // Loop to display monthly payment details
       var remainingBalance = loanAmount;
+      var cumulativeTotal = 0;
       for (var i = 1; i <= numberOfPayments; i++) {
-        var interest = remainingBalance * monthlyRate;
-        var principal = monthlyPayment - interest;
-        remainingBalance -= principal;
+        var interestPaid = remainingBalance * monthlyRate;
+        var principalPaid = monthlyPayment - interestPaid;
+        remainingBalance -= principalPaid;
+        cumulativeTotal += monthlyPayment;
         output += `
-      <tr>
+          <tr>
             <td>${i}</td>
-            <td>${principal.toFixed(2)}</td>
-            <td>${interest.toFixed(2)}</td>
-            <td>${monthlyPayment.toFixed(2)}</td>
+            <td>${principalPaid.toFixed(2)}</td>
+            <td>${interestPaid.toFixed(2)}</td>
+            <td>${cumulativeTotal.toFixed(2)}</td>
             <td>${remainingBalance.toFixed(2)}</td>
           </tr>
         `;
