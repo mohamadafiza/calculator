@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <title>Home Loan Calculator</title>
@@ -121,26 +122,15 @@
   </script>
   
   <script>
-  // Get the form submit button
-  var generatePDFButton = document.getElementById("generate-pdf");
-  
-  console.log(generatePDFButton); // Verify that the button element is correctly referenced
-
-  // Attach a click event listener to the button
-  generatePDFButton.addEventListener("click", function(event) {
-    event.preventDefault();
-
-    // Your code to generate the PDF goes here
-    var pdf = new jsPDF();
-    console.log(pdf); // Verify that the pdf variable is correctly instantiated
-
-    // Example PDF generation code
-    pdf.fromHTML(document.body, 10, 10, {
-      'width': 180
-    });
-
-    pdf.save("sample.pdf");
+var generatePDFButton = document.getElementById("generatePDFButton");
+generatePDFButton.addEventListener("click", function(event) {
+  event.preventDefault();
+  html2canvas(document.body).then(function(canvas) {
+    var pdf = new jsPDF("p", "mm", "a4");
+    pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, 211, 298);
+    pdf.save("result.pdf");
   });
+});
 </script>
 
 </body>
