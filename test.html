@@ -1,40 +1,26 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <meta charset="UTF-8">
-    <title>Product Profit Calculator</title>
-    <center><h1>Tik Tok Seller Fees Calculator</h1></center>
-    <style>
-      .container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-top: 50px;
+  <title>Home Loan Calculator</title>
+  <style>
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+      padding: 5px;
       }
-
-      label {
-        font-size: 18px;
-        margin: 10px 0;
+    input[type="number"] {
+      width:25%;
+      padding:10px 0px;
       }
-
-      input[type="number"] {
-        font-size: 18px;
-        padding: 5px 10px;
-        width: 200px;
-      }
-
-      input[type="checkbox"] {
-        margin-right: 10px;
-      }
-
-      .output {
-        margin-top: 20px;
-        font-size: 18px;
-      }
-
-      .btn {
+    label {
+      display:inline-block;
+      width:160px;
+      text-align:right;
+     }
+     button {
         margin-top: 20px;
         padding: 10px 20px;
         background-color: lightblue;
@@ -43,94 +29,114 @@
         cursor: pointer;
         font-size: 18px;
       }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <label>Product Supplier Cost:</label>
-      <input type="number" id="supplierCost" oninput="calculate()">
-      <label>Product Selling Price:</label>
-      <input type="number" id="sellingPrice" oninput="calculate()">
-      <label>
-        <input type="checkbox" id="shippingFeeCheckbox" oninput="calculate()">
-        Include Shipping Fee
-      </label>
-      <div class="output">
-        <p id="transactionFee"></p>
-        <p id="commissionFee"></p>
-        <p id="shippingFee"></p>
-        <p id="totalFee"></p>
-        <p id="netProfit"></p>
-        <p id="netSale"></p>
-        <p id="profitPercentage"></p>
-        <p id="marginPercentage"></p>
-      </div>
-      <button class="btn" onclick="reset()">Reset</button>
-      <button class="btn" onclick="copyToClipboard()">Copy to Clipboard</button>
-    </div>
-    <script>
-      function calculate() {
-        const supplierCost = Number(document.getElementById("supplierCost").value);
-        const sellingPrice = Number(document.getElementById("sellingPrice").value);
-        const shippingFeeCheckbox = document.getElementById("shippingFeeCheckbox").checked;
+    button:hover {
+      background-color: blue;
+     }
+  </style>
+</head>
+<body><center>
+  <h1>Home Loan Calculator</h1>
+  <form>
+    <label>House Price (RM):</label> <input type="number" id="housePrice"><br>
+    <label>Down Payment (%):</label> <input type="number" id="downPaymentPercentage"><br>
+    <label>Loan Tenure (Years):</label> <input type="number" id="loanTenure"><br>
+    <label>Interest Rate (%):</label> <input type="number" id="interestRate"><br>
+    <button type="button" onclick="calculate()">Calculate</button>
+    <button id="generate-pdf" onclick="event.preventDefault();">Generate PDF</button>
+  </center></form>
+  <br>
+  <table id="result">
 
-        const transactionFee = supplierCost * 0.0212;
-        const commissionFee = sellingPrice * 0.0212;
-        let shippingFee = 0;
-        if (shippingFeeCheckbox) {
-          shippingFee = sellingPrice * 0.025;
-        }
-        const totalFee = transactionFee + commissionFee + shippingFee;
-        const netProfit = sellingPrice - supplierCost - totalFee;
-        const netSale = sellingPrice - totalFee;
-        const profitPercentage = (netProfit / supplierCost) * 100;
-        const marginPercentage = (netProfit / sellingPrice) * 100;
-
-        document.getElementById("transactionFee").innerHTML = `Transaction fee: RM ${transactionFee.toFixed(2)}`;
-        document.getElementById("commissionFee").innerHTML = `Commission fee: RM ${commissionFee.toFixed(2)}`;
-        document.getElementById("shippingFee").innerHTML = `Shipping fee: RM ${shippingFee.toFixed(2)}`;
-        document.getElementById("totalFee").innerHTML = `Total fee: RM ${totalFee.toFixed(2)}`;
-        document.getElementById("netProfit").innerHTML = `Net profit: RM ${netProfit.toFixed(2)}`;
-        document.getElementById("netSale").innerHTML = `Net sale: RM ${netSale.toFixed(2)}`;
-        document.getElementById("profitPercentage").innerHTML = `Profit percentage: ${profitPercentage.toFixed(2)}%`;
-        document.getElementById("marginPercentage").innerHTML = `Margin percentage: ${marginPercentage.toFixed(2)}%`;
+  </table>
+  <script>
+    function calculate() {
+      // Get user inputs
+      var housePrice = parseFloat(document.getElementById("housePrice").value);
+      var downPaymentPercentage = parseFloat(document.getElementById("downPaymentPercentage").value);
+      var loanTenure = parseFloat(document.getElementById("loanTenure").value);
+      var interestRate = parseFloat(document.getElementById("interestRate").value);
+      
+      // Calculate down payment and loan amount
+      var downPayment = housePrice * (downPaymentPercentage / 100);
+      var loanAmount = housePrice - downPayment;
+      
+      // Calculate monthly payment and total payment
+      var monthlyRate = interestRate / 12 / 100;
+      var numberOfPayments = loanTenure * 12;
+      var monthlyPayment = loanAmount * (monthlyRate / (1 - Math.pow(1 + monthlyRate, -numberOfPayments)));
+      var totalPayment = monthlyPayment * numberOfPayments;
+      var totalInterestPaid = totalPayment - loanAmount;
+      
+      // Initialize result table
+      var output = `
+        <tr>
+          <td>Monthly Payment</td>
+          <td colspan="4">RM${monthlyPayment.toFixed(2)}</td>
+        </tr>
+        <tr>
+          <td>Total Interest Paid</td>
+          <td colspan="4">RM${totalInterestPaid.toFixed(2)}</td>
+        </tr>
+        <tr>
+          <td>Total Payment</td>
+          <td colspan="4">RM${totalPayment.toFixed(2)}</td>
+        </tr>
+        <tr>
+          <td>Down Payment Value</td>
+          <td colspan="4">RM${downPayment.toFixed(2)}</td>
+        </tr>
+            <tr>
+      <th>Month</th>
+      <th>Principal Paid (RM)</th>
+      <th>Interest Paid (RM)</th>
+      <th>Total Paid (RM)</th>
+      <th>Remaining Balance (RM)</th>
+    </tr>
+      `;
+      
+      // Loop to display monthly payment details
+      var rem = totalPayment;
+      var remainingBalance = loanAmount;
+      var cumulativeTotal = 0;
+      for (var i = 1; i <= numberOfPayments; i++) {
+        var interestPaid = remainingBalance * monthlyRate;
+        var principalPaid = monthlyPayment - interestPaid;
+        remainingBalance -= principalPaid;
+        cumulativeTotal += monthlyPayment;
+        rem = totalPayment - cumulativeTotal;
+        output += `
+          <tr>
+            <td>${i}</td>
+            <td>${principalPaid.toFixed(2)}</td>
+            <td>${interestPaid.toFixed(2)}</td>
+            <td>${cumulativeTotal.toFixed(2)}</td>
+            <td>${rem.toFixed(2)}</td>
+          </tr>
+        `;
       }
+      
+      // Update result table
+      document.getElementById("result").innerHTML = output;
+    }
+  </script>
+  
+   <script>
+      // Get the button element
+      var generatePDFButton = document.getElementById("generate-pdf");
 
-      function reset() {
-        document.getElementById("supplierCost").value = "";
-        document.getElementById("sellingPrice").value = "";
-        document.getElementById("shippingFeeCheckbox").checked = false;
-        document.getElementById("transactionFee").innerHTML = "";
-        document.getElementById("commissionFee").innerHTML = "";
-        document.getElementById("shippingFee").innerHTML = "";
-        document.getElementById("totalFee").innerHTML = "";
-        document.getElementById("netProfit").innerHTML = "";
-        document.getElementById("netSale").innerHTML = "";
-        document.getElementById("profitPercentage").innerHTML = "";
-        document.getElementById("marginPercentage").innerHTML = "";
-      }
+      // Attach a click event listener to the button
+      generatePDFButton.addEventListener("click", function() {
+        // Create a new instance of the jsPDF library
+        var pdf = new jsPDF();
 
-      function copyToClipboard() {
-        const output = [
-          document.getElementById("transactionFee").innerHTML,
-          document.getElementById("commissionFee").innerHTML,
-          document.getElementById("shippingFee").innerHTML,
-          document.getElementById("totalFee").innerHTML,
-          document.getElementById("netProfit").innerHTML,
-          document.getElementById("netSale").innerHTML,
-          document.getElementById("profitPercentage").innerHTML,
-          document.getElementById("marginPercentage").innerHTML,
-        ];
+        // Use the fromHTML method to convert the HTML content to a PDF document
+        pdf.fromHTML(document.body, 20, 20, {
+          width: 500
+        });
 
-        const outputText = output.join("\n");
-
-        const textArea = document.createElement("textarea");
-        textArea.value = outputText;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand("copy");
-        document.body.removeChild(textArea);
-      }
+        // Save the PDF document
+        pdf.save("homeloan.pdf");
+      });
     </script>
-  </body>
+</body>
 </html>
