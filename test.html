@@ -124,8 +124,10 @@
       // Get the button element
       var generatePDFButton = document.getElementById("generate-pdf");
 
-      // Attach a click event listener to the button
-      generatePDFButton.addEventListener("click", function() {
+  // Attach a click event listener to the button
+  generatePDFButton.addEventListener("click", function(event) {
+    event.preventDefault();
+          
         // Create a new instance of the jsPDF library
         var pdf = new jsPDF();
 
