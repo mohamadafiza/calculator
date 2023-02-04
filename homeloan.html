@@ -9,16 +9,25 @@
       border: 1px solid black;
       border-collapse: collapse;
       padding: 5px;
-    }
+      }
+		input[type="number"] {
+        	width:30%;
+            padding:15px 0px;
+		}
+        label {
+			display:inline-block;
+			width:100px;
+			text-align:right;
+         }
   </style>
 </head>
 <body>
   <h1>Home Loan Calculator</h1>
   <form>
-    House Price (RM): <input type="text" id="housePrice"><br>
-    Down Payment (%): <input type="text" id="downPaymentPercentage"><br>
-    Loan Tenure (Years): <input type="text" id="loanTenure"><br>
-    Interest Rate (%): <input type="text" id="interestRate"><br>
+    <label>House Price (RM):</label> <input type="number" id="housePrice"><br>
+    <label>Down Payment (%):</label> <input type="number" id="downPaymentPercentage"><br>
+    <label>Loan Tenure (Years):</label> <input type="number" id="loanTenure"><br>
+    <label>Interest Rate (%):</label> <input type="number" id="interestRate"><br>
     <button type="button" onclick="calculate()">Calculate</button>
   </form>
   <br>
