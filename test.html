@@ -121,17 +121,7 @@
     }
   </script>
   
-  <script>
-var generatePDFButton = document.getElementById("generatePDFButton");
-generatePDFButton.addEventListener("click", function(event) {
-  event.preventDefault();
-  html2canvas(document.body).then(function(canvas) {
-    var pdf = new jsPDF("p", "mm", "a4");
-    pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, 211, 298);
-    pdf.save("result.pdf");
-  });
-});
-</script>
+<script> var generatePDFButton = document.getElementById("generatePDFButton"); generatePDFButton.addEventListener("click", function(event) { event.preventDefault(); var allPages = []; var pageElements = document.querySelectorAll('body > *'); var pageCount = pageElements.length; var pageNumber = 0; function capturePage(pageNumber) { html2canvas(pageElements[pageNumber], { scale: 2 }).then(function(canvas) { allPages.push(canvas); if (pageNumber < pageCount - 1) { capturePage(pageNumber + 1); } else { var pdf = new jsPDF('p', 'mm', 'a4'); for (var i = 0; i < allPages.length; i++) { pdf.addImage(allPages[i].toDataURL('image/png'), 'PNG', 0, 0, 211, 298); if (i < allPages.length - 1) { pdf.addPage(); } } pdf.save('result.pdf'); } }); } capturePage(0); }); </script>
 
 </body>
 </html>
