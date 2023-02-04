@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="https://cdn.jsdelivr.net/npm/pdfmake@0.1.66/build/pdfmake.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/pdfmake@0.1.66/build/vfs_fonts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dom-to-image@2.6.0/dist/dom-to-image.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@1.5.3/dist/jspdf.min.js"></script>
  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <title>Home Loan Calculator</title>
@@ -127,18 +127,39 @@ var generatePDFButton = document.getElementById("generatePDFButton");
 generatePDFButton.addEventListener("click", function(event) {
   event.preventDefault();
 
-  var bodyElements = document.body.children;
-  var bodyContent = [];
+  var allPages = [];
+  var pageElements = document.querySelectorAll('body > *');
+  var pageCount = pageElements.length;
+  var pageNumber = 0;
 
-  for (var i = 0; i < bodyElements.length; i++) {
-    bodyContent.push({text: bodyElements[i].outerHTML});
+  function capturePage(pageNumber) {
+    domtoimage.toPng(pageElements[pageNumber], {
+      height: window.innerHeight,
+      width: window.innerWidth,
+      style: {
+        'transform': 'scale(2)'
+      }
+    }).then(function(dataUrl) {
+      allPages.push(dataUrl);
+
+      if (pageNumber < pageCount - 1) {
+        capturePage(pageNumber + 1);
+      } else {
+        var pdf = new jsPDF('p', 'mm', 'a4');
+
+        for (var i = 0; i < allPages.length; i++) {
+          pdf.addImage(allPages[i], 'PNG', 0, 0, 211, 298);
+          if (i < allPages.length - 1) {
+            pdf.addPage();
+          }
+        }
+
+        pdf.save('result.pdf');
+      }
+    });
   }
 
-  var docDefinition = {
-    content: bodyContent
-  };
-
-  pdfMake.createPdf(docDefinition).download('result.pdf');
+  capturePage(0);
 });
 </script>
 
