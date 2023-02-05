@@ -8,13 +8,13 @@
 <body>
   <center><marquee><h1>Currency Ringgit-Baht Converter</marquee></h1>
   <form><center>
+    <label>Rate:</label>
+    <input type="number" id="exchange-rate" value=""  oninput="calculate()">
+    <br>
     <label>Baht:</label> <input type="number" id="thb-amount"  oninput="convertBack()">
     <br>
     <label>RM:</label>
     <input type="number" id="rm-amount" oninput="calculate()">
-    <br>
-    <label>Rate:</label>
-    <input type="number" id="exchange-rate" value=""  oninput="calculate()">
     <br>
     <button type="button" onclick="resetValues()">Reset</button>
   </center></form>
