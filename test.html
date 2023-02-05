@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="https://cdn.jsdelivr.net/npm/dom-to-image@2.6.0/dist/dom-to-image.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jspdf@1.5.3/dist/jspdf.min.js"></script>
- <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <title>Home Loan Calculator</title>
   <style>
@@ -43,7 +42,7 @@
     <label>Loan Tenure (Years):</label> <input type="number" id="loanTenure"><br>
     <label>Interest Rate (%):</label> <input type="number" id="interestRate"><br>
     <button type="button" onclick="calculate()">Calculate</button>
-<button id="generatePDFButton">Generate PDF</button>
+<button id="print-pdf-button">Print as PDF</button>
   </center></form>
   <br>
   <table id="result">
@@ -122,44 +121,11 @@
   </script>
   
 <script>
-var generatePDFButton = document.getElementById("generatePDFButton");
+const printPDFButton = document.getElementById('print-pdf-button');
 
-generatePDFButton.addEventListener("click", function(event) {
+printPDFButton.addEventListener('click', function(event) {
   event.preventDefault();
-
-  var allPages = [];
-  var pageElements = document.querySelectorAll('body > *');
-  var pageCount = pageElements.length;
-  var pageNumber = 0;
-
-  function capturePage(pageNumber) {
-    domtoimage.toPng(pageElements[pageNumber], {
-      height: window.innerHeight,
-      width: window.innerWidth,
-      style: {
-        'transform': 'scale(2)'
-      }
-    }).then(function(dataUrl) {
-      allPages.push(dataUrl);
-
-      if (pageNumber < pageCount - 1) {
-        capturePage(pageNumber + 1);
-      } else {
-        var pdf = new jsPDF('p', 'mm', 'a4');
-
-        for (var i = 0; i < allPages.length; i++) {
-          pdf.addImage(allPages[i], 'PNG', 0, 0, 211, 298);
-          if (i < allPages.length - 1) {
-            pdf.addPage();
-          }
-        }
-
-        pdf.save('result.pdf');
-      }
-    });
-  }
-
-  capturePage(0);
+  window.print();
 });
 </script>
 
