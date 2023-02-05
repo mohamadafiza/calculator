@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <title>Home Loan Calculator</title>
@@ -41,6 +42,7 @@
     <label>Loan Tenure (Years):</label> <input type="number" id="loanTenure"><br>
     <label>Interest Rate (%):</label> <input type="number" id="interestRate"><br>
     <button type="button" onclick="calculate()">Calculate</button>
+<button id="print-pdf-button">Print as PDF</button>
   </center></form>
   <br>
   <table id="result">
@@ -117,5 +119,15 @@
       document.getElementById("result").innerHTML = output;
     }
   </script>
+  
+<script>
+const printPDFButton = document.getElementById('print-pdf-button');
+
+printPDFButton.addEventListener('click', function(event) {
+  event.preventDefault();
+  window.print();
+});
+</script>
+
 </body>
 </html>
