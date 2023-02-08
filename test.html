@@ -65,7 +65,7 @@
     if (value > 250000) {
       value = 250000;
     } else if (value % 250 !== 0) {
-      value = Math.round(value / 250) * 250;
+      value = Math.ceil(value / 250) * 250;
     }
     amountInput.value = value;
    
