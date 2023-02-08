@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
+	<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+	<title>Kalkulator Pengiraan Manfaat Program Ayam Kampung PAKKP & Zakat</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <title>Home Loan Calculator</title>
   <style>
     table, th, td {
       border: 1px solid black;
@@ -31,103 +32,79 @@
       }
     button:hover {
       background-color: blue;
+      color: white;
      }
   </style>
-</head>
-<body><center>
-  <h1>Home Loan Calculator</h1>
-  <form>
-    <label>House Price (RM):</label> <input type="number" id="housePrice"><br>
-    <label>Down Payment (%):</label> <input type="number" id="downPaymentPercentage"><br>
-    <label>Loan Tenure (Years):</label> <input type="number" id="loanTenure"><br>
-    <label>Interest Rate (%):</label> <input type="number" id="interestRate"><br>
-    <button type="button" onclick="calculate()">Calculate</button>
-<button id="print-pdf-button">Print as PDF</button>
-  </center></form>
-  <br>
-  <table id="result">
-
-  </table>
+  </head>
+  <body>
+<h1><center><img id="logo" src="logopakkp.jpg" width="50" height="50"> Kalkulator Pengiraan Manfaat PAKKP & Zakat</center></h1>
+    <sup>Masukkan jumlah dalam RM antara RM250 hingga RM250000:</sup>
+	<p>RM<input type="number" id="amount" min="250" max="250000" step="1" />
+    <button id="calculate">Kira</button></p>
+    <br />
+    <br />
+    <table id="result">
+    </table>
+<details>
+  <summary></summary>
+<sup><i>*Zakat dikeluarkan jika cukup nisab lebih kurang RM20k+-(**mengikut negeri) = jumlah simpanan RM lain + manfaat PAKKP</i></sup>
+<center><img src="pakkp.jpg" width="50%" height="50%"></center>
+<p><sub>By Pja</sub></p>
+<img src="https://counter5.optistats.ovh/private/freecounterstat.php?c=w9kcshbekn17c6s8kagruez2glsg6jhf" border="0" >
+</details>
+  </body>
   <script>
-    function calculate() {
-      // Get user inputs
-      var housePrice = parseFloat(document.getElementById("housePrice").value);
-      var downPaymentPercentage = parseFloat(document.getElementById("downPaymentPercentage").value);
-      var loanTenure = parseFloat(document.getElementById("loanTenure").value);
-      var interestRate = parseFloat(document.getElementById("interestRate").value);
-      
-      // Calculate down payment and loan amount
-      var downPayment = housePrice * (downPaymentPercentage / 100);
-      var loanAmount = housePrice - downPayment;
-      
-      // Calculate monthly payment and total payment
-      var monthlyRate = interestRate / 12 / 100;
-      var numberOfPayments = loanTenure * 12;
-      var monthlyPayment = loanAmount * (monthlyRate / (1 - Math.pow(1 + monthlyRate, -numberOfPayments)));
-      var totalPayment = monthlyPayment * numberOfPayments;
-      var totalInterestPaid = totalPayment - loanAmount;
-      
-      // Initialize result table
-      var output = `
-        <tr>
-          <td>Monthly Payment</td>
-          <td colspan="4">RM${monthlyPayment.toFixed(2)}</td>
+    const calculateBtn = document.getElementById("calculate");
+    const amountInput = document.getElementById("amount");
+
+    calculateBtn.addEventListener("click", function () {
+    
+    let value = parseInt(amountInput.value);
+    if (value > 250000) {
+      value = 250000;
+    } else if (value % 250 !== 0) {
+      value = Math.round(value / 250) * 250;
+    }
+    amountInput.value = value;
+   
+    
+      let totalManfaatBulanan = 0;
+      const amount = parseInt(amountInput.value);
+ 
+        const manfaatBulanan = (amount * 5.2) / 100;
+        const manfaatTerkumpulSetahun = manfaatBulanan * 12;
+        const zakatTahunan = (manfaatTerkumpulSetahun * 2.5) / 100;
+        
+        var output = `
+         <tr>
+          <td>Manfaat Bulanan</td>
+          <td colspan="3">RM${manfaatBulanan.toFixed(2)}</td>
         </tr>
         <tr>
-          <td>Total Interest Paid</td>
-          <td colspan="4">RM${totalInterestPaid.toFixed(2)}</td>
+          <td>Jumlah Setahun</td>
+          <td colspan="3">RM${manfaatTerkumpulSetahun.toFixed(2)}</td>
         </tr>
         <tr>
-          <td>Total Payment</td>
-          <td colspan="4">RM${totalPayment.toFixed(2)}</td>
+          <td>Zakat Tahunan</td>
+          <td colspan="3">RM${zakatTahunan.toFixed(2)}</td>
         </tr>
+        
         <tr>
-          <td>Down Payment Value</td>
-          <td colspan="4">RM${downPayment.toFixed(2)}</td>
-        </tr>
-            <tr>
-      <th>Month</th>
-      <th>Principal Paid (RM)</th>
-      <th>Interest Paid (RM)</th>
-      <th>Total Paid (RM)</th>
-      <th>Remaining Balance (RM)</th>
-    </tr>
-      `;
-      
-      // Loop to display monthly payment details
-      var rem = totalPayment;
-      var remainingBalance = loanAmount;
-      var cumulativeTotal = 0;
-      for (var i = 1; i <= numberOfPayments; i++) {
-        var interestPaid = remainingBalance * monthlyRate;
-        var principalPaid = monthlyPayment - interestPaid;
-        remainingBalance -= principalPaid;
-        cumulativeTotal += monthlyPayment;
-        rem = totalPayment - cumulativeTotal;
+          <th>Bulan</th>
+          <th>Terkumpul</th>
+        </tr> `;
+        
+        for (let i = 1; i <= 20; i++) {
+        totalManfaatBulanan += manfaatBulanan;
         output += `
           <tr>
-            <td>${i}</td>
-            <td>${principalPaid.toFixed(2)}</td>
-            <td>${interestPaid.toFixed(2)}</td>
-            <td>${cumulativeTotal.toFixed(2)}</td>
-            <td>${rem.toFixed(2)}</td>
+          <td>${i}</td>
+          <td>RM${totalManfaatBulanan}</td>
           </tr>
-        `;
+      `;
+document.getElementById("result").innerHTML = output;
       }
-      
-      // Update result table
-      document.getElementById("result").innerHTML = output;
-    }
+    
+    });
   </script>
-  
-<script>
-const printPDFButton = document.getElementById('print-pdf-button');
-
-printPDFButton.addEventListener('click', function(event) {
-  event.preventDefault();
-  window.print();
-});
-</script>
-
-</body>
 </html>
