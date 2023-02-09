@@ -1,112 +1,125 @@
 <!DOCTYPE html>
 <html>
-  <head>
-	<head>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-	<title>Kalkulator Pengiraan Manfaat Program Ayam Kampung PAKKP & Zakat</title>
-
-  <style>
-    table, th, td {
-      border: 1px solid black;
-      border-collapse: collapse;
-      padding: 5px;
-      }
-    input[type="number"] {
-      width:25%;
-      padding:10px 0px;
-      }
-    label {
-      display:inline-block;
-      width:160px;
-      text-align:right;
-     }
-     button {
-        margin-top: 20px;
-        padding: 10px 20px;
-        background-color: lightblue;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 18px;
-      }
-    button:hover {
-      background-color: blue;
-      color: white;
-     }
-  </style>
-  </head>
-  <body>
-<h1><center><img id="logo" src="logopakkp.jpg" width="50" height="50"> Kalkulator Pengiraan Manfaat PAKKP & Zakat</center></h1>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
 <center>
-    <sup>Masukkan jumlah dalam RM antara RM250 hingga RM250000:</sup>
-	<p>RM<input type="number" id="amount" min="250" max="250000" step="1" />
-    <button id="calculate">Kira</button></p>
-    <br />
-    <br />
-    <table id="result">
-    </table>
-<br>
-<details>
-  <summary></summary>
-<sup><i>*Zakat dikeluarkan jika cukup nisab lebih kurang RM20k+-(**mengikut negeri) = jumlah simpanan RM lain + manfaat PAKKP</i></sup>
-<center><img src="pakkp.jpg" width="50%" height="50%"></center>
-<p><sub>By Pja</sub></p>
-<img src="https://counter5.optistats.ovh/private/freecounterstat.php?c=w9kcshbekn17c6s8kagruez2glsg6jhf" border="0" >
-</details></center>
-  </body>
-  <script>
-    const calculateBtn = document.getElementById("calculate");
-    const amountInput = document.getElementById("amount");
-
-    calculateBtn.addEventListener("click", function () {
-    
-    let value = parseInt(amountInput.value);
-    if (value > 250000) {
-      value = 250000;
-    } else if (value % 250 !== 0) {
-      value = Math.ceil(value / 250) * 250;
+  <title><Calculator</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 60%;
+      margin: auto;
     }
-    amountInput.value = value;
-   
-    
-      let totalManfaatBulanan = 0;
-      const amount = parseInt(amountInput.value);
- 
-        const manfaatBulanan = (amount * 5.2) / 100;
-        const manfaatTerkumpulSetahun = manfaatBulanan * 12;
-        const zakatTahunan = (manfaatTerkumpulSetahun * 2.5) / 100;
-        
-        var output = `
-         <tr>
-          <td>Manfaat Bulanan</td>
-          <td colspan="3">RM${manfaatBulanan.toFixed(2)}</td>
-        </tr>
-        <tr>
-          <td>Jumlah Setahun</td>
-          <td colspan="3">RM${manfaatTerkumpulSetahun.toFixed(2)}</td>
-        </tr>
-        <tr>
-          <td>Zakat Tahunan</td>
-          <td colspan="3">RM${zakatTahunan.toFixed(2)}</td>
-        </tr>
-        
-        <tr>
-          <th>Bulan</th>
-          <th>Terkumpul</th>
-        </tr> `;
-        
-        for (let i = 1; i <= 20; i++) {
-        totalManfaatBulanan += manfaatBulanan;
-        output += `
-          <tr>
-          <td><center>${i}</center></td>
-          <td><center>RM${totalManfaatBulanan}</center></td>
-          </tr>
-      `;
-document.getElementById("result").innerHTML = output;
-      }
-    
-    });
+
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: lightgray;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="text-align: center;">Calculator</h1>
+  <table>
+    <tr>
+      <th>Description</th>
+      <th>RM</th>
+    </tr>
+    <tr>
+      <td>Supplier Cost</td>
+      <td><input type="number" id="supplier-cost"></td>
+    </tr>
+    <tr>
+      <td>Selling Price</td>
+      <td><input type="number" id="price" oninput="calculate()"></td>
+    </tr>
+    <tr>
+      <td>Transaction Fees</td>
+      <td id="transaction-fees">0.00</td>
+    </tr>
+    <tr>
+      <td>Processing Fees</td>
+      <td id="processing-fees">0.00</td>
+    </tr>
+    <tr>
+      <td>Total Fees</td>
+      <td id="total-fees">0.00</td>
+    </tr>
+    <tr>
+      <td>VAT on Seller Fees</td>
+      <td id="vat">0.00</td>
+    </tr>
+    <tr>
+      <td>Total Fees + VAT</td>
+      <td id="total-fees-vat">0.00</td>
+    </tr>
+    <tr>
+      <td>Net Sale</td>
+      <td id="net-sale">0.00</td>
+    </tr>
+    <tr>
+      <td>Net Profit</td>
+      <td id="net-profit">0.00</td>
+    </tr>
+    <tr>
+      <td>Profit Percentage</td>
+      <td id="profit-percentage">0.00%</td>
+    </tr>
+    <tr>
+      <td>Profit Margin</td>
+    <td id="profit-margin">0.00%</td>
+    </tr>
+  </table>
+
+  <script>
+    function calculate() {
+      // Get the input values
+      let supplierCost = Number(document.getElementById("supplier-cost").value);
+      let price = Number(document.getElementById("price").value);
+
+      // Calculate the transaction fees
+      let transactionFees = price * 0.065;
+
+      // Calculate the processing fees
+      let processingFees = (price * 0.045) + 2.00;
+
+      // Calculate the total fees
+      let totalFees = transactionFees + processingFees;
+
+      // Calculate the VAT on seller fees
+      let vat = totalFees * 0.06;
+
+      // Calculate the total fees + VAT
+      let totalFeesVat = totalFees + vat;
+      
+      // Calculate the net sale
+      let netSale = price - totalFeesVat;
+
+      // Calculate the net profit
+      let netProfit = netSale - supplierCost;
+
+      // Calculate the profit percentage
+      let profitPercentage = (netProfit / price) * 100;
+      
+      // Calculate profit margin
+  	  let profitMargin = (netProfit / netSale) * 100
+
+      // Update the output values
+      document.getElementById("transaction-fees").innerHTML = transactionFees.toFixed(2);
+      document.getElementById("processing-fees").innerHTML = processingFees.toFixed(2);
+      document.getElementById("total-fees").innerHTML = totalFees.toFixed(2);
+      document.getElementById("vat").innerHTML = vat.toFixed(2);
+      document.getElementById("total-fees-vat").innerHTML = totalFeesVat.toFixed(2);
+      document.getElementById("net-sale").innerHTML = netSale.toFixed(2);
+      document.getElementById("net-profit").innerHTML = netProfit.toFixed(2);
+      document.getElementById("profit-percentage").innerHTML = profitPercentage.toFixed(2) + "%";
+	  document.getElementById("profit-margin").innerHTML = profitMargin.toFixed(2) + "%";
+    }
   </script>
+</body></center>
 </html>
