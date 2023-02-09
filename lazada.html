@@ -48,7 +48,7 @@
               type="text"
               id="supplierCost"
               name="supplierCost"
-              placeholder="Harga Modal"
+              placeholder="Harga modal"
               oninput="calculateFees()"
             />
           </td>
@@ -60,11 +60,17 @@
               type="text"
               id="sellingPrice"
               name="sellingPrice"
-              placeholder="Harga Jual"
+              placeholder="Add price+buyer postage cost"
               oninput="calculateFees()"
             />
           </td>
         </tr>
+          <tr>
+          <td>East Malaysia</td>
+          <td>
+            <input type="checkbox" id="eastMalaysia" onchange="calculateFees()">Buyer East Malaysia?
+</td>
+</tr>
         <tr>
           <td>Payment Fee</td>
           <td>
@@ -129,7 +135,8 @@
 function calculateFees() {
 var supplierCost = parseFloat(document.getElementById("supplierCost").value);
 var sellingPrice = parseFloat(document.getElementById("sellingPrice").value);
-var paymentFee = (sellingPrice * 2.12) / 100;
+var eastMalaysiaFee = document.getElementById("eastMalaysia").checked ? 14.50 : 4.9;
+var paymentFee = (sellingPrice + eastMalaysiaFee) * 0.0212;
 var marketplaceFee =
 parseFloat(document.getElementById("marketplaceFee").value) / 100 * sellingPrice;
 var freeShipping = 0;
