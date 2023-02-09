@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <title>Profit Calculator</title>
+</head>
+<body>
+  <h1>Etsy Seller Profit Calculator</h1>
+  <form>
+    <div>
+      <label for="supplier-cost">Supplier Cost (RM):</label>
+      <input type="number" id="supplier-cost" oninput="calculate()">
+    </div>
+    <div>
+      <label for="price">Price (RM):</label>
+      <input type="number" id="price" oninput="calculate()">
+    </div>
+  </form>
+  <hr>
+  <h2>Results</h2>
+  <table>
+    <tr>
+      <td>Transaction Fees (6.5%):</td>
+      <td id="transaction-fees">0.00</td>
+    </tr>
+    <tr>
+      <td>Processing Fees (4.5% + RM 2.00):</td>
+      <td id="processing-fees">0.00</td>
+    </tr>
+    <tr>
+      <td>Total Fees:</td>
+      <td id="total-fees">0.00</td>
+    </tr>
+    <tr>
+      <td>VAT on Seller Fees (6%):</td>
+      <td id="vat">0.00</td>
+    </tr>
+    <tr>
+      <td>Total Fees + VAT:</td>
+      <td id="total-fees-vat">0.00</td>
+    </tr>
+    <tr>
+      <td>Net Profit:</td>
+      <td id="net-profit">0.00</td>
+    </tr>
+    <tr>
+      <td>Profit Margin (%):</td>
+      <td id="profit-margin">0.00</td>
+    </tr>
+  </table>
+  <script>
+    function calculate() {
+      // Get the user inputs
+      let supplierCost = document.getElementById("supplier-cost").value;
+      let price = document.getElementById("price").value;
+
+      // Check if the inputs are valid numbers
+      if (isNaN(price) || price <= 0) {
+        price = 0;
+      } else {
+        price = parseFloat(price);
+      }
+
+      if (isNaN(supplierCost) || supplierCost < 0) {
+        supplierCost = 0;
+      } else {
+        supplierCost = parseFloat(supplierCost);
+      }
+
+      // Calculate transaction fees
+      let transactionFees = price * 0.065;
+
+      // Calculate processing fees
+      let processingFees = (price * 0.045) + 2;
+
+      // Calculate total fees
+      let totalFees = transactionFees + processingFees;
+
+      // Calculate VAT on seller fees
+      let vat = totalFees * 0.06;
+
+      // Calculate total fees plus VAT
+      let totalFeesVat = totalFees + vat;
+
+      // Calculate net profit
+      let netProfit = price - supplierCost - totalFeesVat;
+  // Calculate profit margin
+  let profitMargin = (netProfit / price) * 100;
+
+  // Update the results in the table
+  document.getElementById("transaction-fees").innerHTML = transactionFees.toFixed(2);
+  document.getElementById("processing-fees").innerHTML = processingFees.toFixed(2);
+  document.getElementById("total-fees").innerHTML = totalFees.toFixed(2);
+  document.getElementById("vat").innerHTML = vat.toFixed(2);
+  document.getElementById("total-fees-vat").innerHTML = totalFeesVat.toFixed(2);
+  document.getElementById("net-profit").innerHTML = netProfit.toFixed(2);
+  document.getElementById("profit-margin").innerHTML = profitMargin.toFixed(2) + "%";
+}
+</script>
+</body>
+</html>
