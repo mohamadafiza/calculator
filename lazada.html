@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <title>Lazada Fees & Profit Calculator</title>
+    <style>
+      table {
+        width: 50%;
+        border-collapse: collapse;
+        margin: 0 auto;
+      }
+
+      td,
+      th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+
+      th {
+        background-color: #dddddd;
+      }
+
+      input[type="text"],
+      select {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+      }
+
+      input[type="button"] {
+        width: 100%;
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      input[type="button"]:hover {
+        background-color: #3e8e41;
+      }
+
+      .form-group {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <form>
+    <center><h1>Lazada Fees & Profit Calculator</h1></center>
+      <table>
+        <tr>
+          <td>Supplier Cost</td>
+          <td>
+            <input
+              type="text"
+              id="supplierCost"
+              name="supplierCost"
+              oninput="calculateFees()"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>Selling Price</td>
+          <td>
+            <input
+              type="text"
+              id="sellingPrice"
+              name="sellingPrice"
+              oninput="calculateFees()"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>Payment Fee</td>
+          <td>
+            <input type="text" id="paymentFee" name="paymentFee" readonly />
+          </td>
+        </tr>
+        <tr>
+          <td>Marketplace Fee</td>
+          <td>
+            <select id="marketplaceFee" name="marketplaceFee" onchange="calculateFees()">
+              <option value="4.24">4%</option>
+              <option value="3.71">3.5%</option>
+              <option value="3.18">3%</option>
+              <option value="2.65">2.5%</option>
+              <option value="0">0%</option>                   
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Programme Fee</td>
+          <td>
+            <input type="checkbox" id="freeShipping" onchange="calculateFees()">Free Shipping Max 5%<br>
+            <input type="checkbox" id="everydayCashback" onchange="calculateFees()">Everyday Cashback 2%<br>
+            <input type="checkbox" id="marketplaceFlexicoins" onchange="calculateFees()">Marketplace Flexicoins 3%
+</td>
+</tr>
+<tr>
+<td>Total Fees</td>
+<td>
+<input type="text" id="totalFees" name="totalFees" readonly />
+</td>
+</tr>
+<tr>
+<td>Net Profit</td>
+<td>
+<input type="text" id="netProfit" name="netProfit" readonly />
+</td>
+</tr>
+<tr>
+<td>Net Sales</td>
+<td>
+<input type="text" id="netSales" name="netSales" readonly />
+</td>
+</tr>
+<tr>
+<td>Net Profit Percentage</td>
+<td>
+<input type="text" id="netProfitPercentage" name="netProfitPercentage" readonly />
+</td>
+</tr>
+<tr>
+<td>Net Margin Percentage</td>
+<td>
+<input type="text" id="netMarginPercentage" name="netMarginPercentage" readonly />
+</td>
+</tr>
+</table>
+<div class="form-group">
+</div>
+</form>
+<script>
+function calculateFees() {
+var supplierCost = parseFloat(document.getElementById("supplierCost").value);
+var sellingPrice = parseFloat(document.getElementById("sellingPrice").value);
+var paymentFee = (sellingPrice * 2.12) / 100;
+var marketplaceFee =
+parseFloat(document.getElementById("marketplaceFee").value) / 100 * sellingPrice;
+var freeShipping = 0;
+var everydayCashback = 0;
+var marketplaceFlexicoins = 0;
+if (document.getElementById("freeShipping").checked) {
+freeShipping = (5.3 / 100) * sellingPrice;
+}
+if (document.getElementById("everydayCashback").checked) {
+everydayCashback = (2.12 / 100) * sellingPrice;
+}
+if (document.getElementById("marketplaceFlexicoins").checked) {
+marketplaceFlexicoins = (3.18 / 100) * sellingPrice;
+}
+var totalFees = paymentFee + marketplaceFee + freeShipping + everydayCashback + marketplaceFlexicoins;
+var netProfit = sellingPrice - supplierCost - totalFees;
+var netSales = sellingPrice-totalFees;
+var netProfitPercentage = (netProfit / netSales) * 100;
+var netMarginPercentage = (netProfit / sellingPrice) * 100;
+document.getElementById("paymentFee").value = paymentFee.toFixed(2);
+document.getElementById("totalFees").value = totalFees.toFixed(2);
+document.getElementById("netProfit").value = netProfit.toFixed(2);
+document.getElementById("netSales").value = netSales.toFixed(2);
+document.getElementById("netProfitPercentage").value = netProfitPercentage.toFixed(2) + "%";
+document.getElementById("netMarginPercentage").value = netMarginPercentage.toFixed(2) + "%";
+}
+
+
+  function updateMarketplaceFee() {
+    var category = document.getElementById("category").value;
+    var sellingPrice = parseFloat(document.getElementById("sellingPrice").value);
+    var marketplaceFee = 0;
+    switch (category) {
+      case "0%":
+        marketplaceFee = 0;
+        break;
+      case "2.5%":
+        marketplaceFee = (2.65 / 100) * sellingPrice;
+        break;
+      case "3%":
+        marketplaceFee = (3.18 / 100) * sellingPrice;
+        break;
+      case "3.5%":
+        marketplaceFee = (3.71 / 100) * sellingPrice;
+        break;
+      case "4%":
+        marketplaceFee = (4.24 / 100) * sellingPrice;
+        break;
+    }
+    document.getElementById("marketplaceFee").value = marketplaceFee.toFixed(2);
+  }
+</script>
+  </body>
+</html>
