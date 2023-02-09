@@ -26,25 +26,10 @@
       select {
         width: 100%;
         padding: 12px 20px;
-        margin: 8px 0;
+        margin: 0px 0;
         box-sizing: border-box;
         border: 2px solid #ccc;
         border-radius: 4px;
-      }
-
-      input[type="button"] {
-        width: 100%;
-        background-color: #4CAF50;
-        color: white;
-        padding: 14px 20px;
-        margin: 8px 0;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-
-      input[type="button"]:hover {
-        background-color: #3e8e41;
       }
 
       .form-group {
@@ -63,17 +48,19 @@
               type="text"
               id="supplierCost"
               name="supplierCost"
+              placeholder="Harga modal"
               oninput="calculateFees()"
             />
           </td>
         </tr>
         <tr>
-          <td>Selling Price</td>
+          <td>Selling Price*</td>
           <td>
             <input
               type="text"
               id="sellingPrice"
               name="sellingPrice"
+              placeholder="Add price+buyer postage cost"
               oninput="calculateFees()"
             />
           </td>
