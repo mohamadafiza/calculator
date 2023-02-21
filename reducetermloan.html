@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<title>Kalkulator Pengiraan Dividen ASB & Zakat 2022</title>
+	<link rel="icon" type="image/x-icon" href="favicon.ico">
+    <title>Reduce Mortgage Loan Term Calculator</title>
+  </head>
+  <body>
+    <h1>Reduce Mortgage Loan Term Calculator</h1>
+    <form>
+      <label for="loanAmount">Loan Amount:</label>
+      <input type="number" id="loanAmount" name="loanAmount" value=""><br><br>
+
+      <label for="interestRate">Interest Rate:</label>
+      <input type="number" id="interestRate" name="interestRate" value=""><br><br>
+
+      <label for="loanTerm">Loan Term (years):</label>
+      <input type="number" id="loanTerm" name="loanTerm" value=""><br><br>
+
+      <label for="desiredTerm">Desired Loan Term (years):</label>
+      <input type="number" id="desiredTerm" name="desiredTerm" value=""><br><br>
+
+      <button type="button" onclick="calculatePayment()">Calculate Payment</button>
+    </form>
+    <br>
+    <div id="paymentResult"></div>
+
+    <script>
+      function calculatePayment() {
+        // Get form values
+        const loanAmount = document.getElementById("loanAmount").value;
+        const interestRate = document.getElementById("interestRate").value / 100 / 12;
+        const loanTerm = document.getElementById("loanTerm").value * 12;
+        const desiredTerm = document.getElementById("desiredTerm").value * 12;
+
+        // Calculate monthly payment
+        const monthlyPayment = (loanAmount * interestRate * Math.pow(1 + interestRate, loanTerm)) / (Math.pow(1 + interestRate, loanTerm) - 1);
+
+        // Calculate new monthly payment for desired term
+        const newMonthlyPayment = (loanAmount * interestRate * Math.pow(1 + interestRate, desiredTerm)) / (Math.pow(1 + interestRate, desiredTerm) - 1);
+
+        // Calculate extra payment needed
+        const extraPayment = newMonthlyPayment - monthlyPayment;
+
+        // Display result
+        document.getElementById("paymentResult").innerHTML = "Your current monthly payment is: RM" + monthlyPayment.toFixed(2) + "<br>";
+        document.getElementById("paymentResult").innerHTML += "Your new monthly payment to pay off the loan in " + desiredTerm/12 + " years is: RM" + newMonthlyPayment.toFixed(2) + "<br>";
+        document.getElementById("paymentResult").innerHTML += "You need to add an extra RM" + extraPayment.toFixed(2) + " to your monthly payment to pay off the loan in " + desiredTerm/12 + " years.";
+      }
+    </script>
+  </body>
+</html>
