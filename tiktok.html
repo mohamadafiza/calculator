@@ -77,7 +77,7 @@
         const sellingPrice = Number(document.getElementById("sellingPrice").value);
         const shippingFeeCheckbox = document.getElementById("shippingFeeCheckbox").checked;
 
-        const transactionFee = supplierCost * 0.0212;
+        const transactionFee = (sellingPrice+4.9) * 0.0212;
         const commissionFee = sellingPrice * 0.0212;
         let shippingFee = 0;
         if (shippingFeeCheckbox) {
@@ -89,9 +89,9 @@
         const profitPercentage = (netProfit / supplierCost) * 100;
         const marginPercentage = (netProfit / sellingPrice) * 100;
 
-        document.getElementById("transactionFee").innerHTML = `Transaction fee: RM${transactionFee.toFixed(2)}`;
-        document.getElementById("commissionFee").innerHTML = `Commission fee: RM${commissionFee.toFixed(2)}`;
-        document.getElementById("shippingFee").innerHTML = `Shipping service fee: RM${shippingFee.toFixed(2)}`;
+        document.getElementById("transactionFee").innerHTML = `Transaction fee (2.12%): RM${transactionFee.toFixed(2)}`;
+        document.getElementById("commissionFee").innerHTML = `Commission fee (2.12%): RM${commissionFee.toFixed(2)}`;
+        document.getElementById("shippingFee").innerHTML = `Shipping service fee (2.65%): RM${shippingFee.toFixed(2)}`;
         document.getElementById("totalFee").innerHTML = `Total fee: RM${totalFee.toFixed(2)}`;
         document.getElementById("netProfit").innerHTML = `Net profit: RM${netProfit.toFixed(2)}`;
         document.getElementById("netSale").innerHTML = `Net sale: RM${netSale.toFixed(2)}`;
