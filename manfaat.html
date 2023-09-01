@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link rel="icon" type="image/x-icon" href="favicon.ico" />
+      <title>Tidak Rasmi Kalkulator Pengiraan Manfaat Program Ayam Kampung PAKKP & Zakat V2</title>
+
+      <style>
+        table,
+        th,
+        td {
+          border: 1px solid black;
+          border-collapse: collapse;
+          padding: 5px;
+        }
+        input[type="number"] {
+          width: 25%;
+          padding: 10px 0px;
+        }
+        label {
+          display: inline-block;
+          width: 160px;
+          text-align: right;
+        }
+        button {
+          margin-top: 20px;
+          padding: 10px 20px;
+          background-color: lightblue;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 18px;
+        }
+        button:hover {
+          background-color: blue;
+          color: white;
+        }
+      </style>
+    </head>
+    <body>
+      <h1>
+      <!-- <img id="logo" src="" width="50" height="50" /> --> 
+        <center>(Unofficial) Kalkulator Pengiraan Manfaat (Update September 2023)</center>
+      </h1>
+      <center>
+        <sup>Masukkan jumlah dalam RM antara RM250 hingga RM250000:</sup>
+        <p>RM<input type="number" id="amount" min="250" max="250000" step="1" />
+          <button id="calculate">Kira</button></p>
+        <br />
+        <br />
+        <table id="result"></table>
+        <br />
+        <details>
+          <summary></summary>
+          <sup
+            ><i
+              >*Zakat dikeluarkan jika cukup nisab lebih kurang RM20k+-(**mengikut negeri) = jumlah simpanan RM lain + manfaat</i
+            ></sup
+          >
+          <!-- <center><img src="" width="50%" height="50%" /></center>--> 
+          <p><sub>Unofficial Version not related to official - By Pja</sub></p>
+          <img
+            src="https://counter5.optistats.ovh/private/freecounterstat.php?c=w9kcshbekn17c6s8kagruez2glsg6jhf"
+            border="0"
+          />
+        </details></center
+      >
+    </body>
+    
+        <script>
+      const calculateBtn = document.getElementById("calculate");
+      const amountInput = document.getElementById("amount");
+
+      calculateBtn.addEventListener("click", function () {
+        let value = parseInt(amountInput.value);
+        if (value > 250000) {
+          value = 250000;
+        } else if (value % 250 !== 0) {
+          value = Math.ceil(value / 250) * 250;
+        }
+        amountInput.value = value;
+
+        let totalManfaatBulanan = 0;
+        let account1 = (value * (5.2 / 2)) / 100;
+        let account2 = (value * (5.2 / 2)) / 100;
+
+        let remainder = 0;
+
+        if (account2 > 350) {
+            remainder = account2 - 350;
+            account1 += remainder;
+            account2 = 350;
+        }
+
+        const manfaatBulanan = account1 + account2;
+
+        const manfaatTerkumpulSetahunAccount1 = account1 * 12;
+        const manfaatTerkumpulSetahunAccount2 = account2 * 12;
+
+        const manfaatTerkumpulSetahun = manfaatBulanan * 12;
+        const zakatTahunan = (manfaatTerkumpulSetahun * 2.5) / 100;
+
+         var output = `
+         <tr> 
+           <td>Manfaat Bulanan</td> 
+           <td colspan="3">RM${manfaatBulanan.toFixed(2)}</td> 
+         </tr> 
+         <tr> 
+           <td>Akaun I</td> 
+           <td colspan="3">RM${account1.toFixed(2)}</td> 
+         </tr> 
+         <tr> 
+           <td>Jumlah Setahun Akaun I</td> 
+           <td colspan="3">RM${manfaatTerkumpulSetahunAccount1.toFixed(2)}</td> 
+         </tr> 
+         <tr> 
+           <td>Akaun II</td> 
+           <td colspan="3">RM${account2.toFixed(2)}</td> 
+         </tr> 
+         <tr> 
+           <td>Jumlah Setahun Akaun II</td> 
+           <td colspan="3">RM${manfaatTerkumpulSetahunAccount2.toFixed(2)}</td> 
+         </tr> 
+         <tr> 
+           <td>Baki yang ditambah ke Akaun I</td> 
+           <td colspan="3">RM${remainder.toFixed(2)}</td> 
+         </tr> 
+         <tr> 
+           <td>Jumlah Setahun</td> 
+           <td colspan="3">RM${manfaatTerkumpulSetahun.toFixed(2)}</td> 
+         </tr> 
+         <tr> 
+           <td>Zakat Tahunan</td> 
+           <td colspan="3">RM${zakatTahunan.toFixed(2)}</td> 
+         </tr>
+         <tr>
+          <th>Bulan</th>
+          <th>Akaun I</th>
+          <th>Akaun II</th>
+          <th>Terkumpul</th>
+        </tr>`;
+        
+        let totalAccount1 = 0;
+        let totalAccount2 = 0;
+
+        for (let i = 1; i <= 20; i++) {
+          totalManfaatBulanan += manfaatBulanan;
+          totalAccount1 += account1;
+          totalAccount2 += account2;
+          output += `
+          <tr>
+            <td><center>${i}</center></td>
+            <td><center>RM${totalAccount1.toFixed(2)}</center></td>
+            <td><center>RM${totalAccount2.toFixed(2)}</center></td>
+            <td><center>RM${totalManfaatBulanan.toFixed(2)}</center></td>
+          </tr>`;
+        }
+        document.getElementById("result").innerHTML = output;
+      });
+    </script>
+  </html>
