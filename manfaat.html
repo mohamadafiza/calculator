@@ -5,7 +5,6 @@
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link rel="icon" type="image/x-icon" href="favicon.ico" />
       <title>(Unofficial) Kalkulator Pengiraan Manfaat Program & Zakat</title>
-
       <style>
         table,
         th,
@@ -15,7 +14,7 @@
           padding: 5px;
         }
         input[type="number"] {
-          width: 25%;
+          width: 10%;
           padding: 10px 0px;
         }
         label {
@@ -39,6 +38,27 @@
       </style>
     </head>
     <body>
+    
+<center><h1>Points to RM Converter</h1>
+    <input type="number" id="points" name="points" oninput="convertToRM()">points =
+    RM<input type="number" id="rm" name="rm" oninput="convertToPoints()"><br>
+</center>
+<script>
+    var rate = 0.25;
+
+    function convertToRM() {
+        var points = document.getElementById('points').value;
+        var rm = points * rate;
+        document.getElementById('rm').value = rm;
+    }
+
+    function convertToPoints() {
+        var rm = document.getElementById('rm').value;
+        var points = rm / rate;
+        document.getElementById('points').value = points;
+    }
+</script>
+    
       <h1>
         <center>(Unofficial) Kalkulator Pengiraan Manfaat Program & Zakat</center>
       </h1>
@@ -54,7 +74,8 @@
           <summary></summary>
           <sup
             ><i
-              >*Zakat dikeluarkan jika cukup nisab lebih kurang RM20k+-(**mengikut negeri) = jumlah simpanan RM lain + manfaat</i
+              ><p>*0.2% fees for system maintenance have already been calculated.</p>
+<p>**Zakat dikeluarkan jika cukup nisab lebih kurang RM20k+-(**mengikut negeri) = jumlah simpanan RM lain + manfaat</p></i
             ></sup
           >
           <center></center>
@@ -81,7 +102,7 @@
 
         let totalManfaatBulanan = 0;
 
-        let account2 = (value * (5.2)) / 100;
+        let account2 = (value * (5.0)) / 100;
 
         let remainder = 0;
 
@@ -106,7 +127,7 @@ const zakatTahunan = (manfaatTerkumpulSetahun * 2.5) / 100;
            <td colspan="3">RM${manfaatBulanan.toFixed(2)}</td> 
          </tr> 
          <tr> 
-           <td>Account I</td> 
+           <td>Akaun I</td> 
            <td colspan="3">RM${account1.toFixed(2)}</td> 
          </tr> 
          <tr> 
@@ -114,7 +135,7 @@ const zakatTahunan = (manfaatTerkumpulSetahun * 2.5) / 100;
            <td colspan="3">RM${manfaatTerkumpulSetahunAccount1.toFixed(2)}</td> 
          </tr> 
          <tr> 
-           <td>Account II</td> 
+           <td>Akaun II</td> 
            <td colspan="3">RM${account2.toFixed(2)}</td> 
          </tr> 
          <tr> 
