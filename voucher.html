@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Voucher Calculator</title>
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         table, th, td {
             border: 1px solid black;
@@ -12,37 +12,21 @@
         th, td {
             padding: 15px;
         }
-        @media screen and (max-width: 600px) {
-            table, th, td {
-                width: 100%;
-                font-size: 14px;
-            }
-        }
     </style>
 </head>
 <body>
-
+<center>
 <h2>Voucher Calculator</h2>
 
 <table id="calcTable">
-  <tr>
-    <th>Voucher %</th>
-    <th>Voucher Cap (RM)</th> 
-    <th>Product Price (RM)</th>
-    <th>Shipping (RM)</th>
-    <th>Total Payment (RM)</th>
-    <th>Remainder (RM)</th>
-  </tr>
-  <tr>
-    <td><input type="number" id="voucherPercent" oninput="calculate()"></td>
-    <td><input type="number" id="voucherCap" oninput="calculate()"></td> 
-    <td><input type="number" id="productPrice" oninput="calculate()"></td>
-    <td><input type="number" id="shipping" value="4.90" oninput="calculate()"></td>
-    <td id="totalPayment"></td>
-    <td id="remainder"></td>
-  </tr>
+  <tr><th>Voucher %</th><td><input type="number" id="voucherPercent" oninput="calculate()"></td></tr>
+  <tr><th>Voucher Cap (RM)</th><td><input type="number" id="voucherCap" oninput="calculate()"></td></tr> 
+  <tr><th>Product Price (RM)</th><td><input type="number" id="productPrice" oninput="calculate()"></td></tr>
+  <tr><th>Shipping (RM)</th><td><input type="number" id="shipping" value="4.90" oninput="calculate()"></td></tr>
+  <tr><th>Total Payment (RM)</th><td id="totalPayment"></td></tr>
+  <tr><th>Remainder (RM)</th><td id="remainder"></td></tr>
 </table>
-
+</center>
 <script>
 function calculate() {
   var voucherPercent = document.getElementById("voucherPercent").value;
