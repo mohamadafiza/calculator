@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Voucher Calculator</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 15px;
+        }
+        @media screen and (max-width: 600px) {
+            table, th, td {
+                width: 100%;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h2>Voucher Calculator</h2>
+
+<table id="calcTable">
+  <tr>
+    <th>Voucher %</th>
+    <th>Voucher Cap (RM)</th> 
+    <th>Product Price (RM)</th>
+    <th>Shipping (RM)</th>
+    <th>Total Payment (RM)</th>
+    <th>Remainder (RM)</th>
+  </tr>
+  <tr>
+    <td><input type="number" id="voucherPercent" oninput="calculate()"></td>
+    <td><input type="number" id="voucherCap" oninput="calculate()"></td> 
+    <td><input type="number" id="productPrice" oninput="calculate()"></td>
+    <td><input type="number" id="shipping" value="4.90" oninput="calculate()"></td>
+    <td id="totalPayment"></td>
+    <td id="remainder"></td>
+  </tr>
+</table>
+
+<script>
+function calculate() {
+  var voucherPercent = document.getElementById("voucherPercent").value;
+  var voucherCap = document.getElementById("voucherCap").value;
+  var productPrice = document.getElementById("productPrice").value;
+  var shipping = document.getElementById("shipping").value;
+
+  var discount = Math.min(productPrice * (voucherPercent / 100), voucherCap).toFixed(2);
+  
+  var totalPayment = (parseFloat(productPrice) - parseFloat(discount) + parseFloat(shipping)).toFixed(2);
+  
+  var remainder = (parseFloat(voucherCap) - parseFloat(discount)).toFixed(2);
+  
+  document.getElementById("totalPayment").innerHTML = totalPayment;
+  document.getElementById("remainder").innerHTML = remainder;
+}
+</script>
+
+</body>
+</html>
