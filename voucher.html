@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Voucher Maximizer Calculator (Shopee / Lazada / Tiktok ETC</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <title>Voucher Maximizer Calculator</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         table, th, td {
@@ -15,7 +15,7 @@
     </style>
 </head>
 <body>
-<center>
+
 <h2>Voucher Maximizer Calculator</h2>
 
 <table id="calcTable">
@@ -25,8 +25,10 @@
   <tr><th>Shipping (RM)</th><td><input type="number" id="shipping" value="4.90" oninput="calculate()"></td></tr>
   <tr><th>Total Payment (RM)</th><td id="totalPayment"></td></tr>
   <tr><th>Remainder (RM)</th><td id="remainder"></td></tr>
+  <tr><th>Total Savings (RM)</th><td id="totalSavings"></td></tr>
+  <tr><th>Total Actual % of Savings</th><td id="totalActualPercentSavings"></td></tr>
 </table>
-</center>
+
 <script>
 function calculate() {
   var voucherPercent = document.getElementById("voucherPercent").value;
@@ -39,9 +41,15 @@ function calculate() {
   var totalPayment = (parseFloat(productPrice) - parseFloat(discount) + parseFloat(shipping)).toFixed(2);
   
   var remainder = (parseFloat(voucherCap) - parseFloat(discount)).toFixed(2);
+
+  var totalSavings = (parseFloat(productPrice) - parseFloat(totalPayment)).toFixed(2);
+
+  var totalActualPercentSavings = ((totalSavings / productPrice) * 100).toFixed(2);
   
   document.getElementById("totalPayment").innerHTML = totalPayment;
   document.getElementById("remainder").innerHTML = remainder;
+  document.getElementById("totalSavings").innerHTML = totalSavings;
+  document.getElementById("totalActualPercentSavings").innerHTML = totalActualPercentSavings + "%";
 }
 </script>
 
