@@ -10,7 +10,13 @@
             border-collapse: collapse;
         }
         th, td {
-            padding: 15px;
+            padding: 5px;
+        }
+        input[type="number"] {
+            width: 80px;
+        }
+        #shopVoucherFields, #shopOutputFields {
+            display: none;
         }
     </style>
 </head>
@@ -18,42 +24,83 @@
 <center>
 <h2>Voucher Maximizer Calculator</h2>
 
+<button onclick="toggleShopVoucherFields()">Toggle Shop Voucher Fields</button>
+
 <table id="calcTable">
-  <tr><th>Voucher %</th><td><input type="number" id="voucherPercent" oninput="calculate()"></td></tr>
-  <tr><th>Voucher Cap (RM)</th><td><input type="number" id="voucherCap" oninput="calculate()"></td></tr> 
+  <tr><th>Platform Voucher %</th><td><input type="number" id="platformVoucherPercent" oninput="calculate()"></td></tr>
+  <tr><th>Platform Voucher Cap (RM)</th><td><input type="number" id="platformVoucherCap" oninput="calculate()"></td></tr> 
+  <tbody id="shopVoucherFields">
+    <tr><th>Shop Voucher %</th><td><input type="number" id="shopVoucherPercent" oninput="calculate()"></td></tr>
+    <tr><th>Shop Voucher Cap (RM)</th><td><input type="number" id="shopVoucherCap" oninput="calculate()"></td></tr> 
+  </tbody>
   <tr><th>Product Price (RM)</th><td><input type="number" id="productPrice" oninput="calculate()"></td></tr>
   <tr><th>Shipping (RM)</th><td><input type="number" id="shipping" value="4.90" oninput="calculate()"></td></tr>
   <tr><th>Total Payment (RM)</th><td id="totalPayment"></td></tr>
-  <tr><th>Amount to Add to Maximize Voucher (RM)</th><td id="amountToAdd"></td></tr>
-  <tr><th>Unused Voucher Cap (RM)</th><td id="remainder"></td></tr>
+  <tr><th>Amount to Add to Maximize Platform Voucher (RM)</th><td id="amountToAddPlatform"></td></tr>
+  <tbody id="shopOutputFields">
+    <tr><th>Amount to Add to Maximize Shop Voucher (RM)</th><td id="amountToAddShop"></td></tr>
+    <tr><th>Unused Shop Voucher Cap (RM)</th><td id="remainderShop"></td></tr>
+  </tbody>
+  <tr><th>Unused Platform Voucher Cap (RM)</th><td id="remainderPlatform"></td></tr>
   <tr><th>Total Savings (RM)</th><td id="totalSavings"></td></tr>
   <tr><th>Total Actual % of Savings</th><td id="totalActualPercentSavings"></td></tr>
 </table>
 
 <script>
 function calculate() {
-  var voucherPercent = document.getElementById("voucherPercent").value;
-  var voucherCap = document.getElementById("voucherCap").value;
+  var platformVoucherPercent = document.getElementById("platformVoucherPercent").value;
+  var platformVoucherCap = document.getElementById("platformVoucherCap").value;
+  var shopVoucherPercent = document.getElementById("shopVoucherPercent").value || 0;
+  var shopVoucherCap = document.getElementById("shopVoucherCap").value || 0;
   var productPrice = document.getElementById("productPrice").value;
   var shipping = document.getElementById("shipping").value;
 
-  var discount = Math.min(productPrice * (voucherPercent / 100), voucherCap).toFixed(2);
+  var platformDiscount = Math.min(productPrice * (platformVoucherPercent / 100), platformVoucherCap).toFixed(2);
   
-  var totalPayment = (parseFloat(productPrice) - parseFloat(discount) + parseFloat(shipping)).toFixed(2);
-  
-  var amountToAdd = ((parseFloat(voucherCap) - parseFloat(discount)) / (voucherPercent / 100)).toFixed(2);
+  var shopDiscount = Math.min((productPrice - platformDiscount) * (shopVoucherPercent / 100), shopVoucherCap).toFixed(2);
 
-  var remainder = (parseFloat(voucherCap) - parseFloat(discount)).toFixed(2);
+  var totalPayment = (parseFloat(productPrice) - parseFloat(platformDiscount) - parseFloat(shopDiscount) + parseFloat(shipping)).toFixed(2);
+  
+  var amountToAddPlatform = ((parseFloat(platformVoucherCap) - parseFloat(platformDiscount)) / (platformVoucherPercent / 100)).toFixed(2);
+
+  var amountToAddShop = ((parseFloat(shopVoucherCap) - parseFloat(shopDiscount)) / (shopVoucherPercent / 100)).toFixed(2);
+
+  var remainderPlatform = (parseFloat(platformVoucherCap) - parseFloat(platformDiscount)).toFixed(2);
+
+  var remainderShop = (parseFloat(shopVoucherCap) - parseFloat(shopDiscount)).toFixed(2);
 
   var totalSavings = (parseFloat(productPrice) - parseFloat(totalPayment)).toFixed(2);
 
   var totalActualPercentSavings = ((totalSavings / productPrice) * 100).toFixed(2);
   
   document.getElementById("totalPayment").innerHTML = totalPayment;
-  document.getElementById("amountToAdd").innerHTML = amountToAdd;
-  document.getElementById("remainder").innerHTML = remainder;
+  document.getElementById("amountToAddPlatform").innerHTML = amountToAddPlatform;
+  
+  if(document.getElementById("shopVoucherFields").style.display != "none") {
+    document.getElementById("amountToAddShop").innerHTML = amountToAddShop;
+    document.getElementById("remainderShop").innerHTML = remainderShop;
+  } else {
+    document.getElementById("amountToAddShop").innerHTML = "";
+    document.getElementById("remainderShop").innerHTML = "";
+  }
+  
+  document.getElementById("remainderPlatform").innerHTML = remainderPlatform;
   document.getElementById("totalSavings").innerHTML = totalSavings;
   document.getElementById("totalActualPercentSavings").innerHTML = totalActualPercentSavings + "%";
+}
+
+function toggleShopVoucherFields() {
+  var x = document.getElementById("shopVoucherFields");
+  var y = document.getElementById("shopOutputFields");
+  if (x.style.display === "none") {
+    x.style.display = "table-row-group";
+    y.style.display = "table-row-group";
+  } else {
+    x.style.display = "none";
+    y.style.display = "none";
+    document.getElementById("amountToAddShop").innerHTML = "";
+    document.getElementById("remainderShop").innerHTML = "";
+  }
 }
 </script>
 <br>
