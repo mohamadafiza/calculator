@@ -127,7 +127,7 @@
           <td id="affiliateCommissionOutput"></td>
         </tr>
         <tr>
-          <td>Shipping service fee (2.65%)</td>
+          <td>Shipping service fee (4.24%)</td>
           <td id="shippingFee"></td>
         </tr>
         <tr>
@@ -178,7 +178,7 @@
         const affiliateCommission = sellingPrice * affiliateCommissionPercent;
         let shippingFee = 0;
         if (shippingFeeCheckbox) {
-          shippingFee = sellingPrice * 0.0265;
+          shippingFee = sellingPrice * 0.0424;
         }
         const totalFee = transactionFee + commissionFee + shippingFee + affiliateCommission;
         const netProfit = sellingPrice - supplierCost - totalFee;
