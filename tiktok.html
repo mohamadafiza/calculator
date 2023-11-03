@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <meta charset="UTF-8">
     <title>Tik Tok Seller Fees Calculator</title>
     <center><h1>Tik Tok Seller Fees Calculator</h1></center>
@@ -46,6 +46,11 @@
        .btn:hover {
       background-color: blue;
       }
+
+      .commissionFeeCategory {
+        display: flex;
+        gap: 10px;
+      }
     </style>
   </head>
   <body>
@@ -58,9 +63,30 @@
         <input type="checkbox" id="shippingFeeCheckbox" oninput="calculate()">
         Include Shipping Fee Programme
       </label>
+      <label>Commission Fee Category:</label>
+      <div class="commissionFeeCategory">
+        <label>
+          <input type="radio" name="commissionFeeCategory" value="0" oninput="calculate()"> 0%
+        </label>
+        <label>
+          <input type="radio" name="commissionFeeCategory" value="0.0159" oninput="calculate()"> 1.5%
+        </label>
+        <label>
+          <input type="radio" name="commissionFeeCategory" value="0.0212" oninput="calculate()"> 2%
+        </label>
+        <label>
+          <input type="radio" name="commissionFeeCategory" value="0.0265" oninput="calculate()"> 2.5%
+        </label>
+        <label>
+          <input type="radio" name="commissionFeeCategory" value="0.0318" checked oninput="calculate()"> 3%
+        </label>
+      </div>
+      <label>Affiliate Commission %:</label>
+      <input type="number" id="affiliateCommission" min="0" max="50" oninput="calculate()">
       <div class="output">
         <p id="transactionFee"></p>
         <p id="commissionFee"></p>
+        <p id="affiliateCommissionOutput"></p>
         <p id="shippingFee"></p>
         <p id="totalFee"></p>
         <p id="netProfit"></p>
@@ -76,21 +102,36 @@
         const supplierCost = Number(document.getElementById("supplierCost").value);
         const sellingPrice = Number(document.getElementById("sellingPrice").value);
         const shippingFeeCheckbox = document.getElementById("shippingFeeCheckbox").checked;
+        const commissionFeeCategory = Number(document.querySelector('input[name="commissionFeeCategory"]:checked').value);
+        let affiliateCommissionPercent = Number(document.getElementById("affiliateCommission").value) / 100;
+
+        // Check if the Affiliate Commission % is more than 50% or less than 0%
+        if (affiliateCommissionPercent > 0.5) {
+          alert("Affiliate Commission % cannot be more than 50%");
+          affiliateCommissionPercent = 0.5;
+          document.getElementById("affiliateCommission").value = "50";
+        } else if (affiliateCommissionPercent < 0) {
+          alert("Affiliate Commission % cannot be less than 0%");
+          affiliateCommissionPercent = 0;
+          document.getElementById("affiliateCommission").value = "0";
+        }
 
         const transactionFee = (sellingPrice+4.9) * 0.0212;
-        const commissionFee = sellingPrice * 0.0212;
+        const commissionFee = sellingPrice * commissionFeeCategory; // Including the 6% DST
+        const affiliateCommission = sellingPrice * affiliateCommissionPercent;
         let shippingFee = 0;
         if (shippingFeeCheckbox) {
           shippingFee = sellingPrice * 0.0265;
         }
-        const totalFee = transactionFee + commissionFee + shippingFee;
+        const totalFee = transactionFee + commissionFee + shippingFee + affiliateCommission;
         const netProfit = sellingPrice - supplierCost - totalFee;
         const netSale = sellingPrice - totalFee;
         const profitPercentage = (netProfit / supplierCost) * 100;
         const marginPercentage = (netProfit / sellingPrice) * 100;
 
         document.getElementById("transactionFee").innerHTML = `Transaction fee (2.12%): RM${transactionFee.toFixed(2)}`;
-        document.getElementById("commissionFee").innerHTML = `Commission fee (2.12%): RM${commissionFee.toFixed(2)}`;
+        document.getElementById("commissionFee").innerHTML = `Commission fee (${(commissionFeeCategory * 100).toFixed(2)}%): RM${commissionFee.toFixed(2)}`;
+        document.getElementById("affiliateCommissionOutput").innerHTML = `Affiliate Commission (${affiliateCommissionPercent * 100}%): RM${affiliateCommission.toFixed(2)}`;
         document.getElementById("shippingFee").innerHTML = `Shipping service fee (2.65%): RM${shippingFee.toFixed(2)}`;
         document.getElementById("totalFee").innerHTML = `Total fee: RM${totalFee.toFixed(2)}`;
         document.getElementById("netProfit").innerHTML = `Net profit: RM${netProfit.toFixed(2)}`;
@@ -103,8 +144,11 @@
         document.getElementById("supplierCost").value = "";
         document.getElementById("sellingPrice").value = "";
         document.getElementById("shippingFeeCheckbox").checked = false;
+        document.querySelector('input[name="commissionFeeCategory"][value="0.0318"]').checked = true;
+        document.getElementById("affiliateCommission").value = "";
         document.getElementById("transactionFee").innerHTML = "";
         document.getElementById("commissionFee").innerHTML = "";
+        document.getElementById("affiliateCommissionOutput").innerHTML = "";
         document.getElementById("shippingFee").innerHTML = "";
         document.getElementById("totalFee").innerHTML = "";
         document.getElementById("netProfit").innerHTML = "";
@@ -117,6 +161,7 @@
         const output = [
           document.getElementById("transactionFee").innerHTML,
           document.getElementById("commissionFee").innerHTML,
+          document.getElementById("affiliateCommissionOutput").innerHTML,
           document.getElementById("shippingFee").innerHTML,
           document.getElementById("totalFee").innerHTML,
           document.getElementById("netProfit").innerHTML,
