@@ -4,23 +4,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <meta charset="UTF-8">
-    <title>Tik Tok Seller Fees Calculator</title>
-    <center><h1>Tik Tok Seller Fees Calculator</h1></center>
+    <title>Tik Tok Malaysia Seller Fees Calculator</title>
+    <center><h1>Tik Tok Malaysia Seller Fees Calculator</h1></center>
     <style>
       .container {
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin-top: 50px;
+        margin-top: 0px;
       }
 
       label {
-        font-size: 18px;
-        margin: 10px 0;
+        font-size: 16px;
+        margin: 5px 0;
       }
 
       input[type="number"] {
-        font-size: 18px;
+        font-size: 16px;
         padding: 5px 10px;
         width: 200px;
       }
@@ -31,7 +31,7 @@
 
       .output {
         margin-top: 20px;
-        font-size: 18px;
+        font-size: 16px;
       }
 
       .btn {
@@ -41,7 +41,7 @@
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        font-size: 18px;
+        font-size: 16px;
       }
        .btn:hover {
       background-color: blue;
@@ -53,28 +53,41 @@
       }
 
       table {
-        margin-top: 20px;
+        margin-top: 10px;
         border-collapse: collapse;
       }
 
       th, td {
         border: 1px solid black;
-        padding: 10px;
+        padding: 1px;
         text-align: left;
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <label>Product Supplier Cost:</label>
-      <input type="number" placeholder="Modal" id="supplierCost" oninput="calculate()">
-      <label>Product Selling Price:</label>
-      <input type="number" id="sellingPrice" oninput="calculate()">
-      <label>
-        <input type="checkbox" id="shippingFeeCheckbox" oninput="calculate()">
-        Include Shipping Fee Programme
-      </label>
-      <label><a href="https://seller-my.tiktok.com/university/essay?identity=1&role=1&knowledge_id=6907739532281602" target="_blank">Commission Fee Category:</a></label>
+      <table>
+        <tr>
+          <td><label>Product Supplier Cost:</label></td>
+          <td><input type="number" placeholder="Modal" id="supplierCost" oninput="calculate()" style="width: 70px;"></td>
+        </tr>
+        <tr>
+          <td><label>Product Selling Price:</label></td>
+          <td><input type="number" id="sellingPrice" oninput="calculate()" style="width: 70px;"></td>
+        </tr>
+        <tr>
+          <td><label>Include Shipping Fee Programme:</label></td>
+          <td><input type="checkbox" id="shippingFeeCheckbox" oninput="calculate()"></td>
+        </tr>
+       <tr>
+          <td> <label>Affiliate Commission %:</label></td>
+      <td><input type="number" id="affiliateCommission" min="0" max="50" oninput="calculate()" style="width: 70px;"></td>
+        </tr>
+      </table>
+            <table>
+        <tr>
+          <td>
+      <label><center><a href="https://seller-my.tiktok.com/university/essay?identity=1&role=1&knowledge_id=6907739532281602" target="_blank">Commission Fee Category:</a></center></label>
       <div class="commissionFeeCategory">
         <label>
           <input type="radio" name="commissionFeeCategory" value="0" oninput="calculate()"> 0%
@@ -92,8 +105,10 @@
           <input type="radio" name="commissionFeeCategory" value="0.0318" checked oninput="calculate()"> 3%
         </label>
       </div>
-      <label>Affiliate Commission %:</label>
-      <input type="number" id="affiliateCommission" min="0" max="50" oninput="calculate()">
+           
+        </tr>
+          </td> <table>
+
       <table>
         <tr>
           <th>Description</th>
@@ -136,8 +151,8 @@
           <td id="marginPercentage"></td>
         </tr>
       </table>
-      <button class="btn" onclick="reset()">Reset</button>
-      <button class="btn" onclick="copyToClipboard()">Copy to Clipboard</button>
+      <p><button class="btn" onclick="reset()">Reset</button>
+      <button class="btn" onclick="copyToClipboard()">Copy to Clipboard</button></p>
     </div>
     <script>
       function calculate() {
@@ -201,8 +216,8 @@
 
       function copyToClipboard() {
         const output = [
-          `*Transaction fee (2.12%): ${document.getElementById("transactionFee").innerHTML}`,
-          `Commission fee: ${document.getElementById("commissionFee").innerHTML}`,
+          `Transaction fee (2.12%): ${document.getElementById("transactionFee").innerHTML}`,
+          `*Commission fee: ${document.getElementById("commissionFee").innerHTML}`,
           `Affiliate Commission: ${document.getElementById("affiliateCommissionOutput").innerHTML}`,
           `Shipping service fee (2.65%): ${document.getElementById("shippingFee").innerHTML}`,
           `Total fee: ${document.getElementById("totalFee").innerHTML}`,
@@ -222,7 +237,7 @@
         document.body.removeChild(textArea);
       }
     </script>
-        <br><center>*"Transaction Fee" akan berubah2 jika customer guna voucher atau customer dari Sabah/Sarawak</center>
+        <br><center>*"Transaction Fees" akan berubah2 jika customer guna voucher atau customer dari Sabah/Sarawak</center>
         <br><center><a href="https://payment.tngdigital.com.my/sc/bDLnpKf6Sv">Buy me a coffee, thank you.</a></center>
   </body>
 </html>
