@@ -51,6 +51,17 @@
         display: flex;
         gap: 10px;
       }
+
+      table {
+        margin-top: 20px;
+        border-collapse: collapse;
+      }
+
+      th, td {
+        border: 1px solid black;
+        padding: 10px;
+        text-align: left;
+      }
     </style>
   </head>
   <body>
@@ -63,7 +74,7 @@
         <input type="checkbox" id="shippingFeeCheckbox" oninput="calculate()">
         Include Shipping Fee Programme
       </label>
-      <label>Commission Fee Category:</label>
+      <label><a href="https://seller-my.tiktok.com/university/essay?identity=1&role=1&knowledge_id=6907739532281602" target="_blank">Commission Fee Category:</a></label>
       <div class="commissionFeeCategory">
         <label>
           <input type="radio" name="commissionFeeCategory" value="0" oninput="calculate()"> 0%
@@ -83,17 +94,48 @@
       </div>
       <label>Affiliate Commission %:</label>
       <input type="number" id="affiliateCommission" min="0" max="50" oninput="calculate()">
-      <div class="output">
-        <p id="transactionFee"></p>
-        <p id="commissionFee"></p>
-        <p id="affiliateCommissionOutput"></p>
-        <p id="shippingFee"></p>
-        <p id="totalFee"></p>
-        <p id="netProfit"></p>
-        <p id="netSale"></p>
-        <p id="profitPercentage"></p>
-        <p id="marginPercentage"></p>
-      </div>
+      <table>
+        <tr>
+          <th>Description</th>
+          <th>Value</th>
+        </tr>
+        <tr>
+          <td>Transaction fee (2.12%)</td>
+          <td id="transactionFee"></td>
+        </tr>
+        <tr>
+          <td>Commission fee</td>
+          <td id="commissionFee"></td>
+        </tr>
+        <tr>
+          <td>Affiliate Commission</td>
+          <td id="affiliateCommissionOutput"></td>
+        </tr>
+        <tr>
+          <td>Shipping service fee (2.65%)</td>
+          <td id="shippingFee"></td>
+        </tr>
+        <tr>
+          <td>Total fee</td>
+          <td id="totalFee"></td>
+        </tr>
+        <tr>
+          <td>Net profit</td>
+          <td id="netProfit"></td>
+        </tr>
+        <tr>
+          <td>Net sale</td>
+          <td id="netSale"></td>
+        </tr>
+        <tr>
+          <td>Profit percentage</td>
+          <td id="profitPercentage"></td>
+        </tr>
+        <tr>
+          <td>Margin percentage</td>
+          <td id="marginPercentage"></td>
+        </tr>
+      </table>
       <button class="btn" onclick="reset()">Reset</button>
       <button class="btn" onclick="copyToClipboard()">Copy to Clipboard</button>
     </div>
@@ -129,15 +171,15 @@
         const profitPercentage = (netProfit / supplierCost) * 100;
         const marginPercentage = (netProfit / sellingPrice) * 100;
 
-        document.getElementById("transactionFee").innerHTML = `Transaction fee (2.12%): RM${transactionFee.toFixed(2)}`;
-        document.getElementById("commissionFee").innerHTML = `Commission fee (${(commissionFeeCategory * 100).toFixed(2)}%): RM${commissionFee.toFixed(2)}`;
-        document.getElementById("affiliateCommissionOutput").innerHTML = `Affiliate Commission (${affiliateCommissionPercent * 100}%): RM${affiliateCommission.toFixed(2)}`;
-        document.getElementById("shippingFee").innerHTML = `Shipping service fee (2.65%): RM${shippingFee.toFixed(2)}`;
-        document.getElementById("totalFee").innerHTML = `Total fee: RM${totalFee.toFixed(2)}`;
-        document.getElementById("netProfit").innerHTML = `Net profit: RM${netProfit.toFixed(2)}`;
-        document.getElementById("netSale").innerHTML = `Net sale: RM${netSale.toFixed(2)}`;
-        document.getElementById("profitPercentage").innerHTML = `Profit percentage: ${profitPercentage.toFixed(2)}%`;
-        document.getElementById("marginPercentage").innerHTML = `Margin percentage: ${marginPercentage.toFixed(2)}%`;
+        document.getElementById("transactionFee").innerHTML = `RM${transactionFee.toFixed(2)}`;
+        document.getElementById("commissionFee").innerHTML = `RM${commissionFee.toFixed(2)} (${(commissionFeeCategory * 100).toFixed(2)}%)`;
+        document.getElementById("affiliateCommissionOutput").innerHTML = `RM${affiliateCommission.toFixed(2)} (${affiliateCommissionPercent * 100}%)`;
+        document.getElementById("shippingFee").innerHTML = `RM${shippingFee.toFixed(2)}`;
+        document.getElementById("totalFee").innerHTML = `RM${totalFee.toFixed(2)}`;
+        document.getElementById("netProfit").innerHTML = `RM${netProfit.toFixed(2)}`;
+        document.getElementById("netSale").innerHTML = `RM${netSale.toFixed(2)}`;
+        document.getElementById("profitPercentage").innerHTML = `${profitPercentage.toFixed(2)}%`;
+        document.getElementById("marginPercentage").innerHTML = `${marginPercentage.toFixed(2)}%`;
       }
 
       function reset() {
@@ -159,15 +201,15 @@
 
       function copyToClipboard() {
         const output = [
-          document.getElementById("transactionFee").innerHTML,
-          document.getElementById("commissionFee").innerHTML,
-          document.getElementById("affiliateCommissionOutput").innerHTML,
-          document.getElementById("shippingFee").innerHTML,
-          document.getElementById("totalFee").innerHTML,
-          document.getElementById("netProfit").innerHTML,
-          document.getElementById("netSale").innerHTML,
-          document.getElementById("profitPercentage").innerHTML,
-          document.getElementById("marginPercentage").innerHTML,
+          `Transaction fee (2.12%): ${document.getElementById("transactionFee").innerHTML}`,
+          `Commission fee: ${document.getElementById("commissionFee").innerHTML}`,
+          `Affiliate Commission: ${document.getElementById("affiliateCommissionOutput").innerHTML}`,
+          `Shipping service fee (2.65%): ${document.getElementById("shippingFee").innerHTML}`,
+          `Total fee: ${document.getElementById("totalFee").innerHTML}`,
+          `Net profit: ${document.getElementById("netProfit").innerHTML}`,
+          `Net sale: ${document.getElementById("netSale").innerHTML}`,
+          `Profit percentage: ${document.getElementById("profitPercentage").innerHTML}`,
+          `Margin percentage: ${document.getElementById("marginPercentage").innerHTML}`,
         ];
 
         const outputText = output.join("\n");
@@ -180,5 +222,6 @@
         document.body.removeChild(textArea);
       }
     </script>
+        <br><center><a href="https://payment.tngdigital.com.my/sc/bDLnpKf6Sv">Buy me a coffee, thank you.</a></center>
   </body>
 </html>
