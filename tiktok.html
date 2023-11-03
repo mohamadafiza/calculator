@@ -201,7 +201,7 @@
 
       function copyToClipboard() {
         const output = [
-          `Transaction fee (2.12%): ${document.getElementById("transactionFee").innerHTML}`,
+          `*Transaction fee (2.12%): ${document.getElementById("transactionFee").innerHTML}`,
           `Commission fee: ${document.getElementById("commissionFee").innerHTML}`,
           `Affiliate Commission: ${document.getElementById("affiliateCommissionOutput").innerHTML}`,
           `Shipping service fee (2.65%): ${document.getElementById("shippingFee").innerHTML}`,
@@ -222,6 +222,7 @@
         document.body.removeChild(textArea);
       }
     </script>
+        <br><center>*"Transaction Fee" akan berubah2 jika customer guna voucher atau customer dari Sabah/Sarawak</center>
         <br><center><a href="https://payment.tngdigital.com.my/sc/bDLnpKf6Sv">Buy me a coffee, thank you.</a></center>
   </body>
 </html>
