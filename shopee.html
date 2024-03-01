@@ -8,7 +8,7 @@
     function calculate() {
       var productCost = parseFloat(document.getElementById("productCost").value);
       var totalSale = parseFloat(document.getElementById("totalSale").value);
-      var eastMalaysiaFee = document.getElementById("eastMalaysia").checked ? 10 : 4.9;
+      var eastMalaysiaFee = document.getElementById("eastMalaysia").checked ? 10.60 : 5.19;
       var select = document.getElementById("marketplaceCommissionOption");
       var marketplaceCommissionOption = select.options[select.selectedIndex].value;
 
@@ -19,34 +19,34 @@
           serviceFee = 0;
           break;
         case "Free Shipping RM40":
-          serviceFee = totalSale * 0.0318;
+          serviceFee = totalSale * 0.0324;
           break;
         case "Free Shipping RM15":
-          serviceFee = totalSale * 0.053;
+          serviceFee = totalSale * 0.054;
           break;
         case "FS40 + 10% Cashback":
-          serviceFee = totalSale * 0.0636;
+          serviceFee = totalSale * 0.0648;
           break;
         case "FS15 + 10% Cashback":
-          serviceFee = totalSale * 0.0742;
+          serviceFee = totalSale * 0.0756;
           break;
         case "Cashback 10%":
-          serviceFee = totalSale * 0.0318;
+          serviceFee = totalSale * 0.0324;
           break;
         case "10% Rebate Now":
-          serviceFee = totalSale * 0.0424;
+          serviceFee = totalSale * 0.0432;
           break;
         case "Mall Seller":
-          serviceFee = totalSale * 0.0636;
+          serviceFee = totalSale * 0.0648;
           break;
         case "10% Rebate + 10%CB":
-          serviceFee = totalSale * 0.0424;
+          serviceFee = totalSale * 0.0432;
           break;
         case "10% Rebate + FS40 + 10%CB":
-          serviceFee = totalSale * 0.0848;
+          serviceFee = totalSale * 0.0864;
           break;
         case "10% Rebate + FS15 + 10%CB":
-          serviceFee = totalSale * 0.0742;
+          serviceFee = totalSale * 0.0756;
           break;
       }
 
@@ -54,22 +54,22 @@
       var marketplaceCommissionOption = document.getElementById("marketplaceCommissionOption").value;
       switch (marketplaceCommissionOption) {
         case "Default Category 4.0%":
-          marketplaceCommission = totalSale * 0.0424;
+          marketplaceCommission = totalSale * 0.0432;
           break;
         case "Category 2.5%":
-          marketplaceCommission = totalSale * 0.0265;
+          marketplaceCommission = totalSale * 0.027;
           break;
         case "Category 3.0%":
-          marketplaceCommission = totalSale * 0.0318;
+          marketplaceCommission = totalSale * 0.0324;
           break;
         case "Category 3.5%":
-          marketplaceCommission = totalSale * 0.0371;
+          marketplaceCommission = totalSale * 0.0378;
           break;
         case "Category 0.0%":
           marketplaceCommission = 0;
           break;
-        case "Virtual Goods 5.0%":
-          marketplaceCommission = totalSale * 0.053;
+        case "Virtual Goods 10.0%":
+          marketplaceCommission = totalSale * 0.108;
 	  eastMalaysiaFee = 0;
           break;
       }
@@ -81,7 +81,7 @@
   	return (netProfit / netSale) * 100;
 	}
     
-      var transactionFee = (totalSale + eastMalaysiaFee) * 0.0212;
+      var transactionFee = (totalSale + eastMalaysiaFee) * 0.0216;
       var totalFee = (transactionFee.toFixed(2) - 0) + (marketplaceCommission.toFixed(2) - 0) + (serviceFee.toFixed(2) - 0);
       var netSale = totalSale - totalFee;
 	var netProfit = netSale - productCost;
@@ -202,7 +202,7 @@ width: 100%;
   <option value="Category 3.0%">Category 3.0%</option>
   <option value="Category 3.5%">Category 3.5%</option>
   <option value="Category 0.0%">Category 0.0%</option>
-  <option value="Virtual Goods 5.0%">Virtual Goods 5.0%</option>
+  <option value="Virtual Goods 10.0%">Virtual Goods 10.0%</option>
     </select>
     <br>
     <button class="button" onclick="event.preventDefault(); calculate();">Calculate</button>
@@ -244,7 +244,7 @@ width: 100%;
 <br><br>
 <p><a href="https://mohamadafiza.github.io/calculator/shopeecategoryfee.html">Click here for all category fees percentage.</a></p>
 	<p><a href="https://mohamadafiza.github.io/calculator/shopeefee.html">Click here if your product 
-		shipping cost exceed normal rates [WM:RM4.90|EM:RM10]</a></p>
+		shipping cost exceed normal rates [WM:RM5.19|EM:RM10.60]</a></p>
 <p><a href="https://mohamadafiza.github.io/calculator/packing.html">Seller Packing Cost Calculator.</a></p>
 <details>
   <summary>Click here to read notes</summary>
