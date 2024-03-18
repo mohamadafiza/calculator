@@ -32,9 +32,6 @@
       var marketplaceCommission = 0;
       var marketplaceCommissionOption = document.getElementById("marketplaceCommissionOption").value;
       switch (marketplaceCommissionOption) {
-        case "Category 6.0%":
-          marketplaceCommission = totalSale * 0.0648;
-          break;
         case "Category 8.0%":
           marketplaceCommission = totalSale * 0.0864;
           break;
@@ -46,6 +43,9 @@
           break;
         case "Category 6.5%":
           marketplaceCommission = totalSale * 0.0702;
+          break;
+	case "Category 6.0%":
+          marketplaceCommission = totalSale * 0.0648;
           break;
         case "Category 5.5%":
           marketplaceCommission = totalSale * 0.0594;
@@ -183,11 +183,11 @@ width: 100%;
 <br>
 <label for="marketplaceCommissionOption">Category Fee:</label>
 <select id="marketplaceCommissionOption">
-  <option value="Category 6.0%">Category 6.0%</option>
   <option value="Category 8.0%">Category 8.0%</option>
   <option value="Category 7.5%">Category 7.5%</option>
   <option value="Category 7.0%">Category 7.0%</option>
   <option value="Category 6.5%">Category 6.5%</option>
+  <option value="Category 6.0%">Category 6.0%</option>
   <option value="Category 5.5%">Category 5.5%</option>
   <option value="Category 5.0%">Category 5.0%</option>
   <option value="Category 4.5%">Category 4.5%</option>
