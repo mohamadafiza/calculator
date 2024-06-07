@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profit Calculator</title>
+<style>
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f7f7;
+    padding: 20px;
+  }
+  .container {
+    max-width: 600px;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  label, input {
+  display:inline-block;
+  width: 40%;
+  height: 10%;
+  background:#fff;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5px;
+  color: green;
+  font-weight: bold;
+  line-height: 25px;
+  text-decoration: none;
+  }
+  input[type="number"], input[type="text"] {
+    border: 5px solid #ddd;
+    border-radius: 4px;
+  }
+  input[type="text"][readonly] {
+    background-color: #e9ecef;
+  }
+  h2 {
+    color: #333;
+  }
+</style>
+<script>
+function calculateProfit() {
+  var cost = parseFloat(document.getElementById('cost').value);
+  var salePrice = parseFloat(document.getElementById('salePrice').value);
+  var profit = salePrice - cost;
+  var percentageProfit = (profit / cost) * 100;
+  var marginProfit = (profit / salePrice) * 100;
+
+  document.getElementById('profit').value = profit.toFixed(2);
+  document.getElementById('percentageProfit').value = percentageProfit.toFixed(2);
+  document.getElementById('marginProfit').value = marginProfit.toFixed(2);
+}
+
+function updateSalePriceFromProfit() {
+  var cost = parseFloat(document.getElementById('cost').value);
+  var profit = parseFloat(document.getElementById('profit').value);
+  var salePrice = cost + profit;
+  var percentageProfit = (profit / cost) * 100;
+  var marginProfit = (profit / salePrice) * 100;
+
+  document.getElementById('salePrice').value = salePrice.toFixed(2);
+  document.getElementById('percentageProfit').value = percentageProfit.toFixed(2);
+  document.getElementById('marginProfit').value = marginProfit.toFixed(2);
+}
+
+function updateSalePriceFromMargin() {
+  var cost = parseFloat(document.getElementById('cost').value);
+  var marginProfit = parseFloat(document.getElementById('marginProfit').value);
+  var salePrice = cost / (1 - (marginProfit / 100));
+  var profit = salePrice - cost;
+  var percentageProfit = (profit / cost) * 100;
+
+  document.getElementById('salePrice').value = salePrice.toFixed(2);
+  document.getElementById('profit').value = profit.toFixed(2);
+  document.getElementById('percentageProfit').value = percentageProfit.toFixed(2);
+}
+
+function updateSalePriceFromPercentage() {
+  var cost = parseFloat(document.getElementById('cost').value);
+  var percentageProfit = parseFloat(document.getElementById('percentageProfit').value);
+  var profit = cost * (percentageProfit / 100);
+  var salePrice = cost + profit;
+  var marginProfit = (profit / salePrice) * 100;
+
+  document.getElementById('salePrice').value = salePrice.toFixed(2);
+  document.getElementById('profit').value = profit.toFixed(2);
+  document.getElementById('marginProfit').value = marginProfit.toFixed(2);
+}
+</script>
+</head>
+<body>
+<center><h2>Profit Calculator</h2></center>
+<label for="cost">Cost of Product (RM):</label>
+<input type="number" id="cost" onchange="calculateProfit()" placeholder="Enter cost...">
+<br><br>
+<label for="salePrice">Sale Price (RM):</label>
+<input type="number" id="salePrice" onchange="calculateProfit()" placeholder="Enter sale price...">
+<br><br>
+<label for="profit">Total Profit (RM):</label>
+<input type="text" id="profit" onchange="updateSalePriceFromProfit()">
+<br><br>
+<label for="percentageProfit">Percentage Profit (%):</label>
+<input type="text" id="percentageProfit" onchange="updateSalePriceFromPercentage()">
+<br><br>
+<label for="marginProfit">Margin Profit (%):</label>
+<input type="text" id="marginProfit" onchange="updateSalePriceFromMargin()">
+<br><br>
+</body>
+</html>
