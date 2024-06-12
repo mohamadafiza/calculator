@@ -89,24 +89,23 @@
         <tr>
           <td>
       <label><center><a href="https://seller-my.tiktok.com/university/essay?identity=1&role=1&knowledge_id=6907739532281602" target="_blank">Commission Fee Category:</a></center></label>
-      <div class="commissionFeeCategory">
-        <label>
-          <input type="radio" name="commissionFeeCategory" value="0" oninput="calculate()"> 0%
-        </label>
-        <label>
-          <input type="radio" name="commissionFeeCategory" value="0.0159" oninput="calculate()"> 1.5%
-        </label>
-        <label>
-          <input type="radio" name="commissionFeeCategory" value="0.0212" oninput="calculate()"> 2%
-        </label>
-        <label>
-          <input type="radio" name="commissionFeeCategory" value="0.0265" oninput="calculate()"> 2.5%
-        </label>
-        <label>
-          <input type="radio" name="commissionFeeCategory" value="0.0318" checked oninput="calculate()"> 3%
-        </label>
-      </div>
-           
+<div class="commissionFeeCategory">
+  <label>
+    <input type="radio" name="commissionFeeCategory" value="0" oninput="calculate()"> 0%
+  </label>
+  <label>
+    <input type="radio" name="commissionFeeCategory" value="0.027" oninput="calculate()"> 2.5%
+  </label>
+  <label>
+    <input type="radio" name="commissionFeeCategory" value="0.0324" checked oninput="calculate()"> 3%
+  </label>
+  <label>
+    <input type="radio" name="commissionFeeCategory" value="0.0378" checked oninput="calculate()"> 3.5%
+  </label>
+  <label>
+    <input type="radio" name="commissionFeeCategory" value="0.0432" oninput="calculate()"> 4%
+  </label>
+</div>           
         </tr>
           </td> <table>
 
@@ -116,7 +115,7 @@
           <th>Value</th>
         </tr>
         <tr>
-          <td>Transaction fee (2.12%)</td>
+          <td>Transaction fee (2.16%)</td>
           <td id="transactionFee"></td>
         </tr>
         <tr>
@@ -128,7 +127,7 @@
           <td id="affiliateCommissionOutput"></td>
         </tr>
         <tr>
-          <td>Shipping service fee (4.24%)</td>
+          <td>Shipping service fee (4.32%)</td>
           <td id="shippingFee"></td>
         </tr>
         <tr>
@@ -174,12 +173,12 @@
           document.getElementById("affiliateCommission").value = "0";
         }
 
-        const transactionFee = (sellingPrice+4.9) * 0.0212;
+        const transactionFee = (sellingPrice+4.9) * 0.0216;
         const commissionFee = sellingPrice * commissionFeeCategory; // Including the 6% DST
         const affiliateCommission = sellingPrice * affiliateCommissionPercent;
         let shippingFee = 0;
         if (shippingFeeCheckbox) {
-          shippingFee = sellingPrice * 0.0424;
+          shippingFee = sellingPrice * 0.0432;
         }
         const totalFee = transactionFee + commissionFee + shippingFee + affiliateCommission;
         const netProfit = sellingPrice - supplierCost - totalFee;
@@ -202,7 +201,7 @@
         document.getElementById("supplierCost").value = "";
         document.getElementById("sellingPrice").value = "";
         document.getElementById("shippingFeeCheckbox").checked = false;
-        document.querySelector('input[name="commissionFeeCategory"][value="0.0318"]').checked = true;
+        document.querySelector('input[name="commissionFeeCategory"][value="0.0324"]').checked = true;
         document.getElementById("affiliateCommission").value = "";
         document.getElementById("transactionFee").innerHTML = "";
         document.getElementById("commissionFee").innerHTML = "";
@@ -217,10 +216,10 @@
 
       function copyToClipboard() {
         const output = [
-          `Transaction fee (2.12%): ${document.getElementById("transactionFee").innerHTML}`,
+          `Transaction fee (2.16%): ${document.getElementById("transactionFee").innerHTML}`,
           `*Commission fee: ${document.getElementById("commissionFee").innerHTML}`,
           `Affiliate Commission: ${document.getElementById("affiliateCommissionOutput").innerHTML}`,
-          `Shipping service fee (2.65%): ${document.getElementById("shippingFee").innerHTML}`,
+          `Shipping service fee (2.7%): ${document.getElementById("shippingFee").innerHTML}`,
           `Total fee: ${document.getElementById("totalFee").innerHTML}`,
           `Net profit: ${document.getElementById("netProfit").innerHTML}`,
           `Net sale: ${document.getElementById("netSale").innerHTML}`,
