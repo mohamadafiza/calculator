@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPO Tier Subscription Calculator (MIH)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: right;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        tr.highlight {
+            background-color: #00ff99;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>IPO Tier Subscription Calculator (MIH)</h2>
+    <div class="form-group">
+        <label for="listingPrice">Listing Price</label>
+        <input type="number" id="listingPrice" value="" step="0.01">
+    </div>
+    <div class="form-group">
+        <label for="totalCapital">Total Capital</label>
+        <input type="number" id="totalCapital" value="" step="0.01">
+    </div>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Units to apply</th>
+                <th>Tier</th>
+                <th>Cost</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <!-- Dynamic rows will be added here -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    const units = [
+        100, 300, 1100, 2100, 3100, 4100, 6100, 11100, 
+        20100, 50100, 100100, 200100, 500100, 1000100, 
+        3000100, 5000100, 7000100
+    ];
+    const tiers = Array.from({length: 17}, (_, i) => i + 1);
+
+    function calculateCost(listingPrice, units) {
+        return listingPrice * units;
+    }
+
+    function updateTable() {
+        const listingPrice = parseFloat(document.getElementById('listingPrice').value);
+        const totalCapital = parseFloat(document.getElementById('totalCapital').value);
+        const tableBody = document.getElementById('tableBody');
+        tableBody.innerHTML = '';
+
+        units.forEach((unit, index) => {
+            const row = document.createElement('tr');
+            const tier = tiers[index];
+            const cost = calculateCost(listingPrice, unit).toFixed(2);
+
+            row.innerHTML = `
+                <td>${unit}</td>
+                <td>${tier}</td>
+                <td>RM ${cost}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    document.getElementById('listingPrice').addEventListener('input', updateTable);
+    document.getElementById('totalCapital').addEventListener('input', updateTable);
+    updateTable();
+</script>
+</body>
+</html>
