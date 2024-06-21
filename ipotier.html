@@ -3,113 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPO Tier Subscription Calculator (MIH)</title>
+    <title>Investment Calculator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 20px;
         }
         .container {
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
         th, td {
-            padding: 10px;
-            text-align: right;
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
         }
         th {
-            background-color: #f4f4f4;
+            background-color: #f2f2f2;
         }
-        tr.highlight {
-            background-color: #00ff99;
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .highlight {
+            background-color: #90ee90;
         }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <h2>IPO Tier Subscription Calculator (MIH)</h2>
-    <div class="form-group">
-        <label for="listingPrice">Listing Price</label>
-        <input type="number" id="listingPrice" value="" step="0.01">
+    <div class="container">
+        <form id="calculatorForm">
+            <div>
+                <label for="listingPrice">Listing Price:</label>
+                <input type="number" id="listingPrice" name="listingPrice" step="0.01" value="0.1" required>
+            </div>
+            <div>
+                <label for="totalCapital">Total Capital:</label>
+                <input type="number" id="totalCapital" name="totalCapital" step="0.01" value="1000010.00" required>
+            </div>
+            <div>
+                <label for="numOfCDS">Num of CDS:</label>
+                <input type="number" id="numOfCDS" name="numOfCDS" value="2" required>
+            </div>
+            <div>
+                <label for="issuingHouse">Issuing House:</label>
+                <select id="issuingHouse" name="issuingHouse">
+                    <option value="MIH">Malaysian Issuing House (MIH)</option>
+                    <option value="TIIH">Tricor Investor & Issuing House (TIIH)</option>
+                </select>
+            </div>
+        </form>
+        <div id="recommendation"></div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Units to Apply</th>
+                    <th>Tier</th>
+                    <th>Cost</th>
+                </tr>
+            </thead>
+            <tbody id="resultTable">
+                <!-- Results will be appended here dynamically -->
+            </tbody>
+        </table>
     </div>
-    <div class="form-group">
-        <label for="totalCapital">Total Capital</label>
-        <input type="number" id="totalCapital" value="" step="0.01">
-    </div>
-    </div>
-    <table>
-        <thead>
-            <tr>
-                <th>Units to apply</th>
-                <th>Tier</th>
-                <th>Cost</th>
-            </tr>
-        </thead>
-        <tbody id="tableBody">
-            <!-- Dynamic rows will be added here -->
-        </tbody>
-    </table>
-</div>
 
-<script>
-    const units = [
-        100, 300, 1100, 2100, 3100, 4100, 6100, 11100, 
-        20100, 50100, 100100, 200100, 500100, 1000100, 
-        3000100, 5000100, 7000100
-    ];
-    const tiers = Array.from({length: 17}, (_, i) => i + 1);
+    <script>
+        document.getElementById('listingPrice').addEventListener('input', calculate);
+        document.getElementById('totalCapital').addEventListener('input', calculate);
+        document.getElementById('numOfCDS').addEventListener('input', calculate);
+        document.getElementById('issuingHouse').addEventListener('change', calculate);
 
-    function calculateCost(listingPrice, units) {
-        return listingPrice * units;
-    }
+        function calculate() {
+            const listingPrice = parseFloat(document.getElementById('listingPrice').value);
+            let totalCapital = parseFloat(document.getElementById('totalCapital').value);
+            const numOfCDS = parseFloat(document.getElementById('numOfCDS').value);
+            const issuingHouse = document.getElementById('issuingHouse').value;
 
-    function updateTable() {
-        const listingPrice = parseFloat(document.getElementById('listingPrice').value);
-        const totalCapital = parseFloat(document.getElementById('totalCapital').value);
-        const tableBody = document.getElementById('tableBody');
-        tableBody.innerHTML = '';
+            let units;
+            if (issuingHouse === 'MIH') {
+                units = [
+                    100, 300, 1100, 2100, 3100, 4100, 6100, 11100, 20100, 50100,
+                    100100, 200100, 500100, 1000100, 3000100, 5000100, 7000100
+                ];
+            } else if (issuingHouse === 'TIIH') {
+                units = [
+                    100, 300, 1100, 2100, 3100, 4100, 6100, 11100, 20100, 50100,
+                    100100, 200100, 500100, 1000100, 2000100, 5000100, 10000100
+                ];
+            }
 
-        units.forEach((unit, index) => {
-            const row = document.createElement('tr');
-            const tier = tiers[index];
-            const cost = calculateCost(listingPrice, unit).toFixed(2);
+            const resultTable = document.getElementById('resultTable');
+            resultTable.innerHTML = '';
+            let recommendedAmounts = [];
+            let totalRecommendedAmount = 0;
+            let remainingCapital = totalCapital;
 
-            row.innerHTML = `
-                <td>${unit}</td>
-                <td>${tier}</td>
-                <td>RM ${cost}</td>
-            `;
-            tableBody.appendChild(row);
-        });
-    }
+            for (let i = 0; i < numOfCDS; i++) {
+                let recommendedAmount = 0;
+                let recommendedUnits = 0;
 
-    document.getElementById('listingPrice').addEventListener('input', updateTable);
-    document.getElementById('totalCapital').addEventListener('input', updateTable);
-    updateTable();
-</script>
+                //                // Find the largest unit that fits within the remaining capital
+                for (let j = units.length - 1; j >= 0; j--) {
+                    const unit = units[j];
+                    const cost = unit * listingPrice;
+                    if (cost <= remainingCapital) {
+                        recommendedAmount = cost;
+                        recommendedUnits = unit;
+                        break;
+                    }
+                }
+
+                // If no units can be recommended within the remaining capital, break out of the loop
+                if (recommendedUnits === 0) {
+                    break;
+                }
+
+                recommendedAmounts.push({
+                    amount: recommendedAmount,
+                    units: recommendedUnits
+                });
+
+                remainingCapital -= recommendedAmount;
+            }
+
+            const recommendationDiv = document.getElementById('recommendation');
+            recommendationDiv.innerHTML = ''; // Clear previous recommendations
+
+            if (recommendedAmounts.length === 0) {
+                recommendationDiv.innerHTML = '<p>No suitable investment found within the provided capital.</p>';
+            } else {
+                recommendedAmounts.forEach((rec, index) => {
+                    totalRecommendedAmount += rec.amount;
+                    const recommendation = document.createElement('div');
+                    recommendation.innerHTML = `
+                        <p>CDS ${index + 1}: RM ${rec.amount.toFixed(2)} (${rec.units} units)</p>
+                    `;
+                    recommendationDiv.appendChild(recommendation);
+                });
+
+                const totalRecommendation = document.createElement('div');
+                totalRecommendation.innerHTML = `
+                    <p><strong>Total amount RM ${totalRecommendedAmount.toFixed(2)}</strong></p>
+                `;
+                recommendationDiv.appendChild(totalRecommendation);
+            }
+
+            // Populate the table with units and highlight recommended ones
+            units.forEach((unit, index) => {
+                const row = document.createElement('tr');
+                const totalCost = unit * listingPrice;
+                const isRecommended = recommendedAmounts.some(rec => rec.units === unit);
+
+                if (isRecommended) {
+                    row.classList.add('highlight');
+                }
+
+                row.innerHTML = `
+                    <td>${unit}</td>
+                    <td>${index + 1}</td>
+                    <td>RM ${totalCost.toFixed(2)}</td>
+                `;
+                resultTable.appendChild(row);
+            });
+        }
+
+        // Initial calculation on page load
+        calculate();
+    </script>
 </body>
 </html>
