@@ -38,6 +38,8 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            /* Hide the table initially */
+            display: none; 
         }
         th, td {
             border: 1px solid #ddd;
@@ -92,7 +94,7 @@
             </div>
         </form>
         <div id="recommendation"></div>
-        <table>
+        <table id="resultTable"> 
             <thead>
                 <tr>
                     <th>Units to Apply</th>
@@ -100,7 +102,7 @@
                     <th>Cost (RM)</th>
                 </tr>
             </thead>
-            <tbody id="resultTable">
+            <tbody id="tableBody">
                 <!-- Results will be appended here dynamically -->
             </tbody>
         </table>
@@ -132,73 +134,58 @@
             }
 
             const resultTable = document.getElementById('resultTable');
-            resultTable.innerHTML = '';
+            const tableBody = document.getElementById('tableBody'); // Get the table body
+            tableBody.innerHTML = ''; // Clear previous table data
             const recommendationDiv = document.getElementById('recommendation');
-            recommendationDiv.innerHTML = ''; // Clear previous recommendations
+            recommendationDiv.innerHTML = '';
 
             let recommendedAmounts = [];
-            let totalRecommendedAmount = 0;
-            let remainingCapital = totalCapital;
 
             for (let i = 0; i < numOfCDS; i++) {
                 let recommendedAmount = 0;
                 let recommendedUnits = 0;
-                let tier = 0; // Initialize tier
+                let tier = 0;
 
-                // Find the largest unit that fits within the remaining capital
                 for (let j = units.length - 1; j >= 0; j--) {
                     const unit = units[j];
                     const cost = unit * listingPrice;
-                    if (cost <= remainingCapital) {
+                    if (cost <= totalCapital) {
                         recommendedAmount = cost;
                         recommendedUnits = unit;
-                        tier = j + 1; // Set the tier
+                        tier = j + 1;
                         break;
                     }
                 }
 
-                // If no units can be recommended within the remaining capital, break out of the loop
-                if (recommendedUnits === 0) {
+                if (recommendedUnits > 0) {
+                    totalCapital -= recommendedAmount;
+                    recommendedAmounts.push({
+                        amount: recommendedAmount,
+                        units: recommendedUnits,
+                        tier: tier
+                    });
+
+                    const recommendationBox = document.createElement('div');
+                    recommendationBox.innerHTML = `
+                        <h3>CDS ${i + 1}:</h3>
+                        <p><strong>Amount:</strong> RM ${recommendedAmount.toFixed(2)}</p>
+                        <p><strong>Units:</strong> ${recommendedUnits}</p>
+                        <p><strong>Tier:</strong> ${tier}</p>
+                    `;
+                    recommendationDiv.appendChild(recommendationBox);
+                } else {
                     break;
                 }
-
-                recommendedAmounts.push({
-                    amount: recommendedAmount,
-                    units: recommendedUnits,
-                    tier: tier
-                });
-
-                remainingCapital -= recommendedAmount;
-
-                // Create a visually appealing recommendation box
-                const recommendationBox = document.createElement('div');
-                recommendationBox.innerHTML = `
-                    <h3>CDS ${i + 1}:</h3>
-                    <p><strong>Amount:</strong> RM ${recommendedAmount.toFixed(2)}</p>
-                    <p><strong>Units:</strong> ${recommendedUnits}</p>
-                    <p><strong>Tier:</strong> ${tier}</p>
-                `;
-                recommendationDiv.appendChild(recommendationBox);
-
-                totalRecommendedAmount += recommendedAmount;
             }
 
-            if (recommendedAmounts.length === 0) {
-                recommendationDiv.innerHTML = '<p>No suitable investment found within the provided capital.</p>';
-            } else {
-                const totalRecommendation = document.createElement('div');
-                totalRecommendation.innerHTML = `
-                    <h3>Total Investment:</h3>
-                    <p><strong>Amount:</strong> RM ${totalRecommendedAmount.toFixed(2)}</p>
-                `;
-                recommendationDiv.appendChild(totalRecommendation);
-            }
-
-            // Populate the table with units and highlight recommended ones
-            units.forEach((unit, index) => {
-                const row = document.createElement('tr');
+            // Generate table rows and highlight recommendations
+            for (let i = 0; i < units.length; i++) {
+                const unit = units[i];
+                const tier = i + 1; 
                 const totalCost = unit * listingPrice;
-                const isRecommended = recommendedAmounts.some(rec => rec.units === unit);
+                const row = document.createElement('tr');
+
+                const isRecommended = recommendedAmounts.some(rec => rec.tier === tier);
 
                 if (isRecommended) {
                     row.classList.add('highlight');
@@ -206,15 +193,15 @@
 
                 row.innerHTML = `
                     <td>${unit}</td>
-                    <td>${index + 1}</td>
+                    <td>${tier}</td>
                     <td>RM ${totalCost.toFixed(2)}</td>
                 `;
-                resultTable.appendChild(row);
-            });
-        }
+                tableBody.appendChild(row); // Append the row to the table body
+            }
 
-        // Initial calculation on page load
-        calculate();
+            // Show the table after calculations are done
+            resultTable.style.display = 'table'; 
+        }
     </script>
 </body>
 </html>
