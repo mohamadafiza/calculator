@@ -8,10 +8,31 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            background-color: #f4f4f4;
         }
         .container {
             max-width: 800px;
             margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
         table {
             width: 100%;
@@ -32,24 +53,27 @@
         .highlight {
             background-color: #90ee90;
         }
+        #recommendation div {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <form id="calculatorForm">
-            <div>
+            <div class="form-group">
                 <label for="listingPrice">Listing Price:</label>
-                <input type="number" id="listingPrice" name="listingPrice" step="0.01" value="0." required>
+                <input type="number" id="listingPrice" name="listingPrice" step="0.01" value="0.00" required>
             </div>
-            <div>
+            <div class="form-group">
                 <label for="totalCapital">Total Capital:</label>
                 <input type="number" id="totalCapital" name="totalCapital" step="0.01" value="" required>
             </div>
-            <div>
+            <div class="form-group">
                 <label for="numOfCDS">Num of CDS:</label>
                 <input type="number" id="numOfCDS" name="numOfCDS" value="1" required>
             </div>
-            <div>
+            <div class="form-group">
                 <label for="issuingHouse">Issuing House:</label>
                 <select id="issuingHouse" name="issuingHouse">
                     <option value="MIH">Malaysian Issuing House (MIH)</option>
@@ -90,90 +114,101 @@
                     100, 300, 1100, 2100, 3100, 4100, 6100, 11100, 20100, 50100,
                     100100, 200100, 500100, 1000100, 3000100, 5000100, 7000100
                 ];
-            } else if (issuingHouse === 'TIIH') {
-                units = [
-                    100, 300, 1100, 2100, 3100, 4100, 6100, 11100, 20100, 50100,
-                    100100, 200100, 500100, 1000100, 2000100, 5000100, 10000100
-                ];
-            }
+              
+             } else if (issuingHouse === 'TIIH') {
+                    units = [
+                        100, 300, 1100, 2100, 3100, 4100, 6100, 11100, 20100, 50100,
+                        100100, 200100, 500100, 1000100, 2000100, 5000100, 10000100
+                    ];
+                }
 
-            const resultTable = document.getElementById('resultTable');
-            resultTable.innerHTML = '';
-            let recommendedAmounts = [];
-            let totalRecommendedAmount = 0;
-            let remainingCapital = totalCapital;
+                const resultTable = document.getElementById('resultTable');
+                resultTable.innerHTML = '';
+                let recommendedAmounts = [];
+                let totalRecommendedAmount = 0;
+                let remainingCapital = totalCapital;
+                let recommendedUnitsSet = new Set(); // To keep track of recommended units
 
-            for (let i = 0; i < numOfCDS; i++) {
-                let recommendedAmount = 0;
-                let recommendedUnits = 0;
+                for (let i = 0; i < numOfCDS; i++) {
+                    let recommendedAmount = 0;
+                    let recommendedUnits = 0;
 
-                //                // Find the largest unit that fits within the remaining capital
-                for (let j = units.length - 1; j >= 0; j--) {
-                    const unit = units[j];
-                    const cost = unit * listingPrice;
-                    if (cost <= remainingCapital) {
-                        recommendedAmount = cost;
-                        recommendedUnits = unit;
+                    // Find the largest unit that fits within the remaining capital
+                    for (let j = units.length - 1; j >= 0; j--) {
+                        const unit = units[j];
+                        const cost = unit * listingPrice;
+                        if (cost <= remainingCapital) {
+                            recommendedAmount = cost;
+                            recommendedUnits = unit;
+                            break;
+                        }
+                    }
+
+                    // If no units can be recommended within the remaining capital, break out of the loop
+                    if (recommendedUnits === 0) {
                         break;
                     }
+
+                    recommendedAmounts.push({
+                        amount: recommendedAmount,
+                        units: recommendedUnits
+                    });
+
+                    recommendedUnitsSet.add(recommendedUnits); // Add to the set of recommended units
+
+                    remainingCapital -= recommendedAmount;
                 }
 
-                // If no units can be recommended within the remaining capital, break out of the loop
-                if (recommendedUnits === 0) {
-                    break;
-                }
+                const recommendationDiv = document.getElementById('recommendation');
+                recommendationDiv.innerHTML = ''; // Clear previous recommendations
 
-                recommendedAmounts.push({
-                    amount: recommendedAmount,
-                    units: recommendedUnits
-                });
+                if (recommendedAmounts.length === 0) {
+                    recommendationDiv.innerHTML = '<p>No suitable investment found within the provided capital.</p>';
+                } else {
+                    recommendedAmounts.forEach((rec, index) => {
+                        totalRecommendedAmount += rec.amount;
+                        const recommendation = document.createElement('div');
+                        recommendation.innerHTML = `
+                            <p>CDS ${index + 1}: RM ${rec.amount.toFixed(2)} (${rec.units} units)</p>
+                        `;
+                        recommendationDiv.appendChild(recommendation);
+                    });
 
-                remainingCapital -= recommendedAmount;
-            }
-
-            const recommendationDiv = document.getElementById('recommendation');
-            recommendationDiv.innerHTML = ''; // Clear previous recommendations
-
-            if (recommendedAmounts.length === 0) {
-                recommendationDiv.innerHTML = '<p>No suitable investment found within the provided capital.</p>';
-            } else {
-                recommendedAmounts.forEach((rec, index) => {
-                    totalRecommendedAmount += rec.amount;
-                    const recommendation = document.createElement('div');
-                    recommendation.innerHTML = `
-                        <p>CDS ${index + 1}: RM ${rec.amount.toFixed(2)} (${rec.units} units)</p>
+                    const totalRecommendation = document.createElement('div');
+                    totalRecommendation.innerHTML = `
+                        <p><strong>Total amount RM ${totalRecommendedAmount.toFixed(2)}</strong></p>
                     `;
-                    recommendationDiv.appendChild(recommendation);
-                });
-
-                const totalRecommendation = document.createElement('div');
-                totalRecommendation.innerHTML = `
-                    <p><strong>Total amount RM ${totalRecommendedAmount.toFixed(2)}</strong></p>
-                `;
-                recommendationDiv.appendChild(totalRecommendation);
-            }
-
-            // Populate the table with units and highlight recommended ones
-            units.forEach((unit, index) => {
-                const row = document.createElement('tr');
-                const totalCost = unit * listingPrice;
-                const isRecommended = recommendedAmounts.some(rec => rec.units === unit);
-
-                if (isRecommended) {
-                    row.classList.add('highlight');
+                    recommendationDiv.appendChild(totalRecommendation);
                 }
 
-                row.innerHTML = `
-                    <td>${unit}</td>
-                    <td>${index + 1}</td>
-                    <td>RM ${totalCost.toFixed(2)}</td>
-                `;
-                resultTable.appendChild(row);
-            });
-        }
+                // Populate the table with units and highlight recommended ones
+                units.forEach((unit, index) => {
+                    const row = document.createElement('tr');
+                    const totalCost = unit * listingPrice;
+                    let isRecommended = false;
 
-        // Initial calculation on page load
-        calculate();
-    </script>
-</body>
+                    // Check if the unit is part of any of the recommended amounts
+                    recommendedAmounts.forEach((rec) => {
+                        if (rec.units === unit) {
+                            isRecommended = true;
+                        }
+                    });
+
+                    if (isRecommended) {
+                        row.classList.add('highlight');
+                    }
+
+                    row.innerHTML = `
+                        <td>${unit}</td>
+                        <td>${index + 1}</td>
+                        <td>RM ${totalCost.toFixed(2)}</td>
+                    `;
+                    resultTable.appendChild(row);
+                });
+            }
+
+            // Initial calculation on page load
+            calculate();
+        </script>
+    </body>
 </html>
