@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balance Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+        form {
+            max-width: 300px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        label, input {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            width: 100%;
+        }
+        p {
+            font-size: 14px;
+            margin-top: 10px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <form id="balance-form">
+        <label for="sale-price">Sale Price:</label>
+        <input type="number" id="sale-price" required>
+
+        <label for="customer-payment">Customer Payment:</label>
+        <input type="number" id="customer-payment" required>
+
+        <p id="balance-display">Balance to be paid back: $0.00</p>
+    </form>
+
+    <script>
+        const salePriceInput = document.getElementById('sale-price');
+        const customerPaymentInput = document.getElementById('customer-payment');
+        const balanceDisplay = document.getElementById('balance-display');
+
+        function updateBalance() {
+            const salePrice = parseFloat(salePriceInput.value);
+            const customerPayment = parseFloat(customerPaymentInput.value);
+
+            const balance = customerPayment - salePrice;
+            balanceDisplay.textContent = `Balance to be paid back: $${balance.toFixed(2)}`;
+        }
+
+        salePriceInput.addEventListener('input', updateBalance);
+        customerPaymentInput.addEventListener('input', updateBalance);
+    </script>
+</body>
+</html>
