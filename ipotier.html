@@ -186,6 +186,7 @@
                 const row = document.createElement('tr');
 
                 const isRecommended = recommendedAmounts.some(rec => rec.tier === tier);
+                console.log('isRecommended:', isRecommended); // Log the value of isRecommended
 
                 if (isRecommended) {
                     row.classList.add('highlight');
