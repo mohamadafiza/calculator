@@ -11,7 +11,7 @@
             padding: 20px;
         }
         form {
-            max-width: 300px;
+            max-width: 400px;
             margin: 0 auto;
             background-color: #ffffff;
             border-radius: 8px;
@@ -28,31 +28,23 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-        button {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 4px;
-            width: 100%;
-        }
         p {
-            font-size: 14px;
-            margin-top: 10px;
-            color: #555;
+            font-size: 24px; /* Large font size */
+            margin-top: 20px;
+            color: #333;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <form id="balance-form">
-        <label for="sale-price">Sale Price:</label>
+        <label for="sale-price">Sale Price (RM):</label>
         <input type="number" id="sale-price" required>
 
-        <label for="customer-payment">Customer Payment:</label>
+        <label for="customer-payment">Customer Payment (RM):</label>
         <input type="number" id="customer-payment" required>
 
-        <p id="balance-display">Balance to be paid back: $0.00</p>
+        <p id="balance-display">Balance to be paid back: RM 0.00</p>
     </form>
 
     <script>
@@ -65,7 +57,7 @@
             const customerPayment = parseFloat(customerPaymentInput.value);
 
             const balance = customerPayment - salePrice;
-            balanceDisplay.textContent = `Balance to be paid back: $${balance.toFixed(2)}`;
+            balanceDisplay.textContent = `Balance to be paid back: RM ${balance.toFixed(2)}`;
         }
 
         salePriceInput.addEventListener('input', updateBalance);
