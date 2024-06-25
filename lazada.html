@@ -57,14 +57,14 @@
                 <td><input type="checkbox" id="eastMalaysia"> Buyer East Malaysia?</td>
             </tr>
             <tr>
-                <td>Payment Fee*</td>
+                <td>Payment Fee* (RM)</td>
                 <td><input type="text" id="paymentFee" placeholder="0.0" readonly></td>
             </tr>
             <tr>
                 <td><a href="https://mohamadafiza.github.io/calculator/lazada.png" target="_blank">Marketplace Fee</a></td>
                 <td>
                     <select id="marketplaceFee">
-                        <option value="0">0%</option>
+                        <option value="0">0%</option>                        
                         <option value="4.32">4%</option>
                         <option value="4.86">4.5%</option>
                         <option value="5.40">5.0%</option>
@@ -79,6 +79,10 @@
                 </td>
             </tr>
             <tr>
+                <td>Affiliate % (Optional)</td>
+                <td><input type="text" id="affiliatePercentage" placeholder="Affiliate % Commission"></td>
+            </tr>
+            <tr>
                 <td>Programme Fee</td>
                 <td>
                     <input type="checkbox" id="freeShippingMax"> Free Shipping Max 3.24%<br>
@@ -87,15 +91,19 @@
                 </td>
             </tr>
             <tr>
-                <td>Total Fees</td>
+                <td>Affiliate Fee (RM)</td>
+                <td><input type="text" id="affiliateFee" readonly></td>
+            </tr>
+            <tr>
+                <td>Total Fees (RM)</td>
                 <td><input type="text" id="totalFees" readonly></td>
             </tr>
             <tr>
-                <td>Net Profit</td>
+                <td>Net Profit (RM)</td>
                 <td><input type="text" id="netProfit" readonly></td>
             </tr>
             <tr>
-                <td>Net Sales</td>
+                <td>Net Sales (RM)</td>
                 <td><input type="text" id="netSales" readonly></td>
             </tr>
             <tr>
@@ -120,7 +128,7 @@
             const sellingPrice = parseFloat(document.getElementById('sellingPrice').value) || 0;
             const eastMalaysia = document.getElementById('eastMalaysia').checked ? 0.0216 : 0;
 
-            const paymentFee = sellingPrice * 0.0216;  // Assuming payment fee is 2% of selling price
+            const paymentFee = sellingPrice * 0.0216;  // Assuming payment fee is 2.16% of selling price
             document.getElementById('paymentFee').value = paymentFee.toFixed(2);
 
             const marketplaceFee = parseFloat(document.getElementById('marketplaceFee').value) / 100 || 0;
@@ -129,8 +137,12 @@
             const lazCoins = document.getElementById('lazCoins').checked ? 0.0324 : 0;
             const freeMaxLazCoins = document.getElementById('freeMaxLazCoins').checked ? 0.0216 : 0;
 
+            const affiliatePercentage = parseFloat(document.getElementById('affiliatePercentage').value) / 100 || 0;
+            const affiliateFee = sellingPrice * affiliatePercentage;
+            document.getElementById('affiliateFee').value = affiliateFee.toFixed(2);
+
             const totalProgramFee = freeShippingMax + lazCoins + freeMaxLazCoins;
-            const totalFees = paymentFee + ((marketplaceFee + eastMalaysia + totalProgramFee) * sellingPrice);
+            const totalFees = paymentFee + ((marketplaceFee + eastMalaysia + totalProgramFee) * sellingPrice) + affiliateFee;
 
             const netSales = sellingPrice - totalFees;
             const netProfit = netSales - supplierCost;
