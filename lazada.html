@@ -1,194 +1,148 @@
 <!DOCTYPE html>
 <html>
-  <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <title>Lazada Fees & Profit Calculator</title>
+<head>
+    <title>Lazada Fees & Profit Calculator</title>
     <style>
-      table {
-        width: 95%;
-        border-collapse: collapse;
-        margin: 0 auto;
-      }
+        body {
+            font-family: Arial, sans-serif;
+        }
 
-      td,
-      th {
-        border: 1px solid #dddddd;
-        text-align: left;
-        padding: 0px;
-      }
+        .container {
+            width: 50%;
+            margin: 0 auto;
+        }
 
-      th {
-        background-color: #dddddd;
-      }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-      input[type="text"],
-      select {
-        width: 100%;
-        padding: 12px 20px;
-        margin: 0px 0;
-        box-sizing: border-box;
-        border: 2px solid #ccc;
-        border-radius: 4px;
-      }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
 
-      .form-group {
-        text-align: center;
-      }
+        th {
+            background-color: #f2f2f2;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin: 4px 0;
+            box-sizing: border-box;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
     </style>
-  </head>
-  <body>
-    <form>
-    <center><h1>Lazada Fees & Profit Calculator</h1></center>
-      <table>
-        <tr>
-          <td>Supplier Cost</td>
-          <td>
-            <input
-              type="text"
-              id="supplierCost"
-              name="supplierCost"
-              placeholder="Harga Modal"
-              oninput="calculateFees()"
-            />
-          </td>
-        </tr>
-        <tr>
-          <td>Selling Price</td>
-          <td>
-            <input
-              type="text"
-              id="sellingPrice"
-              name="sellingPrice"
-              placeholder="Harga Jual"
-              oninput="calculateFees()"
-            />
-          </td>
-        </tr>
-          <tr>
-          <td>East Malaysia</td>
-          <td>
-            <input type="checkbox" id="eastMalaysia" onchange="calculateFees()">Buyer East Malaysia?
-</td>
-</tr>
-        <tr>
-          <td>Payment Fee*</td>
-          <td>
-            <input type="text" id="paymentFee" name="paymentFee" readonly />
-          </td>
-        </tr>
-        <tr>
-          <td><a href="https://mohamadafiza.github.io/calculator/lazada.png" target="_blank">Marketplace Fee</a> 
-</td>
-          <td>
-            <select id="marketplaceFee" name="marketplaceFee" onchange="calculateFees()">
-              <option value="4.24">4%</option>
-              <option value="3.71">3.5%</option>
-              <option value="3.18">3%</option>
-              <option value="2.65">2.5%</option>
-              <option value="0">0%</option>                   
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>Programme Fee</td>
-          <td>
-            <input type="checkbox" id="freeShipping" onchange="calculateFees()">Free Shipping Max 5%<br>
-            <input type="checkbox" id="everydayCashback" onchange="calculateFees()">Everyday Cashback 2%<br>
-            <input type="checkbox" id="marketplaceFlexicoins" onchange="calculateFees()">Marketplace Flexicoins 3%
-</td>
-</tr>
-<tr>
-<td>Total Fees</td>
-<td>
-<input type="text" id="totalFees" name="totalFees" readonly />
-</td>
-</tr>
-<tr>
-<td>Net Profit</td>
-<td>
-<input type="text" id="netProfit" name="netProfit" readonly />
-</td>
-</tr>
-<tr>
-<td>Net Sales</td>
-<td>
-<input type="text" id="netSales" name="netSales" readonly />
-</td>
-</tr>
-<tr>
-<td>Net Profit Percentage</td>
-<td>
-<input type="text" id="netProfitPercentage" name="netProfitPercentage" readonly />
-</td>
-</tr>
-<tr>
-<td>Net Margin Percentage</td>
-<td>
-<input type="text" id="netMarginPercentage" name="netMarginPercentage" readonly />
-</td>
-</tr>
-</table>
-<div class="form-group">
-</div>
-</form>
-<script>
-function calculateFees() {
-var supplierCost = parseFloat(document.getElementById("supplierCost").value);
-var sellingPrice = parseFloat(document.getElementById("sellingPrice").value);
-var eastMalaysiaFee = document.getElementById("eastMalaysia").checked ? 14.50 : 4.9;
-var paymentFee = (sellingPrice + eastMalaysiaFee) * 0.0212;
-var marketplaceFee =
-parseFloat(document.getElementById("marketplaceFee").value) / 100 * sellingPrice;
-var freeShipping = 0;
-var everydayCashback = 0;
-var marketplaceFlexicoins = 0;
-if (document.getElementById("freeShipping").checked) {
-freeShipping = (5.3 / 100) * sellingPrice;
-}
-if (document.getElementById("everydayCashback").checked) {
-everydayCashback = (2.12 / 100) * sellingPrice;
-}
-if (document.getElementById("marketplaceFlexicoins").checked) {
-marketplaceFlexicoins = (3.18 / 100) * sellingPrice;
-}
-var totalFees = paymentFee + marketplaceFee + freeShipping + everydayCashback + marketplaceFlexicoins;
-var netProfit = sellingPrice - supplierCost - totalFees;
-var netSales = sellingPrice-totalFees;
-var netProfitPercentage = (netProfit / netSales) * 100;
-var netMarginPercentage = (netProfit / sellingPrice) * 100;
-document.getElementById("paymentFee").value = paymentFee.toFixed(2);
-document.getElementById("totalFees").value = totalFees.toFixed(2);
-document.getElementById("netProfit").value = netProfit.toFixed(2);
-document.getElementById("netSales").value = netSales.toFixed(2);
-document.getElementById("netProfitPercentage").value = netProfitPercentage.toFixed(2) + "%";
-document.getElementById("netMarginPercentage").value = netMarginPercentage.toFixed(2) + "%";
-}
+</head>
+<body>
+    <div class="container">
+        <h1>Lazada Fees & Profit Calculator 2024</h1>
+        <table>
+            <tr>
+                <td>Supplier Cost</td>
+                <td><input type="text" id="supplierCost" placeholder="Harga Modal"></td>
+            </tr>
+            <tr>
+                <td>Selling Price</td>
+                <td><input type="text" id="sellingPrice" placeholder="Harga Jual"></td>
+            </tr>
+            <tr>
+                <td>East Malaysia</td>
+                <td><input type="checkbox" id="eastMalaysia"> Buyer East Malaysia?</td>
+            </tr>
+            <tr>
+                <td>Payment Fee*</td>
+                <td><input type="text" id="paymentFee" placeholder="0.0" readonly></td>
+            </tr>
+            <tr>
+                <td><a href="https://mohamadafiza.github.io/calculator/lazada.png" target="_blank">Marketplace Fee</a></td>
+                <td>
+                    <select id="marketplaceFee">
+                        <option value="0">0%</option>
+                        <option value="4.32">4%</option>
+                        <option value="4.86">4.5%</option>
+                        <option value="5.40">5.0%</option>
+                        <option value="5.94">5.5%</option>
+                        <option value="6.48">6%</option>
+                        <option value="7.02">6.5%</option>
+                        <option value="7.56">7%</option>
+                        <option value="8.10">7.5%</option>
+                        <option value="8.64">8%</option>
+                        <option value="18.90">17.5%</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Programme Fee</td>
+                <td>
+                    <input type="checkbox" id="freeShippingMax"> Free Shipping Max 3.24%<br>
+                    <input type="checkbox" id="lazCoins"> LazCoins 3.24%<br>
+                    <input type="checkbox" id="freeMaxLazCoins"> FreeMax+LazCoins 2.16%
+                </td>
+            </tr>
+            <tr>
+                <td>Total Fees</td>
+                <td><input type="text" id="totalFees" readonly></td>
+            </tr>
+            <tr>
+                <td>Net Profit</td>
+                <td><input type="text" id="netProfit" readonly></td>
+            </tr>
+            <tr>
+                <td>Net Sales</td>
+                <td><input type="text" id="netSales" readonly></td>
+            </tr>
+            <tr>
+                <td>Net Profit Percentage</td>
+                <td><input type="text" id="netProfitPercentage" readonly></td>
+            </tr>
+            <tr>
+                <td>Net Margin Percentage</td>
+                <td><input type="text" id="netMarginPercentage" readonly></td>
+            </tr>
+        </table>
+    </div>
 
+    <script>
+        document.querySelectorAll('input, select').forEach((element) => {
+            element.addEventListener('input', calculate);
+            element.addEventListener('change', calculate);
+        });
 
-  function updateMarketplaceFee() {
-    var category = document.getElementById("category").value;
-    var sellingPrice = parseFloat(document.getElementById("sellingPrice").value);
-    var marketplaceFee = 0;
-    switch (category) {
-      case "0%":
-        marketplaceFee = 0;
-        break;
-      case "2.5%":
-        marketplaceFee = (2.65 / 100) * sellingPrice;
-        break;
-      case "3%":
-        marketplaceFee = (3.18 / 100) * sellingPrice;
-        break;
-      case "3.5%":
-        marketplaceFee = (3.71 / 100) * sellingPrice;
-        break;
-      case "4%":
-        marketplaceFee = (4.24 / 100) * sellingPrice;
-        break;
-    }
-    document.getElementById("marketplaceFee").value = marketplaceFee.toFixed(2);
-  }
-</script>
-  </body>
+        function calculate() {
+            const supplierCost = parseFloat(document.getElementById('supplierCost').value) || 0;
+            const sellingPrice = parseFloat(document.getElementById('sellingPrice').value) || 0;
+            const eastMalaysia = document.getElementById('eastMalaysia').checked ? 0.0216 : 0;
+
+            const paymentFee = sellingPrice * 0.0216;  // Assuming payment fee is 2% of selling price
+            document.getElementById('paymentFee').value = paymentFee.toFixed(2);
+
+            const marketplaceFee = parseFloat(document.getElementById('marketplaceFee').value) / 100 || 0;
+
+            const freeShippingMax = document.getElementById('freeShippingMax').checked ? 0.0324 : 0;
+            const lazCoins = document.getElementById('lazCoins').checked ? 0.0324 : 0;
+            const freeMaxLazCoins = document.getElementById('freeMaxLazCoins').checked ? 0.0216 : 0;
+
+            const totalProgramFee = freeShippingMax + lazCoins + freeMaxLazCoins;
+            const totalFees = paymentFee + ((marketplaceFee + eastMalaysia + totalProgramFee) * sellingPrice);
+
+            const netSales = sellingPrice - totalFees;
+            const netProfit = netSales - supplierCost;
+
+            const netProfitPercentage = (netProfit / sellingPrice) * 100;
+            const netMarginPercentage = (netProfit / netSales) * 100;
+
+            document.getElementById('totalFees').value = totalFees.toFixed(2);
+            document.getElementById('netProfit').value = netProfit.toFixed(2);
+            document.getElementById('netSales').value = netSales.toFixed(2);
+            document.getElementById('netProfitPercentage').value = netProfitPercentage.toFixed(2) + '%';
+            document.getElementById('netMarginPercentage').value = netMarginPercentage.toFixed(2) + '%';
+        }
+    </script>
+</body>
 </html>
