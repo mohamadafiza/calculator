@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <title>Currency Ringgit-Rupiah Converter</title>
+</head>
+<body>
+  <center><marquee><h1>Currency Ringgit-Rupiah Converter</marquee></h1>
+  <form>
+    <center>
+      <input type="checkbox" id="default-rate" onclick="useDefaultRate()"> Use Default Rate
+      <br>
+      <label>Rate:</label>
+      <input type="number" id="exchange-rate" oninput="updateAll()">
+      <br>
+      <label>RP:</label> <input type="number" id="thb-amount" oninput="convertBack()">
+      <br>
+      <label>RM:</label>
+      <input type="number" id="rm-amount" oninput="calculate()">
+      <br>
+      <button type="button" onclick="resetValues()">Reset</button>
+    </center>
+  </form>
+
+  <table id="conversion-table" border="1">
+    <tr>
+      <th>IDR</th>
+      <th>RM</th>
+    </tr>
+  </table>
+
+  <script>
+    // Default exchange rate
+    const defaultRate = 3464;
+
+    function calculate() {
+      var rmAmount = parseFloat(document.getElementById("rm-amount").value);
+      var exchangeRate = parseFloat(document.getElementById("exchange-rate").value);
+      var thbAmount = (rmAmount * exchangeRate).toFixed(2);
+      document.getElementById("thb-amount").value = thbAmount;
+      updateConversionTable();
+    }
+
+    function convertBack() {
+      var thbAmount = parseFloat(document.getElementById("thb-amount").value);
+      var exchangeRate = parseFloat(document.getElementById("exchange-rate").value);
+      var rmAmount = (thbAmount / exchangeRate).toFixed(2);
+      document.getElementById("rm-amount").value = rmAmount;
+      updateConversionTable();
+    }
+
+    function resetValues(){
+      document.getElementById("rm-amount").value = "";
+      document.getElementById("exchange-rate").value = "";
+      document.getElementById("thb-amount").value = "";
+      document.getElementById("default-rate").checked = false;
+      updateConversionTable();
+    }
+
+    function useDefaultRate() {
+      if (document.getElementById("default-rate").checked) {
+        document.getElementById("exchange-rate").value = defaultRate;
+      } else {
+        document.getElementById("exchange-rate").value = "";
+      }
+      updateAll();
+    }
+
+    function updateAll() {
+      calculate();
+      convertBack();
+      updateConversionTable();
+    }
+
+    function updateConversionTable() {
+      var exchangeRate = parseFloat(document.getElementById("exchange-rate").value) || 0;
+      var table = document.getElementById("conversion-table");
+
+      // Remove all rows except the header
+      var rowCount = table.rows.length;
+      for (var i = rowCount - 1; i > 0; i--) {
+        table.deleteRow(i);
+      }
+
+      // Add new rows with conversions if a valid exchange rate is provided
+      if (exchangeRate > 0) {
+        for (var i = 5000; i <= 100000; i += 5000) {
+          var row = table.insertRow();
+          var cell1 = row.insertCell(0);
+          var cell2 = row.insertCell(1);
+          cell1.innerHTML = i;
+          cell2.innerHTML = (i / exchangeRate).toFixed(2);
+        }
+      }
+    }
+
+    // Initialize table on page load
+    window.onload = updateConversionTable;
+  </script>
+
+  <style>
+    /* CSS styles for form and input fields */
+    form {
+      border: 5px solid green;
+      padding: 5px;
+      width: 95%;
+      margin: 0 auto;
+    }
+
+    label {
+      display: inline-block;
+      width: 40px;
+      text-align: right;
+      margin-right: 0px;
+    }
+
+    /* Add some basic styling for the page */
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    /* Style the input fields and labels */
+    input[type="number"] {
+      padding: 10px 0px;
+      margin: 2px 0;
+      box-sizing: border-box;
+      border: 2px solid #ccc;
+      border-radius: 1px;
+    }
+
+    /* Style the button */
+    button {
+      background-color: #FF8A8A;
+      color: white;
+      font-weight: bold;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    /* Style the table */
+    table {
+      width: 95%;
+      margin: 20px auto;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</body>
+</html>
