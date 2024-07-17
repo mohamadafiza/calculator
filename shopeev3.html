@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<title>V3 Shopee Fees & Profit Calculator</title>
+<script>
+function calculate() {
+  var productCost = parseFloat(document.getElementById("productCost").value);
+  var totalSale = parseFloat(document.getElementById("totalSale").value);
+  var affiliatePercentage = document.getElementById("affiliatePercentage").value ? parseFloat(document.getElementById("affiliatePercentage").value) / 100 : 0;
+  var eastMalaysiaFee = document.getElementById("eastMalaysia").checked ? 10.60 : 5.19;
+  var serviceFeeOption = document.querySelector('input[name="serviceFeeOption"]:checked').value;
+  var marketplaceCommissionOption = document.getElementById("marketplaceCommissionOption").value;
+
+  var serviceFee = 0;
+  switch (serviceFeeOption) {
+    case "Normal Seller":
+      serviceFee = 0;
+      break;
+    case "Cashback 10%":
+      serviceFee = totalSale * 0.0378;
+      break;
+  }
+
+  var marketplaceCommission = 0;
+  switch (marketplaceCommissionOption) {
+    case "Category 8.0%":
+      marketplaceCommission = totalSale * 0.0864;
+      break;
+    case "Category 7.5%":
+      marketplaceCommission = totalSale * 0.0810;
+      break;
+    case "Category 7.0%":
+      marketplaceCommission = totalSale * 0.0756;
+      break;
+    case "Category 6.5%":
+      marketplaceCommission = totalSale * 0.0702;
+      break;
+    case "Category 6.0%":
+      marketplaceCommission = totalSale * 0.0648;
+      break;
+    case "Category 5.5%":
+      marketplaceCommission = totalSale * 0.0594;
+      break;
+    case "Category 5.0%":
+      marketplaceCommission = totalSale * 0.0540;
+      break;
+    case "Category 4.5%":
+      marketplaceCommission = totalSale * 0.0486;
+      break;
+    case "Category 4.0%":
+      marketplaceCommission = totalSale * 0.0432;
+      break;
+    case "Category 0.0%":
+      marketplaceCommission = 0;
+      break;
+    case "Virtual Goods 17.5%":
+      marketplaceCommission = totalSale * 0.189;
+      eastMalaysiaFee = 0;
+      break;
+    case "Category 3.0%":
+      marketplaceCommission = totalSale * 0.0324;
+      break;
+    case "Category 8.5%":
+      marketplaceCommission = totalSale * 0.0918;
+      break;
+    case "Category 9.0%":
+      marketplaceCommission = totalSale * 0.0972;
+      break;
+    case "Category 9.5%":
+      marketplaceCommission = totalSale * 0.1026;
+      break;
+    case "Category 10.0%":
+      marketplaceCommission = totalSale * 0.1080;
+      break;
+    case "Category 10.5%":
+      marketplaceCommission = totalSale * 0.1134;
+      break;
+    case "Category 11.0%":
+      marketplaceCommission = totalSale * 0.1188;
+      break;
+    case "Virtual Goods 20.5%":
+      marketplaceCommission = totalSale * 0.2214;
+      eastMalaysiaFee = 0;
+      break;
+  }
+
+  var transactionFee = (totalSale + eastMalaysiaFee) * 0.0378;
+  var affiliateCommission = totalSale * affiliatePercentage;
+  var totalFee = transactionFee + marketplaceCommission + serviceFee + affiliateCommission;
+  var netSale = totalSale - totalFee;
+  var netProfit = netSale - productCost;
+  var profitPercentage = (netProfit / productCost) * 100;
+  var profitMargin = (netProfit / netSale) * 100;
+
+  document.getElementById("transactionFee").innerHTML = "RM" + transactionFee.toFixed(2);
+  document.getElementById("marketplaceCommission").innerHTML = "RM" + marketplaceCommission.toFixed(2);
+  document.getElementById("serviceFee").innerHTML = "RM" + serviceFee.toFixed(2);
+  document.getElementById("affiliateCommission").innerHTML = "RM" + affiliateCommission.toFixed(2);
+  document.getElementById("totalFee").innerHTML = "RM" + totalFee.toFixed(2);
+  document.getElementById("netSale").innerHTML = "RM" + netSale.toFixed(2);
+  document.getElementById("netProfit").innerHTML = "RM" + netProfit.toFixed(2);
+  document.getElementById("profitPercentage").innerHTML = profitPercentage.toFixed(2) + "%";
+  document.getElementById("profitMargin").innerHTML = profitMargin.toFixed(2) + "%";
+}
+</script>
+<style>
+/* CSS styles for form and input fields */
+form {
+  border: 5px solid green;
+  padding: 35px;
+  width: 80%;
+  margin: 0 auto;
+}
+
+body {
+  background-color: #FFFFE8;
+}
+
+label {
+  display: inline-block;
+  width: 150px;
+  text-align: right;
+  margin-right: 10px;
+}
+
+/* Add some basic styling for the page */
+body {
+  font-family: Arial, sans-serif;
+}
+
+/* Style the input fields and labels */
+input[type="text"] {
+  padding: 1px 1px;
+  margin: 1px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 1px;
+}
+
+/* Style the dropdown menus */
+select {
+  width: 200px;
+  padding: 1px 1px;
+  margin: 1px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 1px;
+}
+
+/* Style the calculate button */
+button {
+  background-color: #00FFFF;
+  color: black;
+  font-weight: bold;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.output span {
+  font-weight: bold;
+  line-height: 0;
+}
+</style>
+</head>
+<body>
+<form>
+  <center><h1>Shopee Fees & Profit Calculator (V3 Update Aug 2024)</h1></center>
+  <div class="calculator">
+    <label for="productCost">Product Cost: RM</label>
+    <input type="text" id="productCost" placeholder="Enter Product Cost"><br>
+    <label for="totalSale">Product Sale: RM</label>
+    <input type="text" id="totalSale" placeholder="Enter Selling Price"><br>
+    <label for="eastMalaysia">East Malaysia:</label>
+    <input type="checkbox" id="eastMalaysia" title="Sabah/Sarawak/Labuan"><br>
+    <label for="serviceFeeOption">Service Fee:</label><br>
+    <input type="radio" name="serviceFeeOption" value="Normal Seller" checked> Normal Seller
+    <input type="radio" name="serviceFeeOption" value="Cashback 10%"> Cashback 10%<br>
+    <label for="marketplaceCommissionOption">Category Fee:</label>
+    <select id="marketplaceCommissionOption">
+      <option value="Category 11.0%">Category 11.0%</option>
+      <option value="Category 10.5%">Category 10.5%</option>
+      <option value="Category 10.0%">Category 10.0%</option>
+      <option value="Category 9.5%">Category 9.5%</option>
+      <option value="Category 9.0%">Category 9.0%</option>
+      <option value="Category 8.5%">Category 8.5%</option>
+      <option value="Category 8.0%">Category 8.0%</option>
+      <option value="Category 7.5%">Category 7.5%</option>
+      <option value="Category 7.0%">Category 7.0%</option>
+      <option value="Category 6.5%">Category 6.5%</option>
+      <option value="Category 6.0%">Category 6.0%</option>
+      <option value="Category 5.5%">Category 5.5%</option>
+      <option value="Category 5.0%">Category 5.0%</option>
+      <option value="Category 4.5%">Category 4.5%</option>
+      <option value="Category 4.0%">Category 4.0%</option>
+      <option value="Category 3.0%">Category 3.0%</option>
+      <option value="Category 0.0%">Category 0.0%</option>
+      <option value="Virtual Goods 20.5%">Virtual Goods 20.5%</option>
+      <option value="Virtual Goods 17.5%">Virtual Goods 17.5%</option>
+    </select><br>
+    <label for="affiliatePercentage">Affiliate Comm. %:</label>
+    <input type="text" id="affiliatePercentage" placeholder="Enter Affiliate Percentage (Optional)"><br>
+    <button class="button" onclick="event.preventDefault(); calculate();">Calculate</button>
+    <br><br>
+    <div class="output">
+      <label>Transaction Fee:</label>
+      <span id="transactionFee"></span>
+    </div>
+    <div class="output">
+      <label>Category Fee:</label>
+      <span id="marketplaceCommission"></span>
+    </div>
+    <div class="output">
+      <label>Service Fee:</label>
+      <span id="serviceFee"></span>
+    </div>
+    <div class="output">
+      <label>Affiliate Commission:</label>
+      <span id="affiliateCommission"></span>
+    </div>
+    <div class="output">
+      <label>Total Fee:</label>
+      <span id="totalFee"></span>
+    </div>
+    <div class="output">
+      <label>Net Sale:</label>
+      <span id="netSale"></span>
+    </div>
+    <div class="output">
+      <label>Net Profit:</label>
+      <span id="netProfit"></span>
+    </div>
+    <div class="output">
+      <label>Profit Percentage:</label>
+      <span id="profitPercentage"></span>
+    </div>
+    <div class="output">
+      <label>Profit Margin:</label>
+      <span id="profitMargin"></span>
+    </div>
+  </div>
+</form>
+</body>
+</html>
+<br><br>
+<p><a href="https://seller.shopee.com.my/edu/article/6799">Click here for all category fees percentage.</a></p>
+<p><a href="https://seller.shopee.com.my/edu/article/21011">Click here for Food & Beverages fees percentage.</a></p>
+<p><a href="https://mohamadafiza.github.io/calculator/packing.html">Seller Packing Cost Calculator.</a></p>
+<details>
+  <summary>Click here to read notes</summary>
+<sup><p>*For "Transaction Fee" calculation, assume buyer did not apply voucher or coin to make calculation easier.</p>
+<p>**Tick "East Malaysia" if buyer from Sabah/Sarawak/Labuan</p>
+<p>***Product that exceed standard shipping charges will get imprecise calculation in Transaction Fee because this calculator does not read your additional shipping charges.</p>
+<p>****Calculation already include SST</p>
+</sup>
+ <img src="https://counter10.optistats.ovh/private/freecounterstat.php?c=um96xe2u7frfrh9lhsglmn8ba7mr5khb" border="0">
+</details>
+</body>
+</html>
