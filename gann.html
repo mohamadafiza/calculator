@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gann Square of 9 Calculator</title>
+    <style>
+        /* Add your custom CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .calculator {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h1>Gann Square of 9 Calculator</h1>
+        <p>Enter the initial value:</p>
+        <input type="number" id="initialValue" placeholder="Enter value">
+        <button onclick="calculateGann()">Calculate</button>
+
+        <h2>Results:</h2>
+        <p>Buy Price: <span id="targetBuyPrice"></span></p>
+        <p>Target Price (TP) for Buy: <span id="buyPrice"></span></p>
+        <p>Stop Loss Price for Buy: <span id="stopLossBuyPrice"></span></p>
+        <p>Sell Price: <span id="targetSellPrice"></span></p>
+        <p>Target Price (TP) for Sell: <span id="sellPrice"></span></p>
+        <p>Stop Loss Price for Sell: <span id="stopLossSellPrice"></span></p>
+    </div>
+
+    <script>
+        function calculateGann() {
+            const initialValue = parseFloat(document.getElementById('initialValue').value);
+            const step = 1; // You can adjust the step (e.g., 1, 2, 3, etc.)
+
+            // Calculate Gann levels
+            const buyPrice = initialValue + step * 8;
+            const sellPrice = initialValue - step * 8;
+            const targetBuyPrice = initialValue + step * 4;
+            const stopLossBuyPrice = initialValue - step * 4;
+            const targetSellPrice = initialValue - step * 4;
+            const stopLossSellPrice = initialValue + step * 4;
+
+            // Display results
+            document.getElementById('buyPrice').textContent = buyPrice.toFixed(2);
+            document.getElementById('sellPrice').textContent = sellPrice.toFixed(2);
+            document.getElementById('targetBuyPrice').textContent = targetBuyPrice.toFixed(2);
+            document.getElementById('stopLossBuyPrice').textContent = stopLossBuyPrice.toFixed(2);
+            document.getElementById('targetSellPrice').textContent = targetSellPrice.toFixed(2);
+            document.getElementById('stopLossSellPrice').textContent = stopLossSellPrice.toFixed(2);
+        }
+    </script>
+</body>
+</html>
