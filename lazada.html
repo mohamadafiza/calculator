@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lazada Fees & Profit Calculator (Update 15 Aug 2024)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 99%;
+            margin: 0 auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin: 4px 0;
+            box-sizing: border-box;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lazada Fees & Profit Calculator (Update 15 Aug 2024)</h1>
+        <table>
+            <tr>
+                <td>Supplier Cost</td>
+                <td><input type="text" id="supplierCost" placeholder="Harga Modal"></td>
+            </tr>
+            <tr>
+                <td>Selling Price</td>
+                <td><input type="text" id="sellingPrice" placeholder="Harga Jual"></td>
+            </tr>
+            <tr>
+                <td>East Malaysia</td>
+                <td><input type="checkbox" id="eastMalaysia"> Buyer East Malaysia?</td>
+            </tr>
+            <tr>
+                <td>Payment Fee* (RM)</td>
+                <td><input type="text" id="paymentFee" placeholder="0.0" readonly></td>
+            </tr>
+            <tr>
+                <td><a href="https://sellercenter.lazada.com.my/seller/helpcenter/14132.html" target="_blank">Marketplace Fee</a></td>
+                <td>
+                    <select id="marketplaceFee">
+                        <option value="0">0%</option>  
+                      	<option value="3.24">3%</option>
+                        <option value="4.32">4%</option>
+                        <option value="4.86">4.5%</option>
+                        <option value="5.40">5.0%</option>
+                        <option value="5.94">5.5%</option>
+                        <option value="6.48">6%</option>
+                        <option value="7.02">6.5%</option>
+                        <option value="7.56">7%</option>
+                        <option value="8.10">7.5%</option>
+                        <option value="8.64">8%</option>
+				<option value="9.18">8.5%</option>
+				<option value="9.72">9%</option>
+				<option value="10.26">9.5%</option>
+				<option value="10.8">10%</option>
+				<option value="11.34">10.5%</option>
+				<option value="11.88">11%</option>
+                        <option value="22.14">20.5%</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Affiliate % (Optional)</td>
+                <td><input type="text" id="affiliatePercentage" placeholder="Affiliate % Commission"></td>
+            </tr>
+            <tr>
+                <td>Programme Fee</td>
+                <td>
+                    <input type="checkbox" id="freeShippingMax">3.78%<br>
+                    <input type="checkbox" id="lazCoins">3.24%<br>
+                    <input type="checkbox" id="freeMaxLazCoins">2.16%
+                </td>
+            </tr>
+            <tr>
+                <td>Affiliate Fee (RM)</td>
+                <td><input type="text" id="affiliateFee" readonly></td>
+            </tr>
+            <tr>
+                <td>Total Fees (RM)</td>
+                <td><input type="text" id="totalFees" readonly></td>
+            </tr>
+            <tr>
+                <td>Net Profit (RM)</td>
+                <td><input type="text" id="netProfit" readonly></td>
+            </tr>
+            <tr>
+                <td>Net Sales (RM)</td>
+                <td><input type="text" id="netSales" readonly></td>
+            </tr>
+            <tr>
+                <td>Net Profit Percentage</td>
+                <td><input type="text" id="netProfitPercentage" readonly></td>
+            </tr>
+            <tr>
+                <td>Net Margin Percentage</td>
+                <td><input type="text" id="netMarginPercentage" readonly></td>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        document.querySelectorAll('input, select').forEach((element) => {
+            element.addEventListener('input', calculate);
+            element.addEventListener('change', calculate);
+        });
+
+        function calculate() {
+            const supplierCost = parseFloat(document.getElementById('supplierCost').value) || 0;
+            const sellingPrice = parseFloat(document.getElementById('sellingPrice').value) || 0;
+            const eastMalaysia = document.getElementById('eastMalaysia').checked ? 0.378 : 0;
+
+            const paymentFee = sellingPrice * 0.0378;  // Assuming payment fee is 3.78% of selling price
+            document.getElementById('paymentFee').value = paymentFee.toFixed(2);
+
+            const marketplaceFee = parseFloat(document.getElementById('marketplaceFee').value) / 100 || 0;
+
+            const freeShippingMax = document.getElementById('freeShippingMax').checked ? 0.0378 : 0;
+            const lazCoins = document.getElementById('lazCoins').checked ? 0.0324 : 0;
+            const freeMaxLazCoins = document.getElementById('freeMaxLazCoins').checked ? 0.0216 : 0;
+
+            const affiliatePercentage = parseFloat(document.getElementById('affiliatePercentage').value) / 100 || 0;
+            const affiliateFee = sellingPrice * affiliatePercentage;
+            document.getElementById('affiliateFee').value = affiliateFee.toFixed(2);
+
+            const totalProgramFee = freeShippingMax + lazCoins + freeMaxLazCoins;
+            const totalFees = paymentFee + ((marketplaceFee + eastMalaysia + totalProgramFee) * sellingPrice) + affiliateFee;
+
+            const netSales = sellingPrice - totalFees;
+            const netProfit = netSales - supplierCost;
+
+            const netProfitPercentage = (netProfit / sellingPrice) * 100;
+            const netMarginPercentage = (netProfit / netSales) * 100;
+
+            document.getElementById('totalFees').value = totalFees.toFixed(2);
+            document.getElementById('netProfit').value = netProfit.toFixed(2);
+            document.getElementById('netSales').value = netSales.toFixed(2);
+            document.getElementById('netProfitPercentage').value = netProfitPercentage.toFixed(2) + '%';
+            document.getElementById('netMarginPercentage').value = netMarginPercentage.toFixed(2) + '%';
+        }
+    </script>
+</body>
+</html>
