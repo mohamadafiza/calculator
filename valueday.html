@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Value Day Calculation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input {
+            padding: 8px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        .output {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .form-section {
+            margin-bottom: 40px;
+        }
+        .direction-output-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .direction-output {
+            width: 45%;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+        .output-container {
+            margin-top: 20px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculation Tool</h1>
+
+    <!-- First Form Section (renamed to Value Day) -->
+    <div class="form-section">
+        <h2>Value Day</h2>
+        <label for="high">2 Days Ago High:</label>
+        <input type="number" id="high" step="0.01" placeholder="Enter High Value">
+
+        <label for="low">2 Days Ago Low:</label>
+        <input type="number" id="low" step="0.01" placeholder="Enter Low Value">
+
+        <label for="adjustment">Adjustment (default is 3):</label>
+        <input type="number" id="adjustment" step="0.01" value="3">
+
+        <!-- Outputs -->
+        <div class="output" id="resultOutput"></div>
+    </div>
+
+    <!-- Second Form Section (renamed to Drawing Day) -->
+    <div class="form-section">
+        <h2>Drawing Day</h2>
+        <label for="valueDay">Value Day:</label>
+        <input type="number" id="valueDay" step="0.01" placeholder="Enter Value Day">
+
+        <label for="highestYesterday">Highest Yesterday:</label>
+        <input type="number" id="highestYesterday" step="0.01" placeholder="Enter Highest Yesterday">
+
+        <label for="lowestYesterday">Lowest Yesterday:</label>
+        <input type="number" id="lowestYesterday" step="0.01" placeholder="Enter Lowest Yesterday">
+
+        <!-- Outputs -->
+        <div class="direction-output-container">
+            <div class="direction-output">
+                <h3>Direction Buy</h3>
+                <div id="directionBuyOutput"></div>
+            </div>
+            <div class="direction-output">
+                <h3>Direction Sell</h3>
+                <div id="directionSellOutput"></div>
+            </div>
+        </div>
+
+        <!-- Mouse Trap Outputs -->
+        <div class="direction-output-container">
+            <div class="direction-output">
+                <h3>Mouse Trap Buy</h3>
+                <div id="mouseTrapBuyOutput"></div>
+            </div>
+            <div class="direction-output">
+                <h3>Mouse Trap Sell</h3>
+                <div id="mouseTrapSellOutput"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // First Form: Value Day (Calculation Result)
+        function calculateResults() {
+            const high = parseFloat(document.getElementById('high').value) || 0;
+            const low = parseFloat(document.getElementById('low').value) || 0;
+            const adjustment = parseFloat(document.getElementById('adjustment').value) || 3;
+
+            const calcResult = (high - low + adjustment) / 2;
+            document.getElementById('resultOutput').textContent = `Calculation Result: ${calcResult.toFixed(3)}`;
+        }
+
+        document.getElementById('high').addEventListener('input', calculateResults);
+        document.getElementById('low').addEventListener('input', calculateResults);
+        document.getElementById('adjustment').addEventListener('input', calculateResults);
+
+        // Second Form: Drawing Day (Direction Calculation)
+        function calculateDirections() {
+            const valueDay = parseFloat(document.getElementById('valueDay').value) || 0;
+            const highestYesterday = parseFloat(document.getElementById('highestYesterday').value) || 0;
+            const lowestYesterday = parseFloat(document.getElementById('lowestYesterday').value) || 0;
+            const adjustment = parseFloat(document.getElementById('adjustment').value) || 3;
+
+            // Calculate Direction Buy and Sell
+            let directionBuyOutput = '';
+            let directionSellOutput = '';
+            let buyValue = lowestYesterday;
+            let sellValue = highestYesterday;
+
+            for (let i = 1; i <= 5; i++) {
+                buyValue += valueDay;
+                sellValue -= valueDay;
+
+                directionBuyOutput += `<div class="clickable-value" data-value="${buyValue.toFixed(2)}">Buy ${i}: ${buyValue.toFixed(2)}</div>`;
+                directionSellOutput += `<div class="clickable-value" data-value="${sellValue.toFixed(2)}">Sell ${i}: ${sellValue.toFixed(2)}</div>`;
+            }
+
+            // Display Directions
+            document.getElementById('directionBuyOutput').innerHTML = directionBuyOutput;
+            document.getElementById('directionSellOutput').innerHTML = directionSellOutput;
+
+            // Calculate Mouse Trap Buy and Sell
+            const mouseTrapBuy = highestYesterday + adjustment;
+            const mouseTrapSell = lowestYesterday - adjustment;
+
+            // Display Mouse Trap values
+            document.getElementById('mouseTrapBuyOutput').innerHTML = `<div class="clickable-value" data-value="${mouseTrapBuy.toFixed(2)}">Buy: ${mouseTrapBuy.toFixed(2)}</div>`;
+            document.getElementById('mouseTrapSellOutput').innerHTML = `<div class="clickable-value" data-value="${mouseTrapSell.toFixed(2)}">Sell: ${mouseTrapSell.toFixed(2)}</div>`;
+
+            // Reattach copy-to-clipboard event listeners after content is updated
+            addCopyListeners();
+        }
+
+        document.getElementById('valueDay').addEventListener('input', calculateDirections);
+        document.getElementById('highestYesterday').addEventListener('input', calculateDirections);
+        document.getElementById('lowestYesterday').addEventListener('input', calculateDirections);
+        document.getElementById('adjustment').addEventListener('input', calculateDirections);
+
+        // Function to copy output to clipboard
+        function copyToClipboard(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+        }
+
+        // Function to add event listeners for click-to-copy after content is dynamically created
+        function addCopyListeners() {
+            document.querySelectorAll('.clickable-value').forEach(function(element) {
+                element.addEventListener('click', function() {
+                    const valueToCopy = element.getAttribute('data-value');
+                    copyToClipboard(valueToCopy);
+                });
+            });
+        }
+
+        // Initial call to set listeners when page is loaded
+        addCopyListeners();
+    </script>
+</body>
+</html>
