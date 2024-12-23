@@ -42,24 +42,26 @@
         .output-container {
             margin-top: 20px;
         }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 16px;
+        .hidden {
+            display: none;
         }
-        button:hover {
-            background-color: #45a049;
+        .clickable-value {
+            padding: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .clickable-value:hover {
+            background-color: #d0d0d0;
         }
     </style>
 </head>
 <body>
     <h1>Value Day & Drawing Day</h1>
 
-    <!-- First Form Section (renamed to Value Day) -->
+    <!-- First Form Section (Value Day) -->
     <div class="form-section">
         <h2>Value Day Calculation</h2>
         <label for="high">2 Days Ago High:</label>
@@ -68,16 +70,30 @@
         <label for="low">2 Days Ago Low:</label>
         <input type="number" id="low" step="0.01" placeholder="Enter Low Value">
 
-        <label for="adjustment">Adjustment):</label>
+        <label for="adjustment">Adjustment:</label>
         <input type="number" id="adjustment" step="0.01" value="3">
 
         <!-- Outputs -->
         <div class="output" id="resultOutput"></div>
         <div class="output" id="roundResultOutput"></div>
         <div class="output" id="valueDayOutput"></div>
+
+        <!-- Mouse Trap Outputs (Initially Hidden) -->
+        <div id="mouseTrapSection" class="hidden">
+            <div class="direction-output-container">
+                <div class="direction-output">
+                    <h3>Mouse Trap Buy</h3>
+                    <div id="mouseTrapBuyOutput" class="clickable-value"></div>
+                </div>
+                <div class="direction-output">
+                    <h3>Mouse Trap Sell</h3>
+                    <div id="mouseTrapSellOutput" class="clickable-value"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Second Form Section (renamed to Drawing Day) -->
+    <!-- Second Form Section (Drawing Day) -->
     <div class="form-section">
         <h2>Drawing Day Calculation</h2>
         <label for="highestYesterday">Highest Yesterday:</label>
@@ -86,27 +102,17 @@
         <label for="lowestYesterday">Lowest Yesterday:</label>
         <input type="number" id="lowestYesterday" step="0.01" placeholder="Enter Lowest Yesterday">
 
-        <!-- Outputs -->
-        <div class="direction-output-container">
-            <div class="direction-output">
-                <h3>Direction Buy</h3>
-                <div id="directionBuyOutput"></div>
-            </div>
-            <div class="direction-output">
-                <h3>Direction Sell</h3>
-                <div id="directionSellOutput"></div>
-            </div>
-        </div>
-
-        <!-- Mouse Trap Outputs -->
-        <div class="direction-output-container">
-            <div class="direction-output">
-                <h3>Mouse Trap Buy</h3>
-                <div id="mouseTrapBuyOutput"></div>
-            </div>
-            <div class="direction-output">
-                <h3>Mouse Trap Sell</h3>
-                <div id="mouseTrapSellOutput"></div>
+        <!-- Direction Outputs (Initially Hidden) -->
+        <div id="directionSection" class="hidden">
+            <div class="direction-output-container">
+                <div class="direction-output">
+                    <h3>Direction Buy</h3>
+                    <div id="directionBuyOutput"></div>
+                </div>
+                <div class="direction-output">
+                    <h3>Direction Sell</h3>
+                    <div id="directionSellOutput"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -138,8 +144,8 @@
             // Final Value Day result
             document.getElementById('valueDayOutput').textContent = `Value Day: ${roundedResult}`;
 
-            // Trigger the Drawing Day calculations after calculating Value Day
-            calculateDirections(roundedResult); // Pass the calculated value as Value Day
+            // Update Mouse Trap Outputs
+            calculateMouseTrapOutputs(high, low);
         }
 
         // Add event listeners to trigger calculation on input change
@@ -147,46 +153,60 @@
         document.getElementById('low').addEventListener('input', calculateResults);
         document.getElementById('adjustment').addEventListener('input', calculateResults);
 
+        // Function to calculate Mouse Trap Outputs
+        function calculateMouseTrapOutputs(high, low) {
+            if (high && low) {
+                const mouseTrapBuy = high + 3; // 2 Days Ago High + 3
+                const mouseTrapSell = low - 3; // 2 Days Ago Low - 3
+
+                document.getElementById('mouseTrapBuyOutput').textContent = mouseTrapBuy.toFixed(2);
+                document.getElementById('mouseTrapSellOutput').textContent = mouseTrapSell.toFixed(2);
+
+                // Show Mouse Trap section
+                document.getElementById('mouseTrapSection').classList.remove('hidden');
+
+                addCopyListeners();  // Ensure copy listeners are added after the Mouse Trap outputs are generated
+            } else {
+                // Hide Mouse Trap section if inputs are invalid
+                document.getElementById('mouseTrapSection').classList.add('hidden');
+            }
+        }
+
         // Second Form: Drawing Day (Direction Calculation)
         function calculateDirections(valueDay) {
             const highestYesterday = parseFloat(document.getElementById('highestYesterday').value) || 0;
             const lowestYesterday = parseFloat(document.getElementById('lowestYesterday').value) || 0;
 
-            // Calculate Direction Buy and Sell
-            let directionBuyOutput = '';
-            let directionSellOutput = '';
-            let buyValue = lowestYesterday;
-            let sellValue = highestYesterday;
+            if (valueDay && highestYesterday && lowestYesterday) {
+                let directionBuyOutput = '';
+                let directionSellOutput = '';
+                let buyValue = lowestYesterday;
+                let sellValue = highestYesterday;
 
-            for (let i = 1; i <= 5; i++) {
-                buyValue += valueDay;
-                sellValue -= valueDay;
+                for (let i = 1; i <= 5; i++) {
+                    buyValue += valueDay;
+                    sellValue -= valueDay;
 
-                directionBuyOutput += `<div class="clickable-value" data-value="${buyValue.toFixed(2)}">DB${i}: ${buyValue.toFixed(2)}</div>`;
-                directionSellOutput += `<div class="clickable-value" data-value="${sellValue.toFixed(2)}">DS${i}: ${sellValue.toFixed(2)}</div>`;
+                    directionBuyOutput += `<div class="clickable-value" data-value="${buyValue.toFixed(2)}">DB${i}: ${buyValue.toFixed(2)}</div>`;
+                    directionSellOutput += `<div class="clickable-value" data-value="${sellValue.toFixed(2)}">DS${i}: ${sellValue.toFixed(2)}</div>`;
+                }
+
+                document.getElementById('directionBuyOutput').innerHTML = directionBuyOutput;
+                document.getElementById('directionSellOutput').innerHTML = directionSellOutput;
+
+                document.getElementById('directionSection').classList.remove('hidden');
+
+                addCopyListeners();  // Ensure copy listeners are added after the Direction outputs are generated
+            } else {
+                document.getElementById('directionSection').classList.add('hidden');
             }
-
-            // Display Directions
-            document.getElementById('directionBuyOutput').innerHTML = directionBuyOutput;
-            document.getElementById('directionSellOutput').innerHTML = directionSellOutput;
-
-            // Calculate Mouse Trap Buy and Sell
-            const mouseTrapBuy = highestYesterday + 3;
-            const mouseTrapSell = lowestYesterday - 3;
-
-            // Display Mouse Trap values
-            document.getElementById('mouseTrapBuyOutput').innerHTML = `<div class="clickable-value" data-value="${mouseTrapBuy.toFixed(2)}">Buy: ${mouseTrapBuy.toFixed(2)}</div>`;
-            document.getElementById('mouseTrapSellOutput').innerHTML = `<div class="clickable-value" data-value="${mouseTrapSell.toFixed(2)}">Sell: ${mouseTrapSell.toFixed(2)}</div>`;
-
-            // Reattach copy-to-clipboard event listeners after content is updated
-            addCopyListeners();
         }
 
-        document.getElementById('highestYesterday').addEventListener('input', function() {
+        document.getElementById('highestYesterday').addEventListener('input', function () {
             const valueDay = parseFloat(document.getElementById('valueDayOutput').textContent.replace('Value Day: ', ''));
             calculateDirections(valueDay);
         });
-        document.getElementById('lowestYesterday').addEventListener('input', function() {
+        document.getElementById('lowestYesterday').addEventListener('input', function () {
             const valueDay = parseFloat(document.getElementById('valueDayOutput').textContent.replace('Value Day: ', ''));
             calculateDirections(valueDay);
         });
@@ -203,10 +223,19 @@
 
         // Function to add event listeners for click-to-copy after content is dynamically created
         function addCopyListeners() {
-            document.querySelectorAll('.clickable-value').forEach(function(element) {
-                element.addEventListener('click', function() {
-                    const valueToCopy = element.getAttribute('data-value');
-                    copyToClipboard(valueToCopy);
+            // For Mouse Trap values (Buy and Sell)
+            document.querySelectorAll('#mouseTrapBuyOutput, #mouseTrapSellOutput').forEach(function (element) {
+                element.addEventListener('click', function () {
+                    const value = element.textContent; // Get value from the clicked element
+                    copyToClipboard(value.trim());  // Copy to clipboard
+                });
+            });
+
+            // For Direction values (Buy and Sell)
+            document.querySelectorAll('.clickable-value').forEach(function (element) {
+                element.addEventListener('click', function () {
+                    const value = element.textContent.split(': ')[1]; // Extract only the value (after ': ')
+                    copyToClipboard(value.trim());
                 });
             });
         }
