@@ -79,7 +79,7 @@
 
     <!-- Second Form Section (renamed to Drawing Day) -->
     <div class="form-section">
-        <h2>Drawing Day</h2>
+        <h2>Drawing Day Calculation</h2>
         <label for="highestYesterday">Highest Yesterday:</label>
         <input type="number" id="highestYesterday" step="0.01" placeholder="Enter Highest Yesterday">
 
@@ -162,8 +162,8 @@
                 buyValue += valueDay;
                 sellValue -= valueDay;
 
-                directionBuyOutput += `<div class="clickable-value" data-value="${buyValue.toFixed(2)}">Buy ${i}: ${buyValue.toFixed(2)}</div>`;
-                directionSellOutput += `<div class="clickable-value" data-value="${sellValue.toFixed(2)}">Sell ${i}: ${sellValue.toFixed(2)}</div>`;
+                directionBuyOutput += `<div class="clickable-value" data-value="${buyValue.toFixed(2)}">DB${i}: ${buyValue.toFixed(2)}</div>`;
+                directionSellOutput += `<div class="clickable-value" data-value="${sellValue.toFixed(2)}">DS${i}: ${sellValue.toFixed(2)}</div>`;
             }
 
             // Display Directions
