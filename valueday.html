@@ -77,6 +77,16 @@
         <div class="output" id="resultOutput"></div>
         <div class="output" id="roundResultOutput"></div>
         <div class="output" id="valueDayOutput"></div>
+    </div>
+
+    <!-- Second Form Section (Drawing Day & Mouse Trap) -->
+    <div class="form-section">
+        <h2>Drawing Day Calculation</h2>
+        <label for="highestYesterday">Highest Yesterday:</label>
+        <input type="number" id="highestYesterday" step="0.01" placeholder="Enter Highest Yesterday">
+
+        <label for="lowestYesterday">Lowest Yesterday:</label>
+        <input type="number" id="lowestYesterday" step="0.01" placeholder="Enter Lowest Yesterday">
 
         <!-- Mouse Trap Outputs (Initially Hidden) -->
         <div id="mouseTrapSection" class="hidden">
@@ -91,16 +101,6 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Second Form Section (Drawing Day) -->
-    <div class="form-section">
-        <h2>Drawing Day Calculation</h2>
-        <label for="highestYesterday">Highest Yesterday:</label>
-        <input type="number" id="highestYesterday" step="0.01" placeholder="Enter Highest Yesterday">
-
-        <label for="lowestYesterday">Lowest Yesterday:</label>
-        <input type="number" id="lowestYesterday" step="0.01" placeholder="Enter Lowest Yesterday">
 
         <!-- Direction Outputs (Initially Hidden) -->
         <div id="directionSection" class="hidden">
@@ -143,9 +143,6 @@
 
             // Final Value Day result
             document.getElementById('valueDayOutput').textContent = `Value Day: ${roundedResult}`;
-
-            // Update Mouse Trap Outputs
-            calculateMouseTrapOutputs(high, low);
         }
 
         // Add event listeners to trigger calculation on input change
@@ -153,11 +150,14 @@
         document.getElementById('low').addEventListener('input', calculateResults);
         document.getElementById('adjustment').addEventListener('input', calculateResults);
 
-        // Function to calculate Mouse Trap Outputs
-        function calculateMouseTrapOutputs(high, low) {
-            if (high && low) {
-                const mouseTrapBuy = high + 3; // 2 Days Ago High + 3
-                const mouseTrapSell = low - 3; // 2 Days Ago Low - 3
+        // Function to calculate Mouse Trap Outputs using Highest and Lowest Yesterday
+        function calculateMouseTrapOutputs() {
+            const highestYesterday = parseFloat(document.getElementById('highestYesterday').value) || 0;
+            const lowestYesterday = parseFloat(document.getElementById('lowestYesterday').value) || 0;
+
+            if (highestYesterday && lowestYesterday) {
+                const mouseTrapBuy = highestYesterday + 3; // Highest Yesterday + 3
+                const mouseTrapSell = lowestYesterday - 3; // Lowest Yesterday - 3
 
                 document.getElementById('mouseTrapBuyOutput').textContent = mouseTrapBuy.toFixed(2);
                 document.getElementById('mouseTrapSellOutput').textContent = mouseTrapSell.toFixed(2);
@@ -165,12 +165,16 @@
                 // Show Mouse Trap section
                 document.getElementById('mouseTrapSection').classList.remove('hidden');
 
-                addCopyListeners();  // Ensure copy listeners are added after the Mouse Trap outputs are generated
+                addCopyListeners(); // Ensure copy listeners are added after the Mouse Trap outputs are generated
             } else {
                 // Hide Mouse Trap section if inputs are invalid
                 document.getElementById('mouseTrapSection').classList.add('hidden');
             }
         }
+
+        // Add event listeners for Mouse Trap calculation
+        document.getElementById('highestYesterday').addEventListener('input', calculateMouseTrapOutputs);
+        document.getElementById('lowestYesterday').addEventListener('input', calculateMouseTrapOutputs);
 
         // Second Form: Drawing Day (Direction Calculation)
         function calculateDirections(valueDay) {
@@ -196,7 +200,7 @@
 
                 document.getElementById('directionSection').classList.remove('hidden');
 
-                addCopyListeners();  // Ensure copy listeners are added after the Direction outputs are generated
+                addCopyListeners(); // Ensure copy listeners are added after the Direction outputs are generated
             } else {
                 document.getElementById('directionSection').classList.add('hidden');
             }
@@ -227,7 +231,7 @@
             document.querySelectorAll('#mouseTrapBuyOutput, #mouseTrapSellOutput').forEach(function (element) {
                 element.addEventListener('click', function () {
                     const value = element.textContent; // Get value from the clicked element
-                    copyToClipboard(value.trim());  // Copy to clipboard
+                    copyToClipboard(value.trim()); // Copy to clipboard
                 });
             });
 
