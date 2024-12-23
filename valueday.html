@@ -150,14 +150,15 @@
         document.getElementById('low').addEventListener('input', calculateResults);
         document.getElementById('adjustment').addEventListener('input', calculateResults);
 
-        // Function to calculate Mouse Trap Outputs using Highest and Lowest Yesterday
+        // Function to calculate Mouse Trap Outputs using Highest and Lowest Yesterday with Adjustment
         function calculateMouseTrapOutputs() {
             const highestYesterday = parseFloat(document.getElementById('highestYesterday').value) || 0;
             const lowestYesterday = parseFloat(document.getElementById('lowestYesterday').value) || 0;
+            const adjustment = parseFloat(document.getElementById('adjustment').value) || 3;
 
             if (highestYesterday && lowestYesterday) {
-                const mouseTrapBuy = highestYesterday + 3; // Highest Yesterday + 3
-                const mouseTrapSell = lowestYesterday - 3; // Lowest Yesterday - 3
+                const mouseTrapBuy = highestYesterday + adjustment; // Highest Yesterday + Adjustment
+                const mouseTrapSell = lowestYesterday - adjustment; // Lowest Yesterday - Adjustment
 
                 document.getElementById('mouseTrapBuyOutput').textContent = mouseTrapBuy.toFixed(2);
                 document.getElementById('mouseTrapSellOutput').textContent = mouseTrapSell.toFixed(2);
@@ -175,6 +176,7 @@
         // Add event listeners for Mouse Trap calculation
         document.getElementById('highestYesterday').addEventListener('input', calculateMouseTrapOutputs);
         document.getElementById('lowestYesterday').addEventListener('input', calculateMouseTrapOutputs);
+        document.getElementById('adjustment').addEventListener('input', calculateMouseTrapOutputs);
 
         // Second Form: Drawing Day (Direction Calculation)
         function calculateDirections(valueDay) {
