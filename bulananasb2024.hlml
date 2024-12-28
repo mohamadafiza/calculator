@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Dividen ASB Bulanan 2024</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            width: 90%;
+            max-width: 900px;
+            overflow-x: auto;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+        input {
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .rate-input {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Kalkulator Dividen ASB Bulanan 2024</h1>
+
+        <div class="rate-input">
+            <label for="interestRate">Kadar Dividen Tahunan (%):</label>
+            <input type="number" id="interestRate" value="5.75" step="0.01">
+        </div>
+
+        <table id="dividendTable">
+            <thead>
+                <tr>
+                    <th>Bulan</th>
+                    <th>Tarikh Duit Masuk</th>
+                    <th>Duit Masuk (RM)</th>
+                    <th>Duit Keluar (RM)</th>
+                    <th>Baki Layak Dividen (RM)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be dynamically generated here -->
+            </tbody>
+        </table>
+
+        <div class="result">
+            <p><strong>Jumlah Dividen: RM <span id="totalDividend">0.00</span></strong></p>
+        </div>
+    </div>
+    <script>
+        const tableBody = document.querySelector("#dividendTable tbody");
+        const totalDividendEl = document.getElementById("totalDividend");
+        const interestRateInput = document.getElementById("interestRate");
+
+        function createTableRow(monthIndex) {
+            const row = document.createElement("tr");
+
+            const monthCell = document.createElement("td");
+            monthCell.innerText = new Date(2024, monthIndex, 1).toLocaleString('default', { month: 'long' });
+            row.appendChild(monthCell);
+
+            const dateCell = document.createElement("td");
+            const dateInput = document.createElement("input");
+            dateInput.type = "date";
+            dateInput.value = `2024-${String(monthIndex + 1).padStart(2, '0')}-01`;
+            dateInput.min = `2024-${String(monthIndex + 1).padStart(2, '0')}-01`;
+            dateInput.max = `2024-${String(monthIndex + 1).padStart(2, '0')}-31`;
+            dateInput.addEventListener("input", calculateDividend);
+            dateCell.appendChild(dateInput);
+            row.appendChild(dateCell);
+
+            const moneyInCell = document.createElement("td");
+            const moneyInInput = document.createElement("input");
+            moneyInInput.type = "number";
+            moneyInInput.step = "0.01";
+            moneyInInput.addEventListener("input", calculateDividend);
+            moneyInCell.appendChild(moneyInInput);
+            row.appendChild(moneyInCell);
+
+            const moneyOutCell = document.createElement("td");
+            const moneyOutInput = document.createElement("input");
+            moneyOutInput.type = "number";
+            moneyOutInput.step = "0.01";
+            moneyOutInput.addEventListener("input", calculateDividend);
+            moneyOutCell.appendChild(moneyOutInput);
+            row.appendChild(moneyOutCell);
+
+            const eligibleBalanceCell = document.createElement("td");
+            eligibleBalanceCell.innerText = "0.00";
+            row.appendChild(eligibleBalanceCell);
+
+            tableBody.appendChild(row);
+        }
+
+        function calculateDividend() {
+            const annualRate = parseFloat(interestRateInput.value) || 0;
+            let totalDividend = 0;
+            let currentBalance = 0;
+            let eligibleBalances = Array(12).fill(0);
+
+            Array.from(tableBody.children).forEach((row, index) => {
+                const dateInput = row.children[1].querySelector("input");
+                const moneyInInput = row.children[2].querySelector("input");
+                const moneyOutInput = row.children[3].querySelector("input");
+                const eligibleBalanceCell = row.children[4];
+
+                const moneyIn = parseFloat(moneyInInput.value) || 0;
+                const moneyOut = parseFloat(moneyOutInput.value) || 0;
+                const date = dateInput.value ? new Date(dateInput.value) : null;
+
+                if (date) {
+                    const month = date.getMonth();
+                    const day = date.getDate();
+
+                    // Calculate eligible months based on deposit date
+                    let eligibleMonths = 12 - month;
+                    if (day > 1) eligibleMonths -= 1; // Exclude the current month if not deposited on the 1st
+
+                    // Adjust current balance and eligible balance
+                    currentBalance += moneyIn - moneyOut;
+                    eligibleBalances[index] = (day === 1) ? Math.max(0, currentBalance) : 0;
+                    eligibleBalanceCell.innerText = eligibleBalances[index].toFixed(2);
+                } else {
+                    eligibleBalanceCell.innerText = "0.00";
+                }
+            });
+
+            // Calculate total dividend
+            eligibleBalances.forEach((balance, month) => {
+                const monthlyRate = annualRate / 12 / 100;
+                totalDividend += balance * monthlyRate;
+            });
+
+            // If the balance is withdrawn completely before the end of the year, disqualify from dividend
+            if (currentBalance <= 0) {
+                totalDividend = 0;
+            }
+
+            totalDividendEl.innerText = totalDividend.toFixed(2);
+        }
+
+        // Generate rows for all months in 2024
+        for (let i = 0; i < 12; i++) {
+            createTableRow(i);
+        }
+
+        interestRateInput.addEventListener("input", calculateDividend);
+    </script>
+</body>
+</html>
