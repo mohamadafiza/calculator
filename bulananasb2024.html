@@ -182,10 +182,7 @@
                 totalDividend += balance * monthlyRate;
             });
 
-            // If the balance is withdrawn completely before the end of the year, disqualify from dividend
-            if (currentBalance <= 0) {
-                totalDividend = 0;
-            }
+
 
             totalDividendEl.innerText = totalDividend.toFixed(2);
         }
