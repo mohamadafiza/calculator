@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Dividen ASB 2024</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        p {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Kalkulator Dividen ASB 2024</h1>
+        <form id="asbForm">
+            <label for="balance">Jumlah Simpanan (RM):</label>
+            <input type="number" id="balance" name="balance" required>
+            
+            <label for="interestRate">Kadar Dividen (%):</label>
+            <input type="number" id="interestRate" name="interestRate" value="5.75" step="0.01" required>
+            
+            <label for="saveDate">Tarikh Simpanan:</label>
+            <input type="date" id="saveDate" name="saveDate" min="2024-01-01" max="2024-12-31" value="2024-01-01" required>
+            
+            <p id="result">Dividen: RM <span id="dividend"></span></p>
+            <p id="totalPercent">Total Percent: <span id="totalPercentValue"></span>%</p>
+        </form>
+        <button id="copyButton">Copy</button>
+    </div>
+    <script>
+        document.getElementById('asbForm').addEventListener('input', calculateDividend);
+        document.getElementById('copyButton').addEventListener('click', copyResult);
+
+        function calculateDividend() {
+            const balance = parseFloat(document.getElementById('balance').value) || 0;
+            const interestRate = parseFloat(document.getElementById('interestRate').value) || 0;
+            const saveDate = new Date(document.getElementById('saveDate').value);
+            
+            const monthsSaved = (saveDate.getDate() === 1) ? 12 - saveDate.getMonth() : 11 - saveDate.getMonth();
+            const adjustedRate = (interestRate / 12) * monthsSaved;
+            const dividend = (balance * (adjustedRate / 100)).toFixed(2);
+            const totalPercent = (interestRate / 12 * monthsSaved).toFixed(2);
+
+            document.getElementById('dividend').innerText = dividend;
+            document.getElementById('totalPercentValue').innerText = totalPercent;
+        }
+
+        function copyResult() {
+            const resultText = `Dividen: RM ${document.getElementById('dividend').innerText}, Total Percent: ${document.getElementById('totalPercentValue').innerText}%`;
+            navigator.clipboard.writeText(resultText)
+                .then(() => {
+                    alert('Hasil telah disalin!');
+                })
+                .catch(err => {
+                    alert('Terdapat ralat semasa menyalin hasil.');
+                });
+        }
+    </script>
+</body>
+</html>
