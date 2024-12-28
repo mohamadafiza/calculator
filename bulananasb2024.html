@@ -6,6 +6,10 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <title>Kalkulator Dividen ASB Bulanan 2024</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -14,39 +18,48 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
+            padding: 0;
         }
+
         .container {
             background: #fff;
             padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
-            width: 90%;
-            max-width: 900px;
-            overflow-x: auto;
+            width: 100%;
+            max-width: 900px; /* This makes sure it's responsive */
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+            margin: 0 10px; /* Give some margin from edges of the screen */
         }
+
         h1 {
             text-align: center;
             color: #333;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
+
         th, td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: center;
         }
+
         th {
             background-color: #007BFF;
             color: white;
         }
+
         input {
             width: 100%;
             padding: 5px;
-            box-sizing: border-box;
+            box-sizing: border-box; /* Ensures padding does not affect width */
         }
+
         button {
             display: block;
             width: 100%;
@@ -58,16 +71,60 @@
             cursor: pointer;
             margin-top: 10px;
         }
+
         button:hover {
             background: #0056b3;
         }
+
         .result {
             margin-top: 20px;
             text-align: center;
         }
+
         .rate-input {
             text-align: center;
             margin-top: 20px;
+        }
+
+        /* Media Query for Small Devices (Phones) */
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px; /* Less padding for small screens */
+            }
+
+            th, td {
+                font-size: 12px; /* Reduce text size on small devices */
+            }
+
+            input {
+                font-size: 14px; /* Adjust input text size */
+            }
+
+            button {
+                font-size: 14px; /* Adjust button text size */
+            }
+
+            h1 {
+                font-size: 18px; /* Smaller header text */
+            }
+        }
+
+        @media (max-width: 400px) {
+            th, td {
+                font-size: 10px; /* Further reduce font size on very small screens */
+            }
+
+            input {
+                font-size: 12px; /* Adjust input text size */
+            }
+
+            button {
+                font-size: 12px; /* Adjust button text size */
+            }
+
+            h1 {
+                font-size: 16px; /* Adjust header text size */
+            }
         }
     </style>
 </head>
@@ -182,8 +239,6 @@
                 const monthlyRate = annualRate / 12 / 100;
                 totalDividend += balance * monthlyRate;
             });
-
-
 
             totalDividendEl.innerText = totalDividend.toFixed(2);
         }
