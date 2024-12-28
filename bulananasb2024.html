@@ -27,9 +27,9 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             width: 100%;
-            max-width: 900px; /* This makes sure it's responsive */
-            overflow-x: hidden; /* Prevent horizontal scrolling */
-            margin: 0 10px; /* Give some margin from edges of the screen */
+            max-width: 900px;
+            overflow-x: hidden;
+            margin: 0 10px;
         }
 
         h1 {
@@ -57,7 +57,7 @@
         input {
             width: 100%;
             padding: 5px;
-            box-sizing: border-box; /* Ensures padding does not affect width */
+            box-sizing: border-box;
         }
 
         button {
@@ -89,42 +89,51 @@
         /* Media Query for Small Devices (Phones) */
         @media (max-width: 600px) {
             .container {
-                padding: 10px; /* Less padding for small screens */
+                padding: 10px;
             }
 
             th, td {
-                font-size: 12px; /* Reduce text size on small devices */
+                font-size: 12px;
             }
 
             input {
-                font-size: 14px; /* Adjust input text size */
+                font-size: 14px;
             }
 
             button {
-                font-size: 14px; /* Adjust button text size */
+                font-size: 14px;
             }
 
             h1 {
-                font-size: 18px; /* Smaller header text */
+                font-size: 18px;
             }
         }
 
         @media (max-width: 400px) {
             th, td {
-                font-size: 10px; /* Further reduce font size on very small screens */
+                font-size: 10px;
             }
 
             input {
-                font-size: 12px; /* Adjust input text size */
+                font-size: 12px;
             }
 
             button {
-                font-size: 12px; /* Adjust button text size */
+                font-size: 12px;
             }
 
             h1 {
-                font-size: 16px; /* Adjust header text size */
+                font-size: 16px;
             }
+        }
+
+        /* Specific styles for the date input */
+        input[type="date"] {
+            width: 80px; /* Reduce the width of the date input */
+            padding: 5px;
+            font-size: 12px;
+            text-align: center;
+            margin: 0 auto; /* Center align */
         }
     </style>
 </head>
@@ -221,11 +230,9 @@
                     const month = date.getMonth();
                     const day = date.getDate();
 
-                    // Calculate eligible months based on deposit date
                     let eligibleMonths = 12 - month;
-                    if (day > 1) eligibleMonths -= 1; // Exclude the current month if not deposited on the 1st
+                    if (day > 1) eligibleMonths -= 1;
 
-                    // Adjust current balance and eligible balance
                     currentBalance += moneyIn - moneyOut;
                     eligibleBalances[index] = (day === 1) ? Math.max(0, currentBalance) : 0;
                     eligibleBalanceCell.innerText = eligibleBalances[index].toFixed(2);
@@ -234,7 +241,6 @@
                 }
             });
 
-            // Calculate total dividend
             eligibleBalances.forEach((balance, month) => {
                 const monthlyRate = annualRate / 12 / 100;
                 totalDividend += balance * monthlyRate;
@@ -243,7 +249,6 @@
             totalDividendEl.innerText = totalDividend.toFixed(2);
         }
 
-        // Generate rows for all months in 2024
         for (let i = 0; i < 12; i++) {
             createTableRow(i);
         }
