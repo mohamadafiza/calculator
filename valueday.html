@@ -160,8 +160,8 @@
                 const mouseTrapBuy = highestYesterday + adjustment; // Highest Yesterday + Adjustment
                 const mouseTrapSell = lowestYesterday - adjustment; // Lowest Yesterday - Adjustment
 
-                document.getElementById('mouseTrapBuyOutput').textContent = mouseTrapBuy.toFixed(2);
-                document.getElementById('mouseTrapSellOutput').textContent = mouseTrapSell.toFixed(2);
+                document.getElementById('mouseTrapBuyOutput').textContent = mouseTrapBuy.toFixed(3);
+                document.getElementById('mouseTrapSellOutput').textContent = mouseTrapSell.toFixed(3);
 
                 // Show Mouse Trap section
                 document.getElementById('mouseTrapSection').classList.remove('hidden');
@@ -193,8 +193,8 @@
                     buyValue += valueDay;
                     sellValue -= valueDay;
 
-                    directionBuyOutput += `<div class="clickable-value" data-value="${buyValue.toFixed(2)}">DB${i}: ${buyValue.toFixed(2)}</div>`;
-                    directionSellOutput += `<div class="clickable-value" data-value="${sellValue.toFixed(2)}">DS${i}: ${sellValue.toFixed(2)}</div>`;
+                    directionBuyOutput += `<div class="clickable-value" data-value="${buyValue.toFixed(3)}">DB${i}: ${buyValue.toFixed(3)}</div>`;
+                    directionSellOutput += `<div class="clickable-value" data-value="${sellValue.toFixed(3)}">DS${i}: ${sellValue.toFixed(3)}</div>`;
                 }
 
                 document.getElementById('directionBuyOutput').innerHTML = directionBuyOutput;
