@@ -126,7 +126,7 @@
 
             // Step 1: Calculate the Calculation Result (High - Low + Adjustment) / 2
             const calcResult = (high - low + adjustment) / 2;
-            document.getElementById('resultOutput').textContent = `Calculation Result: ${calcResult.toFixed(3)}`;
+            document.getElementById('resultOutput').textContent = `Calculation Result: ${calcResult.toFixed(4)}`;
 
             // Step 2: Round to 2 decimal places
             let roundedResult = (Math.ceil(calcResult * 100) / 100).toFixed(2); // Round up to two decimals
