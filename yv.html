@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yesterday Value Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+            background-color: #f4f4f4;
+            overflow-y: auto;
+        }
+
+        .container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 500px;
+            width: 90%;
+            margin-top: 20px;
+        }
+
+        h1 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .result-container {
+            margin-top: 20px;
+            display: none; /* Hidden initially */
+        }
+
+        .calculation-summary {
+            padding: 10px;
+            background-color: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .result-item {
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .result-item:hover {
+            background-color: #f1f1f1;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Yesterday Value Calculator</h1>
+        <form id="calcForm">
+            <label for="yesterdayHighest">Yesterday Highest:</label>
+            <input type="number" id="yesterdayHighest" step="0.01" placeholder="Enter yesterday's highest value" required>
+
+            <label for="yesterdayLowest">Yesterday Lowest:</label>
+            <input type="number" id="yesterdayLowest" step="0.01" placeholder="Enter yesterday's lowest value" required>
+
+            <label for="adjustment">Adjustment:</label>
+            <input type="number" id="adjustment" step="0.01" value="3.00" required>
+
+            <label for="todayHighest">Today Highest:</label>
+            <input type="number" id="todayHighest" step="0.01" placeholder="Enter today's highest value">
+
+            <label for="todayLowest">Today Lowest:</label>
+            <input type="number" id="todayLowest" step="0.01" placeholder="Enter today's lowest value">
+        </form>
+
+        <div class="result-container" id="resultContainer">
+            <div class="calculation-summary" id="calculationSummary">
+                <!-- Calculation Summary -->
+            </div>
+            <div class="result-grid" id="resultGrid">
+                <!-- YVB and YVS results -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateResults() {
+            const yesterdayHighest = parseFloat(document.getElementById('yesterdayHighest').value) || 0;
+            const yesterdayLowest = parseFloat(document.getElementById('yesterdayLowest').value) || 0;
+            const adjustment = parseFloat(document.getElementById('adjustment').value) || 0;
+            const todayHighest = parseFloat(document.getElementById('todayHighest').value) || 0;
+            const todayLowest = parseFloat(document.getElementById('todayLowest').value) || 0;
+
+            if (!yesterdayHighest || !yesterdayLowest || !adjustment || !todayHighest || !todayLowest) {
+                document.getElementById('resultContainer').style.display = 'none';
+                return;
+            }
+
+            // Calculate Yesterday Value
+            let calculationResult = (yesterdayHighest - yesterdayLowest + adjustment) / 2;
+            const roundedResult = parseFloat(calculationResult.toFixed(2));
+
+            // Ensure Yesterday Value ends with an odd last digit
+            let yesterdayValue = parseFloat(calculationResult.toFixed(2));
+            const lastDigit = parseInt(yesterdayValue.toFixed(2).split(".")[1][1]);
+            if (lastDigit % 2 === 0) {
+                yesterdayValue = parseFloat((yesterdayValue + 0.01).toFixed(2));
+            }
+
+            // Calculate YVB and YVS values progressively
+            const results = [];
+            let yvb = todayLowest; // Initialize with Today Lowest
+            let yvs = todayHighest; // Initialize with Today Highest
+
+            for (let i = 1; i <= 5; i++) {
+                yvb += yesterdayValue; // Add Yesterday Value progressively
+                yvs -= yesterdayValue; // Subtract Yesterday Value progressively
+
+                results.push({
+                    id: i,
+                    yvb: yvb.toFixed(2),
+                    yvs: yvs.toFixed(2)
+                });
+            }
+
+            // Update the summary
+            const calculationSummary = document.getElementById('calculationSummary');
+            calculationSummary.innerHTML = `
+                <strong>Calculation Result:</strong> ${calculationResult.toFixed(6)}<br>
+                <strong>Rounding (2 decimals):</strong> ${roundedResult.toFixed(2)}<br>
+                <strong>Yesterday Value:</strong> ${yesterdayValue.toFixed(2)}
+            `;
+
+            // Update the results in the grid
+            const resultGrid = document.getElementById('resultGrid');
+            resultGrid.innerHTML = '';
+
+            results.forEach(result => {
+                const yvbElement = document.createElement('div');
+                yvbElement.className = 'result-item';
+                yvbElement.textContent = `YVB${result.id}: ${result.yvb}`;
+                yvbElement.onclick = () => copyToClipboard(result.yvb);
+                resultGrid.appendChild(yvbElement);
+
+                const yvsElement = document.createElement('div');
+                yvsElement.className = 'result-item';
+                yvsElement.textContent = `YVS${result.id}: ${result.yvs}`;
+                yvsElement.onclick = () => copyToClipboard(result.yvs);
+                resultGrid.appendChild(yvsElement);
+            });
+
+            document.getElementById('resultContainer').style.display = 'block';
+        }
+
+        function copyToClipboard(value) {
+            navigator.clipboard.writeText(value);
+        }
+
+        // Attach listeners to inputs
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', updateResults);
+        });
+
+        // Initialize results
+        updateResults();
+    </script>
+</body>
+</html>
