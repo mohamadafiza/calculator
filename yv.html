@@ -87,19 +87,19 @@
         <h1>Yesterday Value Calculator</h1>
         <form id="calcForm">
             <label for="yesterdayHighest">Yesterday Highest:</label>
-            <input type="number" id="yesterdayHighest" step="0.01" placeholder="Enter yesterday's highest value" required>
+            <input type="number" id="yesterdayHighest" step="0.001" placeholder="Enter yesterday's highest value" required>
 
             <label for="yesterdayLowest">Yesterday Lowest:</label>
-            <input type="number" id="yesterdayLowest" step="0.01" placeholder="Enter yesterday's lowest value" required>
+            <input type="number" id="yesterdayLowest" step="0.001" placeholder="Enter yesterday's lowest value" required>
 
             <label for="adjustment">Adjustment:</label>
-            <input type="number" id="adjustment" step="0.01" value="3.00" required>
+            <input type="number" id="adjustment" step="0.001" value="3.00" required>
 
             <label for="todayHighest">Today Highest:</label>
-            <input type="number" id="todayHighest" step="0.01" placeholder="Enter today's highest value">
+            <input type="number" id="todayHighest" step="0.001" placeholder="Enter today's highest value">
 
             <label for="todayLowest">Today Lowest:</label>
-            <input type="number" id="todayLowest" step="0.01" placeholder="Enter today's lowest value">
+            <input type="number" id="todayLowest" step="0.001" placeholder="Enter today's lowest value">
         </form>
 
         <div class="result-container" id="resultContainer">
@@ -113,6 +113,11 @@
     </div>
 
     <script>
+        function getDecimalPlaces(value) {
+            if (!value.toString().includes('.')) return 0;
+            return value.toString().split('.')[1].length;
+        }
+
         function updateResults() {
             const yesterdayHighest = parseFloat(document.getElementById('yesterdayHighest').value) || 0;
             const yesterdayLowest = parseFloat(document.getElementById('yesterdayLowest').value) || 0;
@@ -125,15 +130,26 @@
                 return;
             }
 
+            // Determine the decimal precision dynamically
+            const decimalPrecision = Math.max(
+                getDecimalPlaces(yesterdayHighest),
+                getDecimalPlaces(yesterdayLowest),
+                getDecimalPlaces(adjustment),
+                getDecimalPlaces(todayHighest),
+                getDecimalPlaces(todayLowest)
+            );
+
+            const precisionFactor = Math.pow(10, decimalPrecision);
+
             // Calculate Yesterday Value
             let calculationResult = (yesterdayHighest - yesterdayLowest + adjustment) / 2;
-            const roundedResult = parseFloat(calculationResult.toFixed(2));
+            const roundedResult = parseFloat(calculationResult.toFixed(decimalPrecision));
 
             // Ensure Yesterday Value ends with an odd last digit
-            let yesterdayValue = parseFloat(calculationResult.toFixed(2));
-            const lastDigit = parseInt(yesterdayValue.toFixed(2).split(".")[1][1]);
+            let yesterdayValue = parseFloat(calculationResult.toFixed(decimalPrecision));
+            const lastDigit = parseInt(yesterdayValue.toFixed(decimalPrecision).split(".")[1].slice(-1));
             if (lastDigit % 2 === 0) {
-                yesterdayValue = parseFloat((yesterdayValue + 0.01).toFixed(2));
+                yesterdayValue = parseFloat((yesterdayValue + 1 / precisionFactor).toFixed(decimalPrecision));
             }
 
             // Calculate YVB and YVS values progressively
@@ -147,17 +163,17 @@
 
                 results.push({
                     id: i,
-                    yvb: yvb.toFixed(2),
-                    yvs: yvs.toFixed(2)
+                    yvb: yvb.toFixed(decimalPrecision),
+                    yvs: yvs.toFixed(decimalPrecision)
                 });
             }
 
             // Update the summary
             const calculationSummary = document.getElementById('calculationSummary');
             calculationSummary.innerHTML = `
-                <strong>Calculation Result:</strong> ${calculationResult.toFixed(6)}<br>
-                <strong>Rounding (2 decimals):</strong> ${roundedResult.toFixed(2)}<br>
-                <strong>Yesterday Value:</strong> ${yesterdayValue.toFixed(2)}
+                <strong>Calculation Result:</strong> ${calculationResult.toFixed(decimalPrecision)}<br>
+                <strong>Rounding (${decimalPrecision} decimals):</strong> ${roundedResult.toFixed(decimalPrecision)}<br>
+                <strong>Yesterday Value:</strong> ${yesterdayValue.toFixed(decimalPrecision)}
             `;
 
             // Update the results in the grid
