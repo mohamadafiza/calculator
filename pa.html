@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Price Action Calculator</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f9f9f9;
+      padding: 20px;
+      margin: 0;
+    }
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #555;
+    }
+    input[type="number"], input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    .radio-group {
+      margin-bottom: 20px;
+    }
+    .radio-group label {
+      display: inline-block;
+      margin-right: 15px;
+      font-weight: normal;
+      color: #555;
+    }
+    .radio-group input[type="radio"] {
+      margin-right: 5px;
+    }
+    .output {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f0f0f0;
+      border-radius: 5px;
+    }
+    .output h2 {
+      margin-top: 0;
+      color: #333;
+    }
+    .copyable {
+      cursor: pointer;
+      padding: 8px;
+      background-color: #e0e0e0;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      display: inline-block;
+      transition: background-color 0.3s ease;
+    }
+    .copyable:hover {
+      background-color: #d0d0d0;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Price Action Calculator</h1>
+    <form id="calculatorForm">
+      <label for="adjustment">Adjustment:</label>
+      <input type="number" id="adjustment" required>
+
+      <label for="yv">YV:</label>
+      <input type="number" id="yv" required>
+
+      <div class="radio-group">
+        <label>Trend:</label>
+        <label><input type="radio" name="trend" value="buy" checked> Buy Trend</label>
+        <label><input type="radio" name="trend" value="sell"> Sell Trend</label>
+        <label><input type="radio" name="trend" value="both"> Both Trend</label>
+      </div>
+
+      <label for="layer">Layer (Default is 1):</label>
+      <input type="number" id="layer" value="1" min="1" required>
+
+      <!-- Dynamic Inputs for DB and DS -->
+      <div id="dynamicInputs"></div>
+    </form>
+
+    <div id="output" class="output hidden">
+      <h2>Results</h2>
+      <div id="results"></div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('calculatorForm');
+    const dynamicInputs = document.getElementById('dynamicInputs');
+    const outputDiv = document.getElementById('output');
+    const resultsDiv = document.getElementById('results');
+
+    // Function to generate dynamic inputs for DB and DS based on trend and layer
+    function generateInputs(trend, layer) {
+      let html = '';
+      for (let i = 1; i <= layer; i++) {
+        if (trend === 'buy' || trend === 'both') {
+          html += `<label for="db${i}">DB${i}:</label><input type="number" id="db${i}" required>`;
+        }
+        if (trend === 'sell' || trend === 'both') {
+          html += `<label for="ds${i}">DS${i}:</label><input type="number" id="ds${i}" required>`;
+        }
+      }
+      dynamicInputs.innerHTML = html;
+      addInputListeners();
+    }
+
+    // Function to add input listeners for automatic calculation
+    function addInputListeners() {
+      const inputs = form.querySelectorAll('input');
+      inputs.forEach(input => {
+        input.addEventListener('input', calculateResults);
+      });
+    }
+
+    // Function to calculate results based on selected trend
+    function calculateResults() {
+      const adjustment = parseFloat(document.getElementById('adjustment').value);
+      const yv = parseFloat(document.getElementById('yv').value);
+      const layer = parseInt(document.getElementById('layer').value);
+      const trend = document.querySelector('input[name="trend"]:checked').value;
+
+      let resultsHTML = '';
+      for (let i = 1; i <= layer; i++) {
+        if (trend === 'buy' || trend === 'both') {
+          const db = parseFloat(document.getElementById(`db${i}`).value);
+          if (!isNaN(db)) {
+            const dbReversal = db - yv - adjustment;
+            const dbCutOfLink = db - yv + adjustment;
+            resultsHTML += `
+              <div>
+                <strong>DB${i} Reversal Point:</strong> <span class="copyable">${dbReversal.toFixed(2)}</span><br>
+                <strong>DB${i} Cut Of Link:</strong> <span class="copyable">${dbCutOfLink.toFixed(2)}</span><br>
+              </div>
+            `;
+          }
+        }
+        if (trend === 'sell' || trend === 'both') {
+          const ds = parseFloat(document.getElementById(`ds${i}`).value);
+          if (!isNaN(ds)) {
+            const dsReversal = ds + yv + adjustment;
+            const dsCutOfLink = ds + yv - adjustment;
+            resultsHTML += `
+              <div>
+                <strong>DS${i} Reversal Point:</strong> <span class="copyable">${dsReversal.toFixed(2)}</span><br>
+                <strong>DS${i} Cut Of Link:</strong> <span class="copyable">${dsCutOfLink.toFixed(2)}</span><br>
+              </div>
+            `;
+          }
+        }
+      }
+
+      if (resultsHTML) {
+        resultsDiv.innerHTML = resultsHTML;
+        outputDiv.classList.remove('hidden');
+        addCopyListeners();
+      } else {
+        outputDiv.classList.add('hidden');
+      }
+    }
+
+    // Function to add copy listeners to results
+    function addCopyListeners() {
+      const copyableElements = document.querySelectorAll('.copyable');
+      copyableElements.forEach(element => {
+        element.addEventListener('click', () => {
+          const text = element.innerText;
+          navigator.clipboard.writeText(text).then(() => {
+            console.log('Copied:', text);
+          });
+        });
+      });
+    }
+
+    // Event listeners for trend and layer changes
+    document.querySelectorAll('input[name="trend"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        const trend = document.querySelector('input[name="trend"]:checked').value;
+        const layer = parseInt(document.getElementById('layer').value);
+        generateInputs(trend, layer);
+      });
+    });
+
+    document.getElementById('layer').addEventListener('input', () => {
+      const trend = document.querySelector('input[name="trend"]:checked').value;
+      const layer = parseInt(document.getElementById('layer').value);
+      generateInputs(trend, layer);
+    });
+
+    // Initialize with default values
+    generateInputs('buy', 1); // Default to Buy Trend and 1 layer
+  </script>
+</body>
+</html>
