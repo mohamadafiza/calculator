@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Value Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+            background-color: #f4f4f4;
+            overflow-y: auto;
+        }
+
+        .container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 500px;
+            width: 90%;
+            margin-top: 20px;
+        }
+
+        h1 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .result-container {
+            margin-top: 20px;
+            display: none; /* Hidden initially */
+        }
+
+        .calculation-summary {
+            padding: 10px;
+            background-color: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .result-table th,
+        .result-table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .result-table th {
+            background-color: #f9f9f9;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Value Calculator</h1>
+        <form id="calcForm">
+            <!-- User inputs -->
+            <label for="adjustment">Adjustment:</label>
+            <input type="number" id="adjustment" step="0.001" value="3.00" required>
+
+            <label for="valueDay">Value Day (VD):</label>
+            <input type="number" id="valueDay" step="0.001" placeholder="Enter Value Day (VD)" required>
+
+            <label for="yesterdayValue">Yesterday Value (YV):</label>
+            <input type="number" id="yesterdayValue" step="0.001" placeholder="Enter Yesterday Value (YV)" required>
+
+            <label for="todayHighest">Today Highest:</label>
+            <input type="number" id="todayHighest" step="0.001" placeholder="Enter today's highest value">
+
+            <label for="todayLowest">Today Lowest:</label>
+            <input type="number" id="todayLowest" step="0.001" placeholder="Enter today's lowest value">
+        </form>
+
+        <div class="result-container" id="resultContainer">
+            <div class="calculation-summary" id="calculationSummary">
+                <!-- Calculation Summary -->
+            </div>
+            <table class="result-table" id="resultTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>VD</th>
+                        <th>YV</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be dynamically added here -->
+                </tbody>
+            </table>
+            <div id="calibrationResult" style="margin-top: 20px; font-weight: bold;"></div>
+        </div>
+    </div>
+
+    <script>
+        function getDecimalPlaces(value) {
+            if (!value.toString().includes('.')) return 0;
+            return value.toString().split('.')[1].length;
+        }
+
+        function ensureOddLastDigit(value, precisionFactor) {
+            const lastDigit = parseInt(value.toFixed(getDecimalPlaces(value)).split(".")[1].slice(-1));
+            if (lastDigit % 2 === 0) {
+                return parseFloat((value + 1 / precisionFactor).toFixed(getDecimalPlaces(value)));
+            }
+            return value;
+        }
+
+        function updateResults() {
+            const valueDay = parseFloat(document.getElementById('valueDay').value) || 0;
+            const yesterdayValue = parseFloat(document.getElementById('yesterdayValue').value) || 0;
+            const adjustment = parseFloat(document.getElementById('adjustment').value) || 0;
+            const todayHighest = parseFloat(document.getElementById('todayHighest').value) || 0;
+            const todayLowest = parseFloat(document.getElementById('todayLowest').value) || 0;
+
+            if (!valueDay || !yesterdayValue || !adjustment || !todayHighest || !todayLowest) {
+                document.getElementById('resultContainer').style.display = 'none';
+                return;
+            }
+
+            // Determine the decimal precision dynamically
+            const decimalPrecision = Math.max(
+                getDecimalPlaces(valueDay),
+                getDecimalPlaces(yesterdayValue),
+                getDecimalPlaces(adjustment),
+                getDecimalPlaces(todayHighest),
+                getDecimalPlaces(todayLowest)
+            );
+
+            const precisionFactor = Math.pow(10, decimalPrecision);
+
+            // Calculate Current Value (CV)
+            let cvCalculation = (todayHighest - todayLowest + adjustment) / 2;
+            let cvRounded = parseFloat(cvCalculation.toFixed(decimalPrecision));
+            let cvValue = ensureOddLastDigit(cvRounded, precisionFactor);
+
+            // Calculate Link Value
+            const linkValue = Math.abs(cvValue - yesterdayValue);
+            const linkResult = linkValue <= adjustment ? "Yes" : "No";
+
+            // Update the summary
+            const calculationSummary = document.getElementById('calculationSummary');
+            calculationSummary.innerHTML = `
+                <strong>Value Day (VD):</strong><br>
+                Value Day: ${valueDay.toFixed(decimalPrecision)}<br><br>
+
+                <strong>Yesterday Value (YV):</strong><br>
+                Yesterday Value: ${yesterdayValue.toFixed(decimalPrecision)}<br><br>
+
+                <strong>Current Value (CV):</strong><br>
+                Calculation Result: ${cvCalculation.toFixed(decimalPrecision)}<br>
+                Rounding (${decimalPrecision} decimals): ${cvRounded.toFixed(decimalPrecision)}<br>
+                Current Value: ${cvValue.toFixed(decimalPrecision)}<br><br>
+
+                <strong>Link Value:</strong><br>
+                Link Value: ${linkValue.toFixed(decimalPrecision)}<br>
+                Link: ${linkResult}
+            `;
+
+            // Generate the table rows
+            const resultTableBody = document.querySelector('#resultTable tbody');
+            resultTableBody.innerHTML = '';
+
+            let vdSum = 0;
+            let yvSum = 0;
+            const vdValues = [];
+            const yvValues = [];
+            const matches = [];
+
+            for (let i = 1; i <= 8; i++) {
+                vdSum += valueDay;
+                yvSum += yesterdayValue;
+
+                vdValues.push(vdSum);
+                yvValues.push(yvSum);
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${i}</td>
+                    <td>${vdSum.toFixed(decimalPrecision)}</td>
+                    <td>${yvSum.toFixed(decimalPrecision)}</td>
+                `;
+                resultTableBody.appendChild(row);
+            }
+
+            // Compare all rows for same-row and diagonal matches
+            for (let i = 0; i < 8; i++) {
+                // Same-row comparison
+                if (Math.abs(vdValues[i] - yvValues[i]) <= adjustment) {
+                    matches.push(`${i + 1}:${i + 1}`);
+                }
+
+                // Diagonal comparison
+                for (let j = i + 1; j < 8; j++) {
+                    // Compare VD(i) with YV(j)
+                    if (Math.abs(vdValues[i] - yvValues[j]) <= adjustment) {
+                        matches.push(`${i + 1}:${j + 1}`);
+                    }
+
+                    // Compare YV(i) with VD(j)
+                    if (Math.abs(yvValues[i] - vdValues[j]) <= adjustment) {
+                        matches.push(`${j + 1}:${i + 1}`);
+                    }
+                }
+            }
+
+            // Update calibration result
+            const calibrationResult = document.getElementById('calibrationResult');
+            if (matches.length > 0) {
+                calibrationResult.innerHTML = `
+                    <strong>Calibration Of Value:</strong><br>
+                    ${matches.join('<br>')}
+                `;
+            } else {
+                calibrationResult.textContent = 'No matches found.';
+            }
+
+            document.getElementById('resultContainer').style.display = 'block';
+        }
+
+        // Attach listeners to inputs
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', updateResults);
+        });
+
+        // Initialize results
+        updateResults();
+    </script>
+</body>
+</html>
