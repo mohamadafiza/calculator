@@ -86,14 +86,15 @@
     <div class="container">
         <h1>Yesterday Value Calculator</h1>
         <form id="calcForm">
+            <!-- Adjustment input moved to the top -->
+            <label for="adjustment">Adjustment:</label>
+            <input type="number" id="adjustment" step="0.001" value="3.00" required>
+
             <label for="yesterdayHighest">Yesterday Highest:</label>
             <input type="number" id="yesterdayHighest" step="0.001" placeholder="Enter yesterday's highest value" required>
 
             <label for="yesterdayLowest">Yesterday Lowest:</label>
             <input type="number" id="yesterdayLowest" step="0.001" placeholder="Enter yesterday's lowest value" required>
-
-            <label for="adjustment">Adjustment:</label>
-            <input type="number" id="adjustment" step="0.001" value="3.00" required>
 
             <label for="todayHighest">Today Highest:</label>
             <input type="number" id="todayHighest" step="0.001" placeholder="Enter today's highest value">
@@ -171,7 +172,7 @@
             // Update the summary
             const calculationSummary = document.getElementById('calculationSummary');
             calculationSummary.innerHTML = `
-                <strong>Calculation Result:</strong> ${calculationResult.toFixed(decimalPrecision)}<br>
+                <strong>Calculation Result (Full Precision):</strong> ${calculationResult}<br>
                 <strong>Rounding (${decimalPrecision} decimals):</strong> ${roundedResult.toFixed(decimalPrecision)}<br>
                 <strong>Yesterday Value:</strong> ${yesterdayValue.toFixed(decimalPrecision)}
             `;
