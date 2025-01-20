@@ -114,6 +114,16 @@
     const outputDiv = document.getElementById('output');
     const resultsDiv = document.getElementById('results');
 
+    // Helper function to determine the number of decimal places
+    function getDecimalPlaces(value) {
+      if (typeof value === 'number' && !isNaN(value)) {
+        const match = ('' + value).match(/(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/);
+        if (!match) return 0;
+        return Math.max(0, (match[1] ? match[1].length : 0) - (match[2] ? +match[2] : 0));
+      }
+      return 0;
+    }
+
     // Function to generate dynamic inputs for DB and DS based on trend and layer
     function generateInputs(trend, layer) {
       let html = '';
@@ -144,6 +154,9 @@
       const layer = parseInt(document.getElementById('layer').value);
       const trend = document.querySelector('input[name="trend"]:checked').value;
 
+      // Determine the number of decimal places for YV
+      const yvDecimalPlaces = getDecimalPlaces(yv);
+
       let resultsHTML = '';
       for (let i = 1; i <= layer; i++) {
         if (trend === 'buy' || trend === 'both') {
@@ -151,10 +164,12 @@
           if (!isNaN(db)) {
             const dbReversal = db - yv - adjustment;
             const dbCutOfLink = db - yv + adjustment;
+            const dbDecimalPlaces = getDecimalPlaces(db);
+            const decimalPlaces = Math.max(yvDecimalPlaces, dbDecimalPlaces);
             resultsHTML += `
               <div>
-                <strong>DB${i} Reversal Point:</strong> <span class="copyable">${dbReversal.toFixed(2)}</span><br>
-                <strong>DB${i} Cut Of Link:</strong> <span class="copyable">${dbCutOfLink.toFixed(2)}</span><br>
+                <strong>DB${i} Reversal Point:</strong> <span class="copyable">${dbReversal.toFixed(decimalPlaces)}</span><br>
+                <strong>DB${i} Cut Of Link:</strong> <span class="copyable">${dbCutOfLink.toFixed(decimalPlaces)}</span><br>
               </div>
             `;
           }
@@ -164,10 +179,12 @@
           if (!isNaN(ds)) {
             const dsReversal = ds + yv + adjustment;
             const dsCutOfLink = ds + yv - adjustment;
+            const dsDecimalPlaces = getDecimalPlaces(ds);
+            const decimalPlaces = Math.max(yvDecimalPlaces, dsDecimalPlaces);
             resultsHTML += `
               <div>
-                <strong>DS${i} Reversal Point:</strong> <span class="copyable">${dsReversal.toFixed(2)}</span><br>
-                <strong>DS${i} Cut Of Link:</strong> <span class="copyable">${dsCutOfLink.toFixed(2)}</span><br>
+                <strong>DS${i} Reversal Point:</strong> <span class="copyable">${dsReversal.toFixed(decimalPlaces)}</span><br>
+                <strong>DS${i} Cut Of Link:</strong> <span class="copyable">${dsCutOfLink.toFixed(decimalPlaces)}</span><br>
               </div>
             `;
           }
@@ -183,14 +200,14 @@
       }
     }
 
-    // Function to add copy listeners to results
+    // Function to add copy listeners to results (silent copy)
     function addCopyListeners() {
       const copyableElements = document.querySelectorAll('.copyable');
       copyableElements.forEach(element => {
         element.addEventListener('click', () => {
           const text = element.innerText;
           navigator.clipboard.writeText(text).then(() => {
-            console.log('Copied:', text);
+            // Silent copy, no notification
           });
         });
       });
