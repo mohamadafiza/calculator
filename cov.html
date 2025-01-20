@@ -82,8 +82,12 @@
 </head>
 <body>
     <div class="container">
-        <h1>COV Calculator</h1>
+        <h1>Calibration Of Value Calculator</h1>
         <form id="calcForm">
+            <!-- Adjustment input moved to the top -->
+            <label for="adjustment">Adjustment:</label>
+            <input type="number" id="adjustment" step="0.001" value="3.00" required>
+
             <label for="twoDaysAgoHighest">2 Days Ago Yesterday Highest:</label>
             <input type="number" id="twoDaysAgoHighest" step="0.001" placeholder="Enter 2 days ago highest value" required>
 
@@ -95,9 +99,6 @@
 
             <label for="yesterdayLowest">Yesterday Lowest:</label>
             <input type="number" id="yesterdayLowest" step="0.001" placeholder="Enter yesterday's lowest value" required>
-
-            <label for="adjustment">Adjustment:</label>
-            <input type="number" id="adjustment" step="0.001" value="3.00" required>
 
             <label for="todayHighest">Today Highest:</label>
             <input type="number" id="todayHighest" step="0.001" placeholder="Enter today's highest value">
@@ -182,6 +183,10 @@
             let cvRounded = parseFloat(cvCalculation.toFixed(decimalPrecision));
             let cvValue = ensureOddLastDigit(cvRounded, precisionFactor);
 
+            // Calculate Link Value
+            const linkValue = Math.abs(cvValue - yvValue);
+            const linkResult = linkValue <= adjustment ? "Yes" : "No";
+
             // Update the summary
             const calculationSummary = document.getElementById('calculationSummary');
             calculationSummary.innerHTML = `
@@ -198,7 +203,11 @@
                 <strong>Current Value (CV):</strong><br>
                 Calculation Result: ${cvCalculation.toFixed(decimalPrecision)}<br>
                 Rounding (${decimalPrecision} decimals): ${cvRounded.toFixed(decimalPrecision)}<br>
-                Current Value: ${cvValue.toFixed(decimalPrecision)}
+                Current Value: ${cvValue.toFixed(decimalPrecision)}<br><br>
+
+                <strong>Link Value:</strong><br>
+                Link Value: ${linkValue.toFixed(decimalPrecision)}<br>
+                Link: ${linkResult}
             `;
 
             // Generate the table rows
