@@ -6,7 +6,7 @@
     <title>COV Calculator</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
@@ -14,70 +14,119 @@
             align-items: center;
             justify-content: flex-start;
             height: 100vh;
-            background-color: #f4f4f4;
+            background-color: #f9f9f9;
             overflow-y: auto;
         }
 
         .container {
             background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 30px;
             max-width: 500px;
             width: 90%;
-            margin-top: 20px;
+            margin-top: 40px;
         }
 
         h1 {
-            font-size: 1.5em;
-            margin-bottom: 10px;
+            font-size: 1.8em;
+            margin-bottom: 20px;
             text-align: center;
+            color: #333;
         }
 
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
         }
 
         input {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
+            padding: 12px;
+            margin-bottom: 20px;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 8px;
+            font-size: 1em;
+            color: #333;
+            background-color: #fafafa;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #007bff;
+            outline: none;
+            background-color: #fff;
         }
 
         .result-container {
-            margin-top: 20px;
+            margin-top: 30px;
             display: none; /* Hidden initially */
         }
 
         .calculation-summary {
-            padding: 10px;
+            padding: 20px;
             background-color: #e8f5e9;
             border: 1px solid #c8e6c9;
-            border-radius: 5px;
+            border-radius: 8px;
             margin-bottom: 20px;
+            color: #2e7d32;
+            font-size: 0.95em;
+            line-height: 1.6;
         }
 
         .result-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            margin-top: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .result-table th,
         .result-table td {
-            padding: 10px;
+            padding: 12px;
             text-align: center;
             border: 1px solid #ddd;
         }
 
         .result-table th {
             background-color: #f9f9f9;
+            font-weight: 600;
+            color: #333;
         }
 
+        .result-table td {
+            color: #555;
+        }
+
+        .copy-button {
+            margin-top: 20px;
+            padding: 12px 24px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .copy-button:hover {
+            background-color: #0056b3;
+        }
+
+        #calibrationResult {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333;
+            font-size: 1em;
+            line-height: 1.6;
+        }
     </style>
 </head>
 <body>
@@ -118,6 +167,7 @@
                 </tbody>
             </table>
             <div id="calibrationResult" style="margin-top: 20px; font-weight: bold;"></div>
+            <button class="copy-button" id="copyButton">Copy Data</button>
         </div>
     </div>
 
@@ -171,17 +221,17 @@
             const calculationSummary = document.getElementById('calculationSummary');
             calculationSummary.innerHTML = `
                 <strong>Value Day (VD):</strong><br>
-                Value Day: ${valueDay.toFixed(decimalPrecision)}<br><br>
+                ${valueDay.toFixed(decimalPrecision)}<br><br>
 
                 <strong>Yesterday Value (YV):</strong><br>
-                Yesterday Value: ${yesterdayValue.toFixed(decimalPrecision)}<br><br>
+                ${yesterdayValue.toFixed(decimalPrecision)}<br><br>
 
                 <strong>Current Value (CV):</strong><br>
                 Calculation Result: ${cvCalculation.toFixed(decimalPrecision)}<br>
                 Rounding (${decimalPrecision} decimals): ${cvRounded.toFixed(decimalPrecision)}<br>
                 Current Value: ${cvValue.toFixed(decimalPrecision)}<br><br>
 
-                <strong>Link Value:</strong><br>
+                <strong>Link:</strong><br>
                 Link Value: ${linkValue.toFixed(decimalPrecision)}<br>
                 Link: ${linkResult}
             `;
@@ -196,7 +246,7 @@
             const yvValues = [];
             const matches = [];
 
-            for (let i = 1; i <= 11; i++) { // Updated loop to iterate until 11
+            for (let i = 1; i <= 11; i++) {
                 vdSum += valueDay;
                 yvSum += yesterdayValue;
 
@@ -213,14 +263,14 @@
             }
 
             // Compare all rows for same-row and diagonal matches
-            for (let i = 0; i < 11; i++) { // Updated loop to iterate until 11
+            for (let i = 0; i < 11; i++) {
                 // Same-row comparison
                 if (Math.abs(vdValues[i] - yvValues[i]) <= adjustment) {
                     matches.push(`${i + 1}:${i + 1}`);
                 }
 
                 // Diagonal comparison
-                for (let j = i + 1; j < 11; j++) { // Updated loop to iterate until 11
+                for (let j = i + 1; j < 11; j++) {
                     // Compare VD(i) with YV(j)
                     if (Math.abs(vdValues[i] - yvValues[j]) <= adjustment) {
                         matches.push(`${i + 1}:${j + 1}`);
@@ -237,7 +287,7 @@
             const calibrationResult = document.getElementById('calibrationResult');
             if (matches.length > 0) {
                 calibrationResult.innerHTML = `
-                    <strong>Calibration Of Value:</strong><br>
+                    <strong>COV:</strong><br>
                     ${matches.join('<br>')}
                 `;
             } else {
@@ -247,10 +297,53 @@
             document.getElementById('resultContainer').style.display = 'block';
         }
 
+        // Copy data to clipboard
+        function copyData() {
+            const valueDay = document.getElementById('valueDay').value;
+            const yesterdayValue = document.getElementById('yesterdayValue').value;
+            const todayHighest = document.getElementById('todayHighest').value;
+            const todayLowest = document.getElementById('todayLowest').value;
+
+            // Extract CV and Link values
+            const calculationSummary = document.getElementById('calculationSummary').innerText;
+            const cvValue = calculationSummary.match(/Current Value:\s*([\d.]+)/)[1];
+            const linkValue = calculationSummary.match(/Link Value:\s*([\d.]+)/)[1];
+            const linkResult = calculationSummary.match(/Link:\s*(\w+)/)[1];
+
+            // Extract COV matches
+            const covMatches = document.getElementById('calibrationResult').innerText
+                .replace('COV:', '')
+                .trim()
+                .split('\n')
+                .join('\n');
+
+            // Format the data
+            const dataToCopy = `
+VD: ${valueDay}
+YV: ${yesterdayValue}
+Today Highest: ${todayHighest}
+Today Lowest: ${todayLowest}
+VD: ${valueDay}
+YV: ${yesterdayValue}
+CV: ${cvValue}
+Link: ${linkValue}
+COV: 
+${covMatches}
+            `.trim();
+
+            // Copy to clipboard silently
+            navigator.clipboard.writeText(dataToCopy)
+                .then(() => console.log('Data copied to clipboard!'))
+                .catch(() => console.error('Failed to copy data.'));
+        }
+
         // Attach listeners to inputs
         document.querySelectorAll('input').forEach(input => {
             input.addEventListener('input', updateResults);
         });
+
+        // Attach listener to copy button
+        document.getElementById('copyButton').addEventListener('click', copyData);
 
         // Initialize results
         updateResults();
