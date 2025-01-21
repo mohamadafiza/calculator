@@ -317,14 +317,12 @@
                 .split('\n')
                 .join('\n');
 
-            // Format the data
+            // Format the data (without duplicate VD and YV)
             const dataToCopy = `
 VD: ${valueDay}
 YV: ${yesterdayValue}
 Today Highest: ${todayHighest}
 Today Lowest: ${todayLowest}
-VD: ${valueDay}
-YV: ${yesterdayValue}
 CV: ${cvValue}
 Link: ${linkValue}
 COV: 
