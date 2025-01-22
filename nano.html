@@ -13,20 +13,17 @@
       text-align: center;
       font-size: 24px;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
+    .container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
     }
-    th, td {
+    .flavor-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       padding: 10px;
-      text-align: left;
       border: 1px solid #ddd;
-    }
-    th {
-      background-color: #f4f4f4;
-    }
-    tr:nth-child(even) {
       background-color: #f9f9f9;
     }
     .quantity {
@@ -56,68 +53,41 @@
       font-weight: bold;
       color: red;
     }
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
   <h1>*Nanopods Single Regular*</h1>
-  <table>
-    <thead>
-      <tr>
-        <th>Select</th>
-        <th>Flavor</th>
-        <th>Quantity</th>
-        <th>Select</th>
-        <th>Flavor</th>
-        <th>Quantity</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><input type="checkbox" class="flavor-checkbox"></td><td>Kiwi Rockmelon</td><td><input type="number" class="quantity" value="40"></td>
-        <td><input type="checkbox" class="flavor-checkbox"></td><td>Bubblegum</td><td><input type="number" class="quantity" value="40"></td>
-      </tr>
-      <tr>
-        <td><input type="checkbox" class="flavor-checkbox"></td><td>Graple</td><td><input type="number" class="quantity" value="40"></td>
-        <td><input type="checkbox" class="flavor-checkbox"></td><td>Strawberry Apple</td><td><input type="number" class="quantity" value="40"></td>
-      </tr>
-      <tr>
-        <td><input type="checkbox" class="flavor-checkbox"></td><td>Honeydew</td><td><input type="number" class="quantity" value="40"></td>
-        <td><input type="checkbox" class="flavor-checkbox"></td><td>Tabac Classic</td><td><input type="number" class="quantity" value="40"></td>
-      </tr>
-      <tr>
-        <td><input type="checkbox" class="flavor-checkbox"></td><td>Tabac Menthol</td><td><input type="number" class="quantity" value="40"></td>
-        <td><input type="checkbox" class="flavor-checkbox"></td><td>Butterscotch Cream</td><td><input type="number" class="quantity" value="40"></td>
-      </tr>
-      <tr>
-        <td><input type="checkbox" class="flavor-checkbox"></td><td>Hazelnut Coffee</td><td><input type="number" class="quantity" value="40"></td>
-        <td><input type="checkbox" class="flavor-checkbox"></td><td>Classic Coffee</td><td><input type="number" class="quantity" value="40"></td>
-      </tr>
-      <tr>
-        <td><input type="checkbox" class="flavor-checkbox"></td><td>Jackfruit Freezi</td><td><input type="number" class="quantity" value="40"></td>
-        <td><input type="checkbox" class="flavor-checkbox"></td><td>Guava Freezi</td><td><input type="number" class="quantity" value="40"></td>
-      </tr>
-      <tr>
-        <td><input type="checkbox" class="flavor-checkbox"></td><td>Lychee Freezi</td><td><input type="number" class="quantity" value="40"></td>
-        <td><input type="checkbox" class="flavor-checkbox"></td><td>Lemonade Ice</td><td><input type="number" class="quantity" value="40"></td>
-      </tr>
-      <tr>
-        <td><input type="checkbox" class="flavor-checkbox"></td><td>Mango Ice</td><td><input type="number" class="quantity" value="40"></td>
-        <td><input type="checkbox" class="flavor-checkbox"></td><td>Orange Ice</td><td><input type="number" class="quantity" value="40"></td>
-      </tr>
-      <tr>
-        <td><input type="checkbox" class="flavor-checkbox"></td><td>Grape Ice</td><td><input type="number" class="quantity" value="40"></td>
-        <td><input type="checkbox" class="flavor-checkbox"></td><td>Apple Ice</td><td><input type="number" class="quantity" value="40"></td>
-      </tr>
-      <tr>
-        <td><input type="checkbox" class="flavor-checkbox"></td><td>Popcorn Caramel</td><td><input type="number" class="quantity" value="40"></td>
-        <td><input type="checkbox" class="flavor-checkbox"></td><td>Strawberry Vanilla</td><td><input type="number" class="quantity" value="40"></td>
-      </tr>
-      <tr>
-        <td><input type="checkbox" class="flavor-checkbox"></td><td>Banana Vanilla</td><td><input type="number" class="quantity" value="40"></td>
-        <td><input type="checkbox" class="flavor-checkbox"></td><td>Butter Cake</td><td><input type="number" class="quantity" value="40"></td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="container">
+    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Kiwi Rockmelon</label> <input type="number" class="quantity" value="40"></div>
+    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Bubblegum</label> <input type="number" class="quantity" value="40"></div>
+    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Graple</label> <input type="number" class="quantity" value="40"></div>
+    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Strawberry Apple</label> <input type="number" class="quantity" value="40"></div>
+    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Honeydew</label> <input type="number" class="quantity" value="40"></div>
+    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Tabac Classic</label> <input type="number" class="quantity" value="40"></div>
+    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Tabac Menthol</label> <input type="number" class="quantity" value="40"></div>
+    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Butterscotch Cream</label> <input type="number" class="quantity" value="40"></div>
+    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Hazelnut Coffee</label> <input type="number" class="quantity" value="40"></div>
+    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Classic Coffee</label> <input type="number" class="quantity" value="40"></div>
+    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Jackfruit Freezi</label> <input type="number" class="quantity" value="40"></div>
+    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Guava Freezi</label> <input type="number" class="quantity" value="40"></div>
+    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Lychee Freezi</label> <input type="number" class="quantity" value="40"></div>
+    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Lemonade Ice</label> <input type="number" class="quantity" value="40"></div>
+    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Mango Ice</label> <input type="number" class="quantity" value="40"></div>
+    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Orange Ice</label> <input type="number" class="quantity" value="40"></div>
+    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Grape Ice</label> <input type="number" class="quantity" value="40"></div>
+    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Apple Ice</label> <input type="number" class="quantity" value="40"></div>
+    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Popcorn Caramel</label> <input type="number" class="quantity" value="40"></div>
+    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Strawberry Vanilla</label> <input type="number" class="quantity" value="40"></div>
+    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Banana Vanilla</label> <input type="number" class="quantity" value="40"></div>
+    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Butter Cake</label> <input type="number" class="quantity" value="40"></div>
+  </div>
   <div class="total-warning" id="total-warning"></div>
   <textarea id="output" readonly></textarea>
   <button class="copy-button" onclick="copyOutput()">Copy Output</button>
@@ -145,7 +115,7 @@
       let selectedFlavors = [];
       checkboxes.forEach((checkbox, index) => {
         if (checkbox.checked) {
-          const flavorName = checkbox.parentElement.parentElement.querySelector('td:nth-child(2)').textContent.trim();
+          const flavorName = checkbox.parentElement.textContent.trim();
           let quantity = parseInt(quantities[index].value);
 
           // Round to the nearest multiple of 40
