@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nanopods Single Regular</title>
+  <title>Nanopods Restock Form</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -14,20 +14,22 @@
       font-size: 24px;
     }
     .container {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      display: flex;
+      flex-wrap: wrap;
       gap: 10px;
     }
+    .column {
+      flex: 1;
+      min-width: 150px;
+    }
     .flavor-item {
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 10px;
-      border: 1px solid #ddd;
-      background-color: #f9f9f9;
     }
     .quantity {
-      width: 60px;
+      width: 40px;
       text-align: right;
     }
     #output {
@@ -53,40 +55,68 @@
       font-weight: bold;
       color: red;
     }
-
-    /* Responsive Design */
-    @media (max-width: 600px) {
-      .container {
-        grid-template-columns: 1fr;
-      }
+    hr {
+      border: 0;
+      height: 1px;
+      background: #ddd;
+      margin: 10px 0;
     }
   </style>
 </head>
 <body>
-  <h1>*Nanopods Single Regular*</h1>
+  <h1>Nanopods Restock Form</h1>
   <div class="container">
-    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Kiwi Rockmelon</label> <input type="number" class="quantity" value="40"></div>
-    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Bubblegum</label> <input type="number" class="quantity" value="40"></div>
-    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Graple</label> <input type="number" class="quantity" value="40"></div>
-    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Strawberry Apple</label> <input type="number" class="quantity" value="40"></div>
-    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Honeydew</label> <input type="number" class="quantity" value="40"></div>
-    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Tabac Classic</label> <input type="number" class="quantity" value="40"></div>
-    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Tabac Menthol</label> <input type="number" class="quantity" value="40"></div>
-    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Butterscotch Cream</label> <input type="number" class="quantity" value="40"></div>
-    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Hazelnut Coffee</label> <input type="number" class="quantity" value="40"></div>
-    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Classic Coffee</label> <input type="number" class="quantity" value="40"></div>
-    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Jackfruit Freezi</label> <input type="number" class="quantity" value="40"></div>
-    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Guava Freezi</label> <input type="number" class="quantity" value="40"></div>
-    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Lychee Freezi</label> <input type="number" class="quantity" value="40"></div>
-    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Lemonade Ice</label> <input type="number" class="quantity" value="40"></div>
-    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Mango Ice</label> <input type="number" class="quantity" value="40"></div>
-    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Orange Ice</label> <input type="number" class="quantity" value="40"></div>
-    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Grape Ice</label> <input type="number" class="quantity" value="40"></div>
-    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Apple Ice</label> <input type="number" class="quantity" value="40"></div>
-    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Popcorn Caramel</label> <input type="number" class="quantity" value="40"></div>
-    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Strawberry Vanilla</label> <input type="number" class="quantity" value="40"></div>
-    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Banana Vanilla</label> <input type="number" class="quantity" value="40"></div>
-    <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Butter Cake</label> <input type="number" class="quantity" value="40"></div>
+    <!-- First Column -->
+    <div class="column">
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Kiwi Rockmelon</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Bubblegum</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Graple</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Strawberry Apple</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Honeydew</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Tabac Classic</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Tabac Menthol</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Butterscotch Cream</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Hazelnut Coffee</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Popcorn Caramel</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Butter Cake</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+    </div>
+
+    <!-- Second Column -->
+    <div class="column">
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Jackfruit Freezi</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Guava Freezi</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Lychee Freezi</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Lemonade Ice</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Mango Ice</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Orange Ice</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Grape Ice</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Apple Ice</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Classic Coffee</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Strawberry Vanilla</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Banana Vanilla</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+    </div>
   </div>
   <div class="total-warning" id="total-warning"></div>
   <textarea id="output" readonly></textarea>
