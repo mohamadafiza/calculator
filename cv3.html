@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COV Calculator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            margin-top: 40px;
+        }
+
+        h1 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            color: #333;
+            background-color: #fafafa;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #007bff;
+            outline: none;
+            background-color: #fff;
+        }
+
+        .result-container {
+            margin-top: 30px;
+            display: none; /* Hidden initially */
+        }
+
+        .calculation-summary {
+            padding: 20px;
+            background-color: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #2e7d32;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-table th,
+        .result-table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .result-table th {
+            background-color: #f9f9f9;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .result-table td {
+            color: #555;
+        }
+
+        .copy-button {
+            margin-top: 20px;
+            padding: 12px 24px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .copy-button:hover {
+            background-color: #0056b3;
+        }
+
+        #calibrationResult {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>COV Calculator</h1>
+        <form id="calcForm">
+            <!-- User inputs -->
+            <label for="adjustment">Adjustment:</label>
+            <input type="number" id="adjustment" step="0.001" value="3.00" required>
+
+            <label for="valueDay">Value Day (VD):</label>
+            <input type="number" id="valueDay" step="0.001" placeholder="Enter Value Day (VD)" required>
+
+            <label for="yesterdayValue">Yesterday Value (YV):</label>
+            <input type="number" id="yesterdayValue" step="0.001" placeholder="Enter Yesterday Value (YV)" required>
+
+            <label for="todayHighest">Today Highest:</label>
+            <input type="number" id="todayHighest" step="0.001" placeholder="Enter today's highest value">
+
+            <label for="todayLowest">Today Lowest:</label>
+            <input type="number" id="todayLowest" step="0.001" placeholder="Enter today's lowest value">
+        </form>
+
+        <div class="result-container" id="resultContainer">
+            <div class="calculation-summary" id="calculationSummary">
+                <!-- Calculation Summary -->
+            </div>
+            <table class="result-table" id="resultTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>VD</th>
+                        <th>YV</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be dynamically added here -->
+                </tbody>
+            </table>
+            <div id="calibrationResult" style="margin-top: 20px; font-weight: bold;"></div>
+            <button class="copy-button" id="copyButton">Copy Data</button>
+        </div>
+    </div>
+
+    <script>
+        function getDecimalPlaces(value) {
+            if (!value.toString().includes('.')) return 0;
+            return value.toString().split('.')[1].length;
+        }
+
+        function ensureOddLastDigit(value, precisionFactor) {
+            const lastDigit = parseInt(value.toFixed(getDecimalPlaces(value)).split(".")[1].slice(-1));
+            if (lastDigit % 2 === 0) {
+                return parseFloat((value + 1 / precisionFactor).toFixed(getDecimalPlaces(value)));
+            }
+            return value;
+        }
+
+        function updateResults() {
+            const valueDay = parseFloat(document.getElementById('valueDay').value) || 0;
+            const yesterdayValue = parseFloat(document.getElementById('yesterdayValue').value) || 0;
+            const adjustment = parseFloat(document.getElementById('adjustment').value) || 0;
+            const todayHighest = parseFloat(document.getElementById('todayHighest').value) || 0;
+            const todayLowest = parseFloat(document.getElementById('todayLowest').value) || 0;
+
+            if (!valueDay || !yesterdayValue || !adjustment || !todayHighest || !todayLowest) {
+                document.getElementById('resultContainer').style.display = 'none';
+                return;
+            }
+
+            // Determine the decimal precision dynamically
+            const decimalPrecision = Math.max(
+                getDecimalPlaces(valueDay),
+                getDecimalPlaces(yesterdayValue),
+                getDecimalPlaces(adjustment),
+                getDecimalPlaces(todayHighest),
+                getDecimalPlaces(todayLowest)
+            );
+
+            const precisionFactor = Math.pow(10, decimalPrecision);
+
+            // Calculate Current Value (CV)
+            let cvCalculation = (todayHighest - todayLowest + adjustment) / 2;
+            let cvRounded = parseFloat(cvCalculation.toFixed(decimalPrecision));
+            let cvValue = ensureOddLastDigit(cvRounded, precisionFactor);
+
+            // Calculate Link Value
+            const linkValue = Math.abs(cvValue - yesterdayValue);
+            const linkResult = linkValue <= adjustment ? "Yes" : "No";
+
+            // Update the summary
+            const calculationSummary = document.getElementById('calculationSummary');
+            calculationSummary.innerHTML = `
+                <strong>Value Day (VD):</strong><br>
+                ${valueDay.toFixed(decimalPrecision)}<br><br>
+
+                <strong>Yesterday Value (YV):</strong><br>
+                ${yesterdayValue.toFixed(decimalPrecision)}<br><br>
+
+                <strong>Current Value (CV):</strong><br>
+                Calculation Result: ${cvCalculation.toFixed(decimalPrecision)}<br>
+                Rounding (${decimalPrecision} decimals): ${cvRounded.toFixed(decimalPrecision)}<br>
+                Current Value: ${cvValue.toFixed(decimalPrecision)}<br><br>
+
+                <strong>Link:</strong><br>
+                Link Value: ${linkValue.toFixed(decimalPrecision)}<br>
+                ${linkResult === "Yes" ? "YES" : "NO"} Link: ${linkValue.toFixed(decimalPrecision)}
+            `;
+
+            // Generate the table rows
+            const resultTableBody = document.querySelector('#resultTable tbody');
+            resultTableBody.innerHTML = '';
+
+            let vdSum = 0;
+            let yvSum = 0;
+            const vdValues = [];
+            const yvValues = [];
+            const matches = [];
+
+            for (let i = 1; i <= 11; i++) {
+                vdSum += valueDay;
+                yvSum += yesterdayValue;
+
+                vdValues.push(vdSum);
+                yvValues.push(yvSum);
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${i}</td>
+                    <td>${vdSum.toFixed(decimalPrecision)}</td>
+                    <td>${yvSum.toFixed(decimalPrecision)}</td>
+                `;
+                resultTableBody.appendChild(row);
+            }
+
+            // Compare all rows for same-row and diagonal matches
+            for (let i = 0; i < 11; i++) {
+                // Same-row comparison
+                if (Math.abs(vdValues[i] - yvValues[i]) <= adjustment) {
+                    matches.push(`${i + 1}:${i + 1}`);
+                }
+
+                // Diagonal comparison
+                for (let j = i + 1; j < 11; j++) {
+                    // Compare VD(i) with YV(j)
+                    if (Math.abs(vdValues[i] - yvValues[j]) <= adjustment) {
+                        matches.push(`${i + 1}:${j + 1}`);
+                    }
+
+                    // Compare YV(i) with VD(j)
+                    if (Math.abs(yvValues[i] - vdValues[j]) <= adjustment) {
+                        matches.push(`${j + 1}:${i + 1}`);
+                    }
+                }
+            }
+
+            // Update calibration result
+            const calibrationResult = document.getElementById('calibrationResult');
+            if (matches.length > 0) {
+                calibrationResult.innerHTML = `
+                    <strong>COV:</strong><br>
+                    ${matches.join('<br>')}
+                `;
+            } else {
+                calibrationResult.textContent = 'No matches found.';
+            }
+
+            document.getElementById('resultContainer').style.display = 'block';
+        }
+
+        // Copy data to clipboard
+        function copyData() {
+            const valueDay = document.getElementById('valueDay').value;
+            const yesterdayValue = document.getElementById('yesterdayValue').value;
+            const todayHighest = document.getElementById('todayHighest').value;
+            const todayLowest = document.getElementById('todayLowest').value;
+
+            // Extract CV and Link values
+            const calculationSummary = document.getElementById('calculationSummary').innerText;
+            const cvValue = calculationSummary.match(/Current Value:\s*([\d.]+)/)[1];
+            const linkValue = calculationSummary.match(/Link Value:\s*([\d.]+)/)[1];
+            const linkResult = calculationSummary.match(/Link:\s*(\w+)/)[1];
+
+            // Extract COV matches
+            const covMatches = document.getElementById('calibrationResult').innerText
+                .replace('COV:', '')
+                .trim()
+                .split('\n')
+                .join('\n');
+
+            // Generate timestamp in dd/mm/yyyy format
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0'); // Ensure 2 digits for day
+            const month = String(now.getMonth() + 1).padStart(2, '0'); // Ensure 2 digits for month
+            const year = now.getFullYear();
+            const timestamp = `${day}/${month}/${year}`;
+
+            // Format the data (without duplicate VD and YV)
+            const dataToCopy = `
+VD: ${valueDay}
+YV: ${yesterdayValue}
+Today Highest: ${todayHighest}
+Today Lowest: ${todayLowest}
+CV: ${cvValue}
+${linkResult === "Yes" ? "YES" : "NO"} Link: ${linkValue}
+COV: 
+${covMatches}
+Timestamp: ${timestamp}
+            `.trim();
+
+            // Copy to clipboard silently
+            navigator.clipboard.writeText(dataToCopy)
+                .then(() => console.log('Data copied to clipboard!'))
+                .catch(() => console.error('Failed to copy data.'));
+        }
+
+        // Attach listeners to inputs
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', updateResults);
+        });
+
+        // Attach listener to copy button
+        document.getElementById('copyButton').addEventListener('click', copyData);
+
+        // Initialize results
+        updateResults();
+    </script>
+</body>
+</html>
