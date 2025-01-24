@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>COV Calculator</title>
     <style>
-        body {
+                body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
@@ -317,12 +317,20 @@
                 .split('\n')
                 .join('\n');
 
-            // Generate timestamp in dd/mm/yyyy format
+            // Generate timestamp in dd/mm/yyyy hh:mm:ss AM/PM format
             const now = new Date();
             const day = String(now.getDate()).padStart(2, '0'); // Ensure 2 digits for day
             const month = String(now.getMonth() + 1).padStart(2, '0'); // Ensure 2 digits for month
             const year = now.getFullYear();
-            const timestamp = `${day}/${month}/${year}`;
+
+            // Convert hours to 12-hour format and determine AM/PM
+            let hours = now.getHours();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12; // Convert 0 to 12 for 12-hour format
+            const minutes = String(now.getMinutes()).padStart(2, '0'); // Ensure 2 digits for minutes
+            const seconds = String(now.getSeconds()).padStart(2, '0'); // Ensure 2 digits for seconds
+
+            const timestamp = `${day}/${month}/${year} ${hours}:${minutes}:${seconds} ${ampm}`;
 
             // Format the data (without duplicate VD and YV)
             const dataToCopy = `
