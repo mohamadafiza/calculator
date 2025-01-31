@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Value Day & Drawing Day</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+        .output {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        .form-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .direction-output-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .direction-output {
+            width: 45%;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+        .clickable-value {
+            padding: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .clickable-value:hover {
+            background-color: #d0d0d0;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Value Day & Drawing Day</h1>
+
+    <!-- First Form Section (Value Day) -->
+    <div class="form-section">
+        <h2>Value Day Calculation</h2>
+        <label for="high">2 Days Ago High:</label>
+        <input type="number" id="high" step="0.00001" placeholder="Enter High Value">
+
+        <label for="low">2 Days Ago Low:</label>
+        <input type="number" id="low" step="0.00001" placeholder="Enter Low Value">
+
+        <label for="adjustment">Adjustment:</label>
+        <input type="number" id="adjustment" step="0.00001" value="3">
+
+        <!-- Outputs -->
+        <div class="output" id="resultOutput"></div>
+        <div class="output" id="roundResultOutput"></div>
+        <div class="output" id="valueDayOutput"></div>
+    </div>
+
+    <!-- Second Form Section (Drawing Day & Mouse Trap) -->
+    <div class="form-section">
+        <h2>Drawing Day Calculation</h2>
+        <label for="highestYesterday">Highest Yesterday:</label>
+        <input type="number" id="highestYesterday" step="0.00001" placeholder="Enter Highest Yesterday">
+
+        <label for="lowestYesterday">Lowest Yesterday:</label>
+        <input type="number" id="lowestYesterday" step="0.00001" placeholder="Enter Lowest Yesterday">
+
+        <!-- Mouse Trap Outputs (Initially Hidden) -->
+        <div id="mouseTrapSection" class="hidden">
+            <div class="direction-output-container">
+                <div class="direction-output">
+                    <h3>Mouse Trap Buy</h3>
+                    <div id="mouseTrapBuyOutput" class="clickable-value"></div>
+                </div>
+                <div class="direction-output">
+                    <h3>Mouse Trap Sell</h3>
+                    <div id="mouseTrapSellOutput" class="clickable-value"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Direction Outputs (Initially Hidden) -->
+        <div id="directionSection" class="hidden">
+            <div class="direction-output-container">
+                <div class="direction-output">
+                    <h3>Direction Buy</h3>
+                    <div id="directionBuyOutput"></div>
+                </div>
+                <div class="direction-output">
+                    <h3>Direction Sell</h3>
+                    <div id="directionSellOutput"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to detect the number of decimal places in a number
+        function getDecimalPlaces(value) {
+            if (typeof value === 'number' && !isNaN(value)) {
+                const match = ('' + value).match(/(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/);
+                if (!match) return 0;
+                return Math.max(0, (match[1] ? match[1].length : 0) - (match[2] ? +match[2] : 0));
+            }
+            return 0;
+        }
+
+        // Function to get the maximum decimal places from multiple inputs
+        function getMaxDecimalPlaces(...values) {
+            return Math.max(...values.map(value => getDecimalPlaces(value)));
+        }
+
+        // First Form: Value Day (Calculation Result)
+        function calculateResults() {
+            const high = parseFloat(document.getElementById('high').value) || 0;
+            const low = parseFloat(document.getElementById('low').value) || 0;
+            const adjustment = parseFloat(document.getElementById('adjustment').value) || 0.003;
+
+            // Determine the maximum number of decimal places from inputs
+            const decimalPlaces = getMaxDecimalPlaces(high, low, adjustment);
+
+            // Step 1: Calculate the Calculation Result (High - Low + Adjustment) / 2
+            const calcResult = (high - low + adjustment) / 2;
+            document.getElementById('resultOutput').textContent = `Calculation Result: ${calcResult.toFixed(decimalPlaces)}`;
+
+            // Step 2: Round to the detected decimal places
+            let roundedResult = calcResult.toFixed(decimalPlaces);
+            document.getElementById('roundResultOutput').textContent = `Rounding (${decimalPlaces} decimals): ${roundedResult}`;
+
+            // Step 3: Apply SOP rule: if the last digit is even (including 0), increment by 1 to make it odd
+            let lastDigit = parseInt(roundedResult.charAt(roundedResult.length - 1));
+            if (lastDigit % 2 === 0) {
+                // Increment the last digit by 1
+                let newValue = parseFloat(roundedResult) + Math.pow(10, -decimalPlaces);
+                roundedResult = newValue.toFixed(decimalPlaces);
+            }
+
+            // Final Value Day result
+            document.getElementById('valueDayOutput').textContent = `Value Day: ${roundedResult}`;
+        }
+
+        // Add event listeners to trigger calculation on input change
+        document.getElementById('high').addEventListener('input', calculateResults);
+        document.getElementById('low').addEventListener('input', calculateResults);
+        document.getElementById('adjustment').addEventListener('input', calculateResults);
+
+        // Function to calculate Mouse Trap Outputs using Highest and Lowest Yesterday with Adjustment
+        function calculateMouseTrapOutputs() {
+            const highestYesterday = parseFloat(document.getElementById('highestYesterday').value) || 0;
+            const lowestYesterday = parseFloat(document.getElementById('lowestYesterday').value) || 0;
+            const adjustment = parseFloat(document.getElementById('adjustment').value) || 0.003;
+
+            if (highestYesterday && lowestYesterday) {
+                // Determine the maximum number of decimal places from inputs
+                const decimalPlaces = getMaxDecimalPlaces(highestYesterday, lowestYesterday, adjustment);
+
+                const mouseTrapBuy = highestYesterday + adjustment; // Highest Yesterday + Adjustment
+                const mouseTrapSell = lowestYesterday - adjustment; // Lowest Yesterday - Adjustment
+
+                document.getElementById('mouseTrapBuyOutput').textContent = mouseTrapBuy.toFixed(decimalPlaces);
+                document.getElementById('mouseTrapSellOutput').textContent = mouseTrapSell.toFixed(decimalPlaces);
+
+                // Show Mouse Trap section
+                document.getElementById('mouseTrapSection').classList.remove('hidden');
+
+                addCopyListeners(); // Ensure copy listeners are added after the Mouse Trap outputs are generated
+            } else {
+                // Hide Mouse Trap section if inputs are invalid
+                document.getElementById('mouseTrapSection').classList.add('hidden');
+            }
+        }
+
+        // Add event listeners for Mouse Trap calculation
+        document.getElementById('highestYesterday').addEventListener('input', calculateMouseTrapOutputs);
+        document.getElementById('lowestYesterday').addEventListener('input', calculateMouseTrapOutputs);
+        document.getElementById('adjustment').addEventListener('input', calculateMouseTrapOutputs);
+
+        // Second Form: Drawing Day (Direction Calculation)
+        function calculateDirections(valueDay) {
+            const highestYesterday = parseFloat(document.getElementById('highestYesterday').value) || 0;
+            const lowestYesterday = parseFloat(document.getElementById('lowestYesterday').value) || 0;
+
+            if (valueDay && highestYesterday && lowestYesterday) {
+                // Determine the maximum number of decimal places from inputs
+                const decimalPlaces = getMaxDecimalPlaces(highestYesterday, lowestYesterday, valueDay);
+
+                let directionBuyOutput = '';
+                let directionSellOutput = '';
+                let buyValue = lowestYesterday;
+                let sellValue = highestYesterday;
+
+                for (let i = 1; i <= 5; i++) {
+                    buyValue += valueDay;
+                    sellValue -= valueDay;
+
+                    directionBuyOutput += `<div class="clickable-value" data-value="${buyValue.toFixed(decimalPlaces)}">DB${i}: ${buyValue.toFixed(decimalPlaces)}</div>`;
+                    directionSellOutput += `<div class="clickable-value" data-value="${sellValue.toFixed(decimalPlaces)}">DS${i}: ${sellValue.toFixed(decimalPlaces)}</div>`;
+                }
+
+                document.getElementById('directionBuyOutput').innerHTML = directionBuyOutput;
+                document.getElementById('directionSellOutput').innerHTML = directionSellOutput;
+
+                document.getElementById('directionSection').classList.remove('hidden');
+
+                addCopyListeners(); // Ensure copy listeners are added after the Direction outputs are generated
+            } else {
+                document.getElementById('directionSection').classList.add('hidden');
+            }
+        }
+
+        document.getElementById('highestYesterday').addEventListener('input', function () {
+            const valueDay = parseFloat(document.getElementById('valueDayOutput').textContent.replace('Value Day: ', ''));
+            calculateDirections(valueDay);
+        });
+        document.getElementById('lowestYesterday').addEventListener('input', function () {
+            const valueDay = parseFloat(document.getElementById('valueDayOutput').textContent.replace('Value Day: ', ''));
+            calculateDirections(valueDay);
+        });
+
+        // Function to copy output to clipboard
+        function copyToClipboard(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+        }
+
+        // Function to add event listeners for click-to-copy after content is dynamically created
+        function addCopyListeners() {
+            // For Mouse Trap values (Buy and Sell)
+            document.querySelectorAll('#mouseTrapBuyOutput, #mouseTrapSellOutput').forEach(function (element) {
+                element.addEventListener('click', function () {
+                    const value = element.textContent; // Get value from the clicked element
+                    copyToClipboard(value.trim()); // Copy to clipboard
+                });
+            });
+
+            // For Direction values (Buy and Sell)
+            document.querySelectorAll('.clickable-value').forEach(function (element) {
+                element.addEventListener('click', function () {
+                    const value = element.textContent.split(': ')[1]; // Extract only the value (after ': ')
+                    copyToClipboard(value.trim());
+                });
+            });
+        }
+
+        // Initial call to set listeners when page is loaded
+        addCopyListeners();
+    </script>
+</body>
+</html>
