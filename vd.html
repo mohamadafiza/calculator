@@ -77,17 +77,20 @@
 <body>
     <h1>Value Day & Drawing Day</h1>
 
+    <!-- Adjustment Input -->
+    <div class="form-section">
+        <label for="adjustment">Adjustment:</label>
+        <input type="number" id="adjustment" step="0.01" value="3">
+    </div>
+
     <!-- First Form Section (Value Day) -->
     <div class="form-section">
         <h2>Value Day Calculation</h2>
         <label for="high">2 Days Ago High:</label>
-        <input type="number" id="high" step="0.00001" placeholder="Enter High Value">
+        <input type="number" id="high" step="0.01" placeholder="Enter High Value">
 
         <label for="low">2 Days Ago Low:</label>
-        <input type="number" id="low" step="0.00001" placeholder="Enter Low Value">
-
-        <label for="adjustment">Adjustment:</label>
-        <input type="number" id="adjustment" step="0.00001" value="3">
+        <input type="number" id="low" step="0.01" placeholder="Enter Low Value">
 
         <!-- Outputs -->
         <div class="output" id="resultOutput"></div>
@@ -99,10 +102,10 @@
     <div class="form-section">
         <h2>Drawing Day Calculation</h2>
         <label for="highestYesterday">Highest Yesterday:</label>
-        <input type="number" id="highestYesterday" step="0.00001" placeholder="Enter Highest Yesterday">
+        <input type="number" id="highestYesterday" step="0.01" placeholder="Enter Highest Yesterday">
 
         <label for="lowestYesterday">Lowest Yesterday:</label>
-        <input type="number" id="lowestYesterday" step="0.00001" placeholder="Enter Lowest Yesterday">
+        <input type="number" id="lowestYesterday" step="0.01" placeholder="Enter Lowest Yesterday">
 
         <!-- Mouse Trap Outputs (Initially Hidden) -->
         <div id="mouseTrapSection" class="hidden">
@@ -153,17 +156,17 @@
         function calculateResults() {
             const high = parseFloat(document.getElementById('high').value) || 0;
             const low = parseFloat(document.getElementById('low').value) || 0;
-            const adjustment = parseFloat(document.getElementById('adjustment').value) || 0.003;
-
-            // Determine the maximum number of decimal places from inputs
-            const decimalPlaces = getMaxDecimalPlaces(high, low, adjustment);
+            const adjustment = parseFloat(document.getElementById('adjustment').value) || 3;
 
             // Step 1: Calculate the Calculation Result (High - Low + Adjustment) / 2
             const calcResult = (high - low + adjustment) / 2;
-            document.getElementById('resultOutput').textContent = `Calculation Result: ${calcResult.toFixed(decimalPlaces)}`;
+            document.getElementById('resultOutput').textContent = `Calculation Result: ${calcResult}`;
 
-            // Step 2: Round to the detected decimal places
-            let roundedResult = calcResult.toFixed(decimalPlaces);
+            // Step 2: Determine the number of decimal places from price inputs
+            const decimalPlaces = getMaxDecimalPlaces(high, low);
+
+            // Round the Calculation Result to the detected decimal places
+            let roundedResult = (Math.round(calcResult * Math.pow(10, decimalPlaces)) / Math.pow(10, decimalPlaces)).toFixed(decimalPlaces);
             document.getElementById('roundResultOutput').textContent = `Rounding (${decimalPlaces} decimals): ${roundedResult}`;
 
             // Step 3: Apply SOP rule: if the last digit is even (including 0), increment by 1 to make it odd
@@ -187,11 +190,11 @@
         function calculateMouseTrapOutputs() {
             const highestYesterday = parseFloat(document.getElementById('highestYesterday').value) || 0;
             const lowestYesterday = parseFloat(document.getElementById('lowestYesterday').value) || 0;
-            const adjustment = parseFloat(document.getElementById('adjustment').value) || 0.003;
+            const adjustment = parseFloat(document.getElementById('adjustment').value) || 3;
 
             if (highestYesterday && lowestYesterday) {
                 // Determine the maximum number of decimal places from inputs
-                const decimalPlaces = getMaxDecimalPlaces(highestYesterday, lowestYesterday, adjustment);
+                const decimalPlaces = getMaxDecimalPlaces(highestYesterday, lowestYesterday);
 
                 const mouseTrapBuy = highestYesterday + adjustment; // Highest Yesterday + Adjustment
                 const mouseTrapSell = lowestYesterday - adjustment; // Lowest Yesterday - Adjustment
@@ -221,7 +224,7 @@
 
             if (valueDay && highestYesterday && lowestYesterday) {
                 // Determine the maximum number of decimal places from inputs
-                const decimalPlaces = getMaxDecimalPlaces(highestYesterday, lowestYesterday, valueDay);
+                const decimalPlaces = getMaxDecimalPlaces(highestYesterday, lowestYesterday);
 
                 let directionBuyOutput = '';
                 let directionSellOutput = '';
