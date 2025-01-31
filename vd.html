@@ -107,19 +107,7 @@
         <label for="lowestYesterday">Lowest Yesterday:</label>
         <input type="number" id="lowestYesterday" step="0.01" placeholder="Enter Lowest Yesterday">
 
-        <!-- Mouse Trap Outputs (Initially Hidden) -->
-        <div id="mouseTrapSection" class="hidden">
-            <div class="direction-output-container">
-                <div class="direction-output">
-                    <h3>Mouse Trap Buy</h3>
-                    <div id="mouseTrapBuyOutput" class="clickable-value"></div>
-                </div>
-                <div class="direction-output">
-                    <h3>Mouse Trap Sell</h3>
-                    <div id="mouseTrapSellOutput" class="clickable-value"></div>
-                </div>
-            </div>
-        </div>
+
 
         <!-- Direction Outputs (Initially Hidden) -->
         <div id="directionSection" class="hidden">
@@ -134,8 +122,23 @@
                 </div>
             </div>
         </div>
-    </div>
 
+
+        <!-- Mouse Trap Outputs (Initially Hidden) -->
+        <div id="mouseTrapSection" class="hidden">
+            <div class="direction-output-container">
+                <div class="direction-output">
+                    <h3>Mouse Trap Buy</h3>
+                    <div id="mouseTrapBuyOutput" class="clickable-value"></div>
+                </div>
+                <div class="direction-output">
+                    <h3>Mouse Trap Sell</h3>
+                    <div id="mouseTrapSellOutput" class="clickable-value"></div>
+                </div>
+            </div>
+        </div>
+      </div>
+        
     <script>
         // Function to detect the number of decimal places in a number
         function getDecimalPlaces(value) {
@@ -152,6 +155,12 @@
             return Math.max(...values.map(value => getDecimalPlaces(value)));
         }
 
+        // Function to round a number to a specific number of decimal places
+        function roundToDecimal(value, decimalPlaces) {
+            const factor = Math.pow(10, decimalPlaces);
+            return Math.round((value + Number.EPSILON) * factor) / factor;
+        }
+
         // First Form: Value Day (Calculation Result)
         function calculateResults() {
             const high = parseFloat(document.getElementById('high').value) || 0;
@@ -160,13 +169,16 @@
 
             // Step 1: Calculate the Calculation Result (High - Low + Adjustment) / 2
             const calcResult = (high - low + adjustment) / 2;
-            document.getElementById('resultOutput').textContent = `Calculation Result: ${calcResult}`;
+
+            // Round the Calculation Result to 5 decimal places to mimic phone calculator behavior
+            const preciseCalcResult = roundToDecimal(calcResult, 5);
+            document.getElementById('resultOutput').textContent = `Calculation Result: ${preciseCalcResult}`;
 
             // Step 2: Determine the number of decimal places from price inputs
             const decimalPlaces = getMaxDecimalPlaces(high, low);
 
-            // Round the Calculation Result to the detected decimal places
-            let roundedResult = (Math.round(calcResult * Math.pow(10, decimalPlaces)) / Math.pow(10, decimalPlaces)).toFixed(decimalPlaces);
+            // Round the precise Calculation Result to the detected decimal places
+            let roundedResult = roundToDecimal(preciseCalcResult, decimalPlaces).toFixed(decimalPlaces);
             document.getElementById('roundResultOutput').textContent = `Rounding (${decimalPlaces} decimals): ${roundedResult}`;
 
             // Step 3: Apply SOP rule: if the last digit is even (including 0), increment by 1 to make it odd
