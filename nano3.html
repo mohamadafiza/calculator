@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nanopods Restock Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 24px;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .column {
+      flex: 1;
+      min-width: 150px;
+    }
+    .flavor-item {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .quantity {
+      width: 40px;
+      text-align: right;
+    }
+    #output {
+      width: 100%;
+      height: 150px;
+      margin-top: 20px;
+      padding: 10px;
+      font-family: monospace;
+    }
+    .copy-button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .copy-button:hover {
+      background-color: #45a049;
+    }
+    .total-warning {
+      margin-top: 20px;
+      font-weight: bold;
+      color: red;
+    }
+    hr {
+      border: 0;
+      height: 1px;
+      background: #ddd;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Nanopods Restock Form</h1>
+  <div class="container">
+    <!-- First Column -->
+    <div class="column">
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Kiwi Rockmelon</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Bubblegum</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Graple</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Strawberry Apple</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Honeydew</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Tabac Menthol</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Butterscotch Cream</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Popcorn Caramel</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Butter Cake</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+    </div>
+    <!-- Second Column -->
+    <div class="column">
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Jackfruit Freezi</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Lychee Freezi</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Lemonade Ice</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Mango Ice</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Orange Ice</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Grape Ice</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Apple Ice</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Classic Coffee</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+      <div class="flavor-item"><label><input type="checkbox" class="flavor-checkbox"> Banana Vanilla</label> <input type="number" class="quantity" value="40"></div>
+      <hr>
+    </div>
+  </div>
+  <div class="total-warning" id="total-warning"></div>
+  <textarea id="output" readonly></textarea>
+  <button class="copy-button" onclick="copyOutput()">Copy Output</button>
+  <script>
+    const checkboxes = document.querySelectorAll('.flavor-checkbox');
+    const quantities = document.querySelectorAll('.quantity');
+    const output = document.getElementById('output');
+    const totalWarning = document.getElementById('total-warning');
+
+    function roundToMultiple(value, multiple) {
+      return Math.round(value / multiple) * multiple;
+    }
+
+    function enforceMinValue(input) {
+      let value = parseInt(input.value);
+      if (isNaN(value) || value < 40) {
+        value = 40;
+      }
+      input.value = roundToMultiple(value, 40);
+    }
+
+    function updateOutput() {
+      let total = 0;
+      let selectedFlavors = [];
+      checkboxes.forEach((checkbox, index) => {
+        if (checkbox.checked) {
+          const flavorName = checkbox.parentElement.textContent.trim();
+          let quantity = parseInt(quantities[index].value);
+          // Round to the nearest multiple of 40
+          quantity = roundToMultiple(quantity, 40);
+          if (quantity < 40) quantity = 40; // Ensure minimum is 40
+          quantities[index].value = quantity; // Update the input field
+          total += quantity;
+          selectedFlavors.push(`${flavorName} - ${quantity}`);
+        }
+      });
+
+      // Calculate balance needed
+      const remainder = total % 400;
+      const balance = remainder === 0 ? 0 : 400 - remainder;
+
+      // Update total warning
+      if (total % 400 !== 0) {
+        totalWarning.textContent = `Total must be in multiples of 400pcs. Current total: ${total}pcs. Balance needed: ${balance}pcs.`;
+        totalWarning.style.color = 'red';
+      } else {
+        totalWarning.textContent = `Total is valid: ${total}pcs.`;
+        totalWarning.style.color = 'green';
+      }
+
+      // Update output textbox
+      output.value = `*Nanopods Single Regular*\n${selectedFlavors.join('\n')}`;
+    }
+
+    function copyOutput() {
+      output.select();
+      document.execCommand('copy');
+      alert('Output copied to clipboard!');
+    }
+
+    checkboxes.forEach((checkbox, index) => {
+      checkbox.addEventListener('change', () => {
+        enforceMinValue(quantities[index]);
+        updateOutput();
+      });
+      quantities[index].addEventListener('blur', () => {
+        enforceMinValue(quantities[index]);
+        updateOutput();
+      });
+    });
+
+    // Initial update
+    updateOutput();
+  </script>
+</body>
+</html>
