@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calibration Of Value Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+            background-color: #f4f4f4;
+            overflow-y: auto;
+        }
+
+        .container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 500px;
+            width: 90%;
+            margin-top: 20px;
+        }
+
+        h1 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .result-container {
+            margin-top: 20px;
+            display: none; /* Hidden initially */
+        }
+
+        .calculation-summary {
+            padding: 10px;
+            background-color: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .result-table th,
+        .result-table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .result-table th {
+            background-color: #f9f9f9;
+        }
+
+        .copyable {
+            cursor: pointer;
+        }
+
+        .copyable:hover {
+            background-color: #f1f1f1;
+        }
+
+        .direction-output-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .direction-output {
+            width: 45%;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .clickable-value {
+            padding: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .clickable-value:hover {
+            background-color: #d0d0d0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calibration Of Value Calculator</h1>
+        <form id="calcForm">
+            <!-- Adjustment input moved to the top -->
+            <label for="adjustment">Adjustment:</label>
+            <input type="number" id="adjustment" step="0.001" value="3.00" required>
+
+            <label for="twoDaysAgoHighest">2 Days Ago Highest:</label>
+            <input type="number" id="twoDaysAgoHighest" step="0.001" placeholder="Enter 2 days ago highest value" required>
+
+            <label for="twoDaysAgoLowest">2 Days Ago Lowest:</label>
+            <input type="number" id="twoDaysAgoLowest" step="0.001" placeholder="Enter 2 days ago lowest value" required>
+
+            <label for="yesterdayHighest">Yesterday Highest:</label>
+            <input type="number" id="yesterdayHighest" step="0.001" placeholder="Enter yesterday's highest value" required>
+
+            <label for="yesterdayLowest">Yesterday Lowest:</label>
+            <input type="number" id="yesterdayLowest" step="0.001" placeholder="Enter yesterday's lowest value" required>
+
+            <label for="todayHighest">Today Highest:</label>
+            <input type="number" id="todayHighest" step="0.001" placeholder="Enter today's highest value">
+
+            <label for="todayLowest">Today Lowest:</label>
+            <input type="number" id="todayLowest" step="0.001" placeholder="Enter today's lowest value">
+        </form>
+
+        <div class="result-container" id="resultContainer">
+            <div class="calculation-summary" id="calculationSummary">
+                <!-- Calculation Summary -->
+            </div>
+            <table class="result-table" id="resultTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>VD</th>
+                        <th>YV</th>
+                        <th>YVB</th>
+                        <th>YVS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be dynamically added here -->
+                </tbody>
+            </table>
+            <div id="calibrationResult" style="margin-top: 20px; font-weight: bold;"></div>
+        </div>
+
+        <!-- Mouse Trap and DB/DS Outputs -->
+        <div class="form-section">
+            <!-- Mouse Trap Outputs (Initially Hidden) -->
+            <div id="mouseTrapSection" class="hidden">
+              <h2><center>Mouse Trap & DB/DS Calculation</center></h2>
+                <div class="direction-output-container">
+                    <div class="direction-output">
+                        <h3>Mouse Trap Buy</h3>
+                        <div id="mouseTrapBuyOutput" class="clickable-value"></div>
+                    </div>
+                    <div class="direction-output">
+                        <h3>Mouse Trap Sell</h3>
+                        <div id="mouseTrapSellOutput" class="clickable-value"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Direction Outputs (Initially Hidden) -->
+            <div id="directionSection" class="hidden">
+                <div class="direction-output-container">
+                    <div class="direction-output">
+                        <h3>Direction Buy</h3>
+                        <div id="directionBuyOutput"></div>
+                    </div>
+                    <div class="direction-output">
+                        <h3>Direction Sell</h3>
+                        <div id="directionSellOutput"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function getDecimalPlaces(value) {
+            if (!value.toString().includes('.')) return 0;
+            return value.toString().split('.')[1].length;
+        }
+
+        function ensureOddLastDigit(value, precisionFactor) {
+            const lastDigit = parseInt(value.toFixed(getDecimalPlaces(value)).split(".")[1].slice(-1));
+            if (lastDigit % 2 === 0) {
+                return parseFloat((value + 1 / precisionFactor).toFixed(getDecimalPlaces(value)));
+            }
+            return value;
+        }
+
+        function updateResults() {
+            const twoDaysAgoHighest = parseFloat(document.getElementById('twoDaysAgoHighest').value) || 0;
+            const twoDaysAgoLowest = parseFloat(document.getElementById('twoDaysAgoLowest').value) || 0;
+            const yesterdayHighest = parseFloat(document.getElementById('yesterdayHighest').value) || 0;
+            const yesterdayLowest = parseFloat(document.getElementById('yesterdayLowest').value) || 0;
+            const adjustment = parseFloat(document.getElementById('adjustment').value) || 0;
+            const todayHighest = parseFloat(document.getElementById('todayHighest').value) || 0;
+            const todayLowest = parseFloat(document.getElementById('todayLowest').value) || 0;
+
+            if (!twoDaysAgoHighest || !twoDaysAgoLowest || !yesterdayHighest || !yesterdayLowest || !adjustment || !todayHighest || !todayLowest) {
+                document.getElementById('resultContainer').style.display = 'none';
+                return;
+            }
+
+            // Determine the decimal precision dynamically
+            const decimalPrecision = Math.max(
+                getDecimalPlaces(twoDaysAgoHighest),
+                getDecimalPlaces(twoDaysAgoLowest),
+                getDecimalPlaces(yesterdayHighest),
+                getDecimalPlaces(yesterdayLowest),
+                getDecimalPlaces(adjustment),
+                getDecimalPlaces(todayHighest),
+                getDecimalPlaces(todayLowest)
+            );
+
+            const precisionFactor = Math.pow(10, decimalPrecision);
+
+            // Calculate Value Day (VD)
+            let vdCalculation = (twoDaysAgoHighest - twoDaysAgoLowest + adjustment) / 2;
+            let vdRounded = parseFloat(vdCalculation.toFixed(decimalPrecision));
+            let vdValue = ensureOddLastDigit(vdRounded, precisionFactor);
+
+            // Calculate Yesterday Value (YV)
+            let yvCalculation = (yesterdayHighest - yesterdayLowest + adjustment) / 2;
+            let yvRounded = parseFloat(yvCalculation.toFixed(decimalPrecision));
+            let yvValue = ensureOddLastDigit(yvRounded, precisionFactor);
+
+            // Calculate Current Value (CV)
+            let cvCalculation = (todayHighest - todayLowest + adjustment) / 2;
+            let cvRounded = parseFloat(cvCalculation.toFixed(decimalPrecision));
+            let cvValue = ensureOddLastDigit(cvRounded, precisionFactor);
+
+            // Calculate Link Value
+            const linkValue = Math.abs(cvValue - yvValue);
+            const linkResult = linkValue <= adjustment ? "Yes - Off Trade" : "No";
+
+            // Update the summary
+            const calculationSummary = document.getElementById('calculationSummary');
+            calculationSummary.innerHTML = `
+                <strong>Value Day (VD):</strong><br>
+                Calculation Result: ${vdCalculation.toFixed(decimalPrecision)}<br>
+                Rounding (${decimalPrecision} decimals): ${vdRounded.toFixed(decimalPrecision)}<br>
+                Value Day: ${vdValue.toFixed(decimalPrecision)}<br><br>
+
+                <strong>Yesterday Value (YV):</strong><br>
+                Calculation Result: ${yvCalculation.toFixed(decimalPrecision)}<br>
+                Rounding (${decimalPrecision} decimals): ${yvRounded.toFixed(decimalPrecision)}<br>
+                Yesterday Value: ${yvValue.toFixed(decimalPrecision)}<br><br>
+
+                <strong>Current Value (CV):</strong><br>
+                Calculation Result: ${cvCalculation.toFixed(decimalPrecision)}<br>
+                Rounding (${decimalPrecision} decimals): ${cvRounded.toFixed(decimalPrecision)}<br>
+                Current Value: ${cvValue.toFixed(decimalPrecision)}<br><br>
+
+                <strong>Link Value:</strong>
+                ${linkValue.toFixed(decimalPrecision)}<br>
+                Link: ${linkResult}
+            `;
+
+            // Generate the table rows
+            const resultTableBody = document.querySelector('#resultTable tbody');
+            resultTableBody.innerHTML = '';
+
+            let vdSum = 0;
+            let yvSum = 0;
+            let yvbSum = todayLowest;
+            let yvsSum = todayHighest;
+            const vdValues = [];
+            const yvValues = [];
+            const yvbValues = [];
+            const yvsValues = [];
+            const matches = [];
+
+            // Add YVB0 and YVS0
+            const row0 = document.createElement('tr');
+            row0.innerHTML = `
+                <td>0</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="copyable" onclick="copyToClipboard('${yvbSum.toFixed(decimalPrecision)}')">${yvbSum.toFixed(decimalPrecision)}</td>
+                <td class="copyable" onclick="copyToClipboard('${yvsSum.toFixed(decimalPrecision)}')">${yvsSum.toFixed(decimalPrecision)}</td>
+            `;
+            resultTableBody.appendChild(row0);
+
+            for (let i = 1; i <= 10; i++) {
+                vdSum += vdValue;
+                yvSum += yvValue;
+                yvbSum += yvValue;
+                yvsSum -= yvValue;
+
+                vdValues.push(vdSum);
+                yvValues.push(yvSum);
+                yvbValues.push(yvbSum);
+                yvsValues.push(yvsSum);
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${i}</td>
+                    <td class="copyable" onclick="copyToClipboard('${vdSum.toFixed(decimalPrecision)}')">${vdSum.toFixed(decimalPrecision)}</td>
+                    <td class="copyable" onclick="copyToClipboard('${yvSum.toFixed(decimalPrecision)}')">${yvSum.toFixed(decimalPrecision)}</td>
+                    <td class="copyable" onclick="copyToClipboard('${yvbSum.toFixed(decimalPrecision)}')">${yvbSum.toFixed(decimalPrecision)}</td>
+                    <td class="copyable" onclick="copyToClipboard('${yvsSum.toFixed(decimalPrecision)}')">${yvsSum.toFixed(decimalPrecision)}</td>
+                `;
+                resultTableBody.appendChild(row);
+            }
+
+            // Compare all rows for same-row and diagonal matches
+            for (let i = 0; i < 10; i++) {
+                // Same-row comparison
+                if (Math.abs(vdValues[i] - yvValues[i]) <= adjustment) {
+                    matches.push(`${i + 1}:${i + 1}`);
+                }
+
+                // Diagonal comparison
+                for (let j = i + 1; j < 10; j++) {
+                    // Compare VD(i) with YV(j)
+                    if (Math.abs(vdValues[i] - yvValues[j]) <= adjustment) {
+                        matches.push(`${i + 1}:${j + 1}`);
+                    }
+
+                    // Compare YV(i) with VD(j)
+                    if (Math.abs(yvValues[i] - vdValues[j]) <= adjustment) {
+                        matches.push(`${j + 1}:${i + 1}`);
+                    }
+                }
+            }
+
+            // Update calibration result
+            const calibrationResult = document.getElementById('calibrationResult');
+            if (matches.length > 0) {
+                calibrationResult.innerHTML = `
+                    <strong>Calibration Of Value:</strong><br>
+                    ${matches.join('<br>')}
+                `;
+            } else {
+                calibrationResult.textContent = 'No matches found.';
+            }
+
+            document.getElementById('resultContainer').style.display = 'block';
+
+            // Calculate Mouse Trap and DB/DS outputs
+            calculateMouseTrapOutputs(yesterdayHighest, yesterdayLowest, adjustment, decimalPrecision);
+            calculateDirections(vdValue, yesterdayHighest, yesterdayLowest, decimalPrecision);
+        }
+
+        function calculateMouseTrapOutputs(highestYesterday, lowestYesterday, adjustment, decimalPrecision) {
+            if (highestYesterday && lowestYesterday) {
+                const mouseTrapBuy = highestYesterday + adjustment; // Highest Yesterday + Adjustment
+                const mouseTrapSell = lowestYesterday - adjustment; // Lowest Yesterday - Adjustment
+
+                document.getElementById('mouseTrapBuyOutput').textContent = mouseTrapBuy.toFixed(decimalPrecision);
+                document.getElementById('mouseTrapSellOutput').textContent = mouseTrapSell.toFixed(decimalPrecision);
+
+                // Show Mouse Trap section
+                document.getElementById('mouseTrapSection').classList.remove('hidden');
+
+                addCopyListeners(); // Ensure copy listeners are added after the Mouse Trap outputs are generated
+            } else {
+                // Hide Mouse Trap section if inputs are invalid
+                document.getElementById('mouseTrapSection').classList.add('hidden');
+            }
+        }
+
+        function calculateDirections(valueDay, highestYesterday, lowestYesterday, decimalPrecision) {
+            if (valueDay && highestYesterday && lowestYesterday) {
+                let directionBuyOutput = '';
+                let directionSellOutput = '';
+                let buyValue = lowestYesterday;
+                let sellValue = highestYesterday;
+
+                // Add DB0 and DS0
+                directionBuyOutput += `<div class="clickable-value" data-value="${buyValue.toFixed(decimalPrecision)}">DB0: ${buyValue.toFixed(decimalPrecision)}</div>`;
+                directionSellOutput += `<div class="clickable-value" data-value="${sellValue.toFixed(decimalPrecision)}">DS0: ${sellValue.toFixed(decimalPrecision)}</div>`;
+
+                for (let i = 1; i <= 7; i++) {
+                    buyValue += valueDay;
+                    sellValue -= valueDay;
+
+                    directionBuyOutput += `<div class="clickable-value" data-value="${buyValue.toFixed(decimalPrecision)}">DB${i}: ${buyValue.toFixed(decimalPrecision)}</div>`;
+                    directionSellOutput += `<div class="clickable-value" data-value="${sellValue.toFixed(decimalPrecision)}">DS${i}: ${sellValue.toFixed(decimalPrecision)}</div>`;
+                }
+
+                document.getElementById('directionBuyOutput').innerHTML = directionBuyOutput;
+                document.getElementById('directionSellOutput').innerHTML = directionSellOutput;
+
+                document.getElementById('directionSection').classList.remove('hidden');
+
+                addCopyListeners(); // Ensure copy listeners are added after the Direction outputs are generated
+            } else {
+                document.getElementById('directionSection').classList.add('hidden');
+            }
+        }
+
+        function copyToClipboard(value) {
+            navigator.clipboard.writeText(value);
+        }
+
+        function addCopyListeners() {
+            // For Mouse Trap values (Buy and Sell)
+            document.querySelectorAll('#mouseTrapBuyOutput, #mouseTrapSellOutput').forEach(function (element) {
+                element.addEventListener('click', function () {
+                    const value = element.textContent; // Get value from the clicked element
+                    copyToClipboard(value.trim()); // Copy to clipboard
+                });
+            });
+
+            // For Direction values (Buy and Sell)
+            document.querySelectorAll('.clickable-value').forEach(function (element) {
+                element.addEventListener('click', function () {
+                    const value = element.textContent.split(': ')[1]; // Extract only the value (after ': ')
+                    copyToClipboard(value.trim());
+                });
+            });
+        }
+
+        // Attach listeners to inputs
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', updateResults);
+        });
+
+        // Initialize results
+        updateResults();
+    </script>
+</body>
+</html>
