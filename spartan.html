@@ -143,7 +143,12 @@
         <h1>Spartan Unofficial Calculator</h1>
         <form id="calcForm">
             <!-- Adjustment input moved to the top -->
-            <label for="adjustment" title="
+<label for="adjustment">Adjustment: 
+  <span class="info-icon" onclick="showAdjustments()">ℹ️</span>
+</label>
+
+<div id="adjustments-modal" style="display:none; background:#f9f9f9; padding:15px; border-radius:5px; margin-top:5px; border:1px solid #ddd;">
+  <pre style="margin:0; font-family:sans-serif;">
 === Adjustment Values ===
 
 📈 Stock Indices:
@@ -181,7 +186,15 @@ COPPER - 0.03
 NATURAL GAS - 0.03
 CORN - 0.03
 SOY - 3 / 0.03
-">Adjustment:</label>
+  </pre>
+</div>
+
+<script>
+function showAdjustments() {
+  const modal = document.getElementById("adjustments-modal");
+  modal.style.display = modal.style.display === "none" ? "block" : "none";
+}
+</script>
             <input type="number" id="adjustment" step="0.001" value="3.00" required>
 
             <label for="threeDaysAgoHighest">3 Days Ago Highest:</label>
