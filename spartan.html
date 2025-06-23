@@ -246,14 +246,14 @@ function showAdjustments() {
 
         <!-- Previous Day DB/DS (PDB/PDS) Outputs -->
         <div id="previousDirectionSection" class="hidden">
-            <h2><center>Previous Day DB/DS (PDB/PDS)</center></h2>
+            <h2><center>Previous Day DB/DS</center></h2>
             <div class="direction-output-container">
                 <div class="direction-output">
-                    <h3>Previous DB (PDB0-PDB7)</h3>
+                    <h3>Previous (PDB0-PDB7)</h3>
                     <div id="previousDirectionBuyOutput"></div>
                 </div>
                 <div class="direction-output">
-                    <h3>Previous DS (PDS0-PDS7)</h3>
+                    <h3>Previous (PDS0-PDS7)</h3>
                     <div id="previousDirectionSellOutput"></div>
                 </div>
             </div>
@@ -293,6 +293,12 @@ function showAdjustments() {
         <div id="linkSection" class="hidden">
             <h2><center>Link Results (DB/DS vs YVB/YVS 0-7)</center></h2>
             <div id="linkResults"></div>
+        </div>
+        
+        <!-- PDB/DB and PDS/DS Link Results -->
+        <div id="pdbdsLinkSection" class="hidden">
+            <h2><center>Link Results (PDB/DB vs PDS/DS 0-7)</center></h2>
+            <div id="pdbdsLinkResults"></div>
         </div>
     </div>
 
@@ -480,6 +486,9 @@ function showAdjustments() {
 
             // Calculate Links
             calculateLinks();
+            
+            // Calculate PDB/DB and PDS/DS Links
+            calculatePDBDSLinks();
         }
 
         function calculatePreviousDirections(valueDay, highestYesterday, lowestYesterday) {
@@ -625,6 +634,54 @@ function showAdjustments() {
             } else {
                 document.getElementById('linkResults').innerHTML = '<p>No links found between DB/DS and YVB/YVS (0-7)</p>';
                 document.getElementById('linkSection').classList.remove('hidden');
+            }
+        }
+        
+        function calculatePDBDSLinks() {
+            if (pdbValues.length === 0 || pdsValues.length === 0 || dbValues.length === 0 || dsValues.length === 0) {
+                document.getElementById('pdbdsLinkSection').classList.add('hidden');
+                return;
+            }
+
+            let pdbdsLinkResultsHTML = '';
+            let foundPDBDSLinks = false;
+
+            // Check PDB0-PDB7 against DB0-DB7
+            for (let i = 0; i <= 7; i++) {
+                for (let j = 0; j <= 7; j++) {
+                    const diff = Math.abs(pdbValues[i] - dbValues[j]);
+                    if (diff <= adjustmentValue) {
+                        foundPDBDSLinks = true;
+                        pdbdsLinkResultsHTML += `<p>PDB${i} (${pdbValues[i].toFixed(decimalPrecision)}) links with DB${j} (${dbValues[j].toFixed(decimalPrecision)}) - Difference: ${diff.toFixed(decimalPrecision)}</p>`;
+                        
+                        // Highlight the linked elements
+                        const pdbElement = document.getElementById(`pdb${i}`);
+                        if (pdbElement) pdbElement.classList.add('linked');
+                    }
+                }
+            }
+
+            // Check PDS0-PDS7 against DS0-DS7
+            for (let i = 0; i <= 7; i++) {
+                for (let j = 0; j <= 7; j++) {
+                    const diff = Math.abs(pdsValues[i] - dsValues[j]);
+                    if (diff <= adjustmentValue) {
+                        foundPDBDSLinks = true;
+                        pdbdsLinkResultsHTML += `<p>PDS${i} (${pdsValues[i].toFixed(decimalPrecision)}) links with DS${j} (${dsValues[j].toFixed(decimalPrecision)}) - Difference: ${diff.toFixed(decimalPrecision)}</p>`;
+                        
+                        // Highlight the linked elements
+                        const pdsElement = document.getElementById(`pds${i}`);
+                        if (pdsElement) pdsElement.classList.add('linked');
+                    }
+                }
+            }
+
+            if (foundPDBDSLinks) {
+                document.getElementById('pdbdsLinkResults').innerHTML = pdbdsLinkResultsHTML;
+                document.getElementById('pdbdsLinkSection').classList.remove('hidden');
+            } else {
+                document.getElementById('pdbdsLinkResults').innerHTML = '<p>No links found between PDB/DB and PDS/DS (0-7)</p>';
+                document.getElementById('pdbdsLinkSection').classList.remove('hidden');
             }
         }
 
