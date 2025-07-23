@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator Petrol Rakyat Marhaen</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f2f2f2; }
+    h1 { text-align: center; }
+    .container { max-width: 700px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+    input, select, button { width: 100%; padding: 10px; margin: 10px 0; }
+    .result { background: #e0ffe0; padding: 15px; border-radius: 5px; }
+    .quote-box { background: #f9f9f9; padding: 10px; margin-top: 10px; border-left: 4px solid #ccc; }
+    .timeline, .projection { background: #fff8dc; padding: 15px; border-radius: 5px; margin-top: 15px; }
+    ul { padding-left: 20px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Kalkulator Petrol Rakyat Marhaen</h1>
+
+    <label>Berapa liter anda isi seminggu?</label>
+    <input type="number" id="liter" placeholder="Contoh: 40">
+
+    <button onclick="kiraPenjimatan()">Kira Penjimatan</button>
+
+    <div class="result" id="result" style="display:none"></div>
+
+    <div class="projection" id="projection" style="display:none"></div>
+
+    <h3>Berapa barang boleh beli dengan penjimatan ni?</h3>
+    <div id="barang"></div>
+
+    <h3>📏 Dialog di kedai kopi</h3>
+    <button onclick="warungRandom()">Apa kata anti AI?</button>
+    <div class="quote-box" id="quote"></div>
+
+    <h3>Berapa kali boleh pusing KLCC?</h3>
+    <label>Masukkan jarak per liter kereta anda (km/l)</label>
+    <input type="number" id="kmPerLiter" placeholder="Contoh: 13">
+    <button onclick="kiraPusingKLCC()">Kira</button>
+    <div id="klccResult" class="result" style="display:none"></div>
+
+    <h3>Throwback Sejarah Harga RON95</h3>
+    <div class="timeline">
+      <ul>
+        <li>2008 - RM1.92</li>
+        <li>2013 - RM1.90</li>
+        <li>2018 - RM2.20</li>
+        <li>2020 - RM1.30 (MCO)</li>
+        <li>2023 - RM2.05</li>
+        <li>2025 - <strong>RM1.99 🔥</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const hargaLama = 2.05;
+    const hargaBaru = 1.99;
+
+    function kiraPenjimatan() {
+      const liter = parseFloat(document.getElementById('liter').value);
+      if (isNaN(liter) || liter <= 0) return alert("Masukkan nilai liter yang sah!");
+      const jimatMinggu = (hargaLama - hargaBaru) * liter;
+      document.getElementById('result').style.display = 'block';
+      document.getElementById('result').innerHTML = `Anda jimat RM${jimatMinggu.toFixed(2)} seminggu!`;
+
+      const barang = [
+        { nama: "aiskrim", harga: 1.50 },
+        { nama: "teh ais mamak", harga: 2.00 },
+        { nama: "gula-gula Hacks", harga: 0.50 },
+        { nama: "topup RM5", harga: 5.00 },
+        { nama: "cendol tepi jalan", harga: 3.00 }
+      ];
+
+      let list = '<ul>';
+      barang.forEach(b => {
+        const qty = Math.floor(jimatMinggu / b.harga);
+        list += `<li>${qty}x ${b.nama}</li>`;
+      });
+      list += '</ul>';
+      document.getElementById('barang').innerHTML = list;
+
+      // Kiraan jangka masa
+      const proj = [
+        { label: 'Sebulan', minggu: 4 },
+        { label: 'Setahun', minggu: 52 },
+        { label: '10 tahun', minggu: 520 },
+        { label: '100 tahun', minggu: 5200 },
+        { label: '1 juta tahun 🛸', minggu: 52000000 }
+      ];
+
+      let projHTML = '<h4>Anggaran Penjimatan Masa Panjang:</h4><ul>';
+      proj.forEach(p => {
+        const total = jimatMinggu * p.minggu;
+        projHTML += `<li>${p.label}: RM${total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</li>`;
+      });
+      projHTML += '</ul>';
+      document.getElementById('projection').style.display = 'block';
+      document.getElementById('projection').innerHTML = projHTML;
+    }
+
+    function warungRandom() {
+      const quotes = [
+        "Ni mesti nak PRK ni...",
+        "RM1.99? Ni harga zaman Pak Lah dulu!",
+        "Tak turun pun, aku isi tadi RM60 jugak!",
+        "Alhamdulillah... tapi cukai lepas ni jangan naik sudah.",
+        "Rasanya ni sebab minyak dunia turun, bukan sebab kerajaan pun..."
+      ];
+      const rand = quotes[Math.floor(Math.random() * quotes.length)];
+      document.getElementById('quote').innerText = rand;
+    }
+
+    function kiraPusingKLCC() {
+      const kmPerLiter = parseFloat(document.getElementById('kmPerLiter').value);
+      if (isNaN(kmPerLiter) || kmPerLiter <= 0) return alert("Masukkan nilai km/l yang sah!");
+      const hargaSekarang = 1.99;
+      const duit = 50;
+      const liter = duit / hargaSekarang;
+      const totalKm = liter * kmPerLiter;
+      const kelilingKLCC = 5.3; // anggaran km
+      const round = totalKm / kelilingKLCC;
+      document.getElementById('klccResult').style.display = 'block';
+      document.getElementById('klccResult').innerHTML = `Dengan RM50, anda boleh pusing KLCC sebanyak ${round.toFixed(1)} kali!`;
+    }
+  </script>
+</body>
+</html>
