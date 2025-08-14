@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magnetic Code Metafizik Advanced - Enhanced</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0f0f1e;
+            min-height: 100vh;
+            color: #e2e8f0;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(236, 72, 153, 0.2) 0%, transparent 50%);
+            animation: backgroundShift 20s ease infinite;
+            z-index: -1;
+        }
+        
+        @keyframes backgroundShift {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            33% { transform: rotate(120deg) scale(1.1); }
+            66% { transform: rotate(240deg) scale(0.9); }
+        }
+        
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) translateX(100px); opacity: 0; }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Header with glassmorphism */
+        .header {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            text-align: center;
+            border-radius: 24px;
+            margin-bottom: 40px;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            animation: slideDown 0.8s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            animation: gradientShift 5s ease infinite;
+            background-size: 200% 200%;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            color: #cbd5e1;
+            margin-bottom: 10px;
+        }
+        
+        .header .credits {
+            font-size: 0.9em;
+            color: #94a3b8;
+            margin-top: 20px;
+        }
+        
+        /* Input section with modern design */
+        .input-section {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .input-group {
+            margin-bottom: 30px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 600;
+            font-size: 1.1em;
+            color: #e2e8f0;
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(30, 41, 59, 0.5);
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            font-size: 18px;
+            color: #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(30, 41, 59, 0.8);
+            box-shadow: 
+                0 0 0 4px rgba(99, 102, 241, 0.1),
+                0 0 20px rgba(99, 102, 241, 0.2);
+        }
+        
+        input[type="text"]::placeholder {
+            color: #64748b;
+        }
+        
+        /* Animated buttons */
+        .button-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            position: relative;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        button:hover::before {
+            left: 100%;
+        }
+        
+        .primary-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+        }
+        
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(99, 102, 241, 0.4);
+        }
+        
+        .clear-btn {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            color: white;
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+        }
+        
+        .clear-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(239, 68, 68, 0.4);
+        }
+        
+        /* Results section */
+        .results-section {
+            display: none;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Energy cards with hover effects */
+        .energy-analysis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .energy-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 25px;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+        
+        .energy-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .energy-card:hover::before {
+            opacity: 1;
+        }
+        
+        .energy-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .energy-card h4 {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            color: #e2e8f0;
+        }
+        
+        /* General advice section */
+        .general-advice {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .general-advice h3 {
+            color: #e2e8f0;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .general-advice h4 {
+            color: #60a5fa;
+            margin: 20px 0 10px;
+            font-size: 1.2em;
+        }
+        
+        .general-advice ul {
+            margin-left: 20px;
+            color: #cbd5e1;
+            line-height: 1.8;
+        }
+        
+        .general-advice li {
+            margin-bottom: 10px;
+        }
+        
+        /* Disclaimer with warning style */
+        .disclaimer {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.2));
+            border: 2px solid #f59e0b;
+            border-radius: 16px;
+            padding: 30px;
+            margin-top: 30px;
+            position: relative;
+        }
+        
+        .disclaimer h4 {
+            color: #fbbf24;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .disclaimer p {
+            color: #fde68a;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        
+        /* Service link */
+        .service-link {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.2));
+            border: 2px solid #3b82f6;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .service-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+        
+        .service-link a {
+            color: #60a5fa;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 1.1em;
+        }
+        
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2em; }
+            .container { padding: 15px; }
+            .input-section, .general-advice { padding: 25px; }
+            .button-group { flex-direction: column; }
+            button { width: 100%; }
+        }
+        
+        /* Print styles */
+        @media print {
+            body { background: white; color: black; }
+            .button-group { display: none; }
+        }
+        
+        /* Fallback for browsers without backdrop-filter support */
+        @supports not (backdrop-filter: blur(20px)) {
+            .header, .input-section, .energy-card, .general-advice {
+                background: rgba(255, 255, 255, 0.2);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated particles background -->
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🔮 Magnetic Code Metafizik Advanced</h1>
+            <p>Sistem Analisis Tenaga Nombor Metafizik</p>
+            <div class="credits">
+                <p></p>
+            </div>
+        </div>
+        
+        <div class="input-section">
+            <div class="input-group">
+                <label for="numberInput">📱 Masukkan Nombor (Telefon/IC/Kenderaan)</label>
+                <p style="font-size: 0.95em; color: #94a3b8; margin-bottom: 12px;">Masukkan nombor sahaja tanpa simbol atau ruang</p>
+                <div class="input-wrapper">
+                    <input type="text" id="numberInput" placeholder="Contoh: 0123456789 atau 681207085051" autocomplete="off">
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button onclick="analyzeNumber()" class="primary-btn">
+                    <span id="analyzeText">🔍 Analisis Sekarang</span>
+                    <span id="loadingSpinner" class="loading" style="display: none;"></span>
+                </button>
+                <button onclick="clearAll()" class="clear-btn">🗑️ Kosongkan</button>
+            </div>
+        </div>
+        
+        <div id="results" class="results-section">
+            <div class="energy-analysis" id="energyAnalysis"></div>
+            
+            <div class="general-advice" id="generalAdvice" style="display: none;">
+                <h3><span class="emoji">💡</span>Nasihat Am</h3>
+                <div id="adviceContent">
+                    <h4>Tenaga Positif</h4>
+                    <ul>
+                        <li>Gunakan momentum tenaga positif anda untuk mencapai matlamat hidup</li>
+                        <li>Kembangkan potensi kepimpinan dan jaringan sosial anda selagi aura masih kuat</li>
+                        <li>Tenaga positif yang dominan menunjukkan potensi kejayaan yang tinggi</li>
+                        <li>Amalkan kesedaran diri untuk mengekalkan kestabilan emosi dan keputusan yang tepat</li>
+                        <li>Teruskan penjagaan energi supaya aura tidak terganggu oleh unsur negatif</li>
+                        <li>Ingat bahawa ini adalah panduan, bukan takdir mutlak</li>
+                    </ul>
+                    <h4>Tenaga Negatif</h4>
+                    <ul>
+                        <li>Kenal pasti punca tenaga negatif yang mengganggu fokus dan semangat anda</li>
+                        <li>Elakkan membuat keputusan besar ketika minda dan emosi berada pada tahap lemah</li>
+                        <li>Tenaga negatif yang berlarutan boleh menarik situasi merugikan dan menutup peluang rezeki</li>
+                        <li>Amalkan perlindungan diri secara rohani dan mental untuk mengurangkan kesannya</li>
+                        <li>Dapatkan bantuan pembersihan dan pengaktifan energi untuk menukar aura negatif kepada positif</li>
+                        <li>Ingat bahawa ini adalah panduan, bukan takdir mutlak</li>
+                        <li>Dapatkan khidmat Servis Metafizik untuk membantu anda</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="service-link">
+
+            </div>
+            
+            <div class="disclaimer">
+                <h4>⚠️ Penafian (Disclaimer)</h4>
+                <p><strong>Sistem Metafizik Penomboran ini bukanlah satu bentuk ramalan atau tilikan masa depan.</strong> Ia merupakan kaedah analisis corak berdasarkan angka, yang bertujuan untuk membantu individu memahami potensi diri, mengenal kekuatan dan kelemahan, serta merancang kehidupan secara lebih sedar dan tersusun.</p>
+                <p>Sistem ini <strong>tidak sekali-kali bertujuan menggantikan ajaran agama, kepercayaan, atau menentukan takdir Tuhan.</strong> Segala hasil analisis hanyalah sebagai panduan dan refleksi kendiri—bukan penentu masa depan secara mutlak.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Energy categories data
+        const energyCategories = {
+            wealth: {
+                name: 'Wealth (Kekayaan)',
+                emoji: '💰',
+                numbers: [13, 31, 68, 86, 49, 94, 27, 72],
+                type: 'positive',
+                description: 'Kemakmuran, kejayaan kewangan, rezeki masuk'
+            },
+            nobleman: {
+                name: 'Nobleman (Pembantu)',
+                emoji: '🤝',
+                numbers: [14, 41, 67, 76, 39, 93, 28, 82],
+                type: 'positive',
+                description: 'Bantuan / support dari orang luar, rakan sokongan, mentor, '
+            },
+            leadership: {
+                name: 'Leadership (Kepimpinan)',
+                emoji: '⭐',
+                numbers: [19, 91, 78, 87, 34, 43, 26, 62],
+                type: 'positive',
+                description: 'Ketegasan, keupayaan memimpin, visi jelas'
+            },
+            stagnancy: {
+                name: 'Stagnancy (Kestabilan)',
+                emoji: '🌱',
+                numbers: [11, 22, 88, 99, 66, 77, 33, 44],
+                type: 'positive',
+                description: 'Kestabilan, ketahanan, kesabaran, kesinambungan hidup, hidup statik, susah nak berubah/maju'
+            },
+            eloquence: {
+                name: 'Eloquence (Kefasihan)',
+                emoji: '🧠',
+                numbers: [17, 71, 89, 98, 46, 64, 23, 32],
+                type: 'negative',
+                description: 'Petah bercakap, potensi konflik, risiko pengkhianatan, orang tikam belakang, orang iri hati, banyak bercakap buat orang salah faham'
+            },
+            accidents: {
+                name: 'Financial Issues/Accidents (Kebocoran Wang/Kemalangan)',
+                emoji: '🚨',
+                numbers: [12, 21, 69, 96, 48, 84, 37, 73],
+                type: 'negative',
+                description: 'Risiko masalah kewangan, Kebocoran wang, susah menyimpan,  kerugian, kena scam, kemalangan'
+            },
+            theJoker: {
+                name: 'The Joker (Gangguan Spiritual/Emosi)',
+                emoji: '⚡',
+                numbers: [18, 81, 79, 97, 36, 63, 24, 42],
+                type: 'negative',
+                description: 'Kreatif dan inovatif, tetapi tidak stabil, gangguan spiritual / emosi, naik turun hidup, Kejatuhan dalam hidup, potensi perpisahan dalam hubungan'
+            },
+            relationship: {
+                name: 'Relationship Issue',
+                emoji: '💔',
+                numbers: [16, 61, 47, 74, 38, 83, 29, 92],
+                type: 'negative',
+                description: 'Masalah perhubungan, berat jodoh / sukar, konflik rumah tangga, konflik dengan orang lain'
+            }
+        };
+        
+        function processNumber(input) {
+            const cleanInput = input.replace(/\D/g, '');
+            let finalPairs = [];
+            
+            // Count total 5s in the number for repetition
+            const totalFives = (cleanInput.match(/5/g) || []).length;
+            
+            let i = 0;
+            while (i < cleanInput.length - 1) {
+                let digit1 = cleanInput[i];
+                let digit2 = cleanInput[i + 1];
+                let pair = '';
+                
+                // Special patterns with 5
+                if (i + 2 < cleanInput.length) {
+                    // Pattern 850
+                    if (digit1 === '8' && digit2 === '5' && cleanInput[i + 2] === '0') {
+                        pair = '88';
+                        for (let k = 0; k < totalFives; k++) {
+                            finalPairs.push(pair);
+                        }
+                        i += 2;
+                        continue;
+                    }
+                    // Pattern 051
+                    else if (digit1 === '0' && digit2 === '5' && cleanInput[i + 2] === '1') {
+                        pair = '11';
+                        for (let k = 0; k < totalFives; k++) {
+                            finalPairs.push(pair);
+                        }
+                        i += 2;
+                        continue;
+                    }
+                    // Pattern X5Y (general 5 bridge)
+                    else if (digit2 === '5') {
+                        let digit3 = cleanInput[i + 2];
+                        // Check for consecutive 5s
+                        if (digit3 === '5') {
+                            let fiveStart = i + 1;
+                            let fiveEnd = fiveStart;
+                            while (fiveEnd < cleanInput.length && cleanInput[fiveEnd] === '5') {
+                                fiveEnd++;
+                            }
+                            if (fiveEnd < cleanInput.length) {
+                                let afterFives = cleanInput[fiveEnd];
+                                pair = digit1 + afterFives;
+                                for (let k = 0; k < totalFives; k++) {
+                                    finalPairs.push(pair);
+                                }
+                                i = fiveEnd;
+                                continue;
+                            }
+                        } else {
+                            pair = digit1 + digit3;
+                            for (let k = 0; k < totalFives; k++) {
+                                finalPairs.push(pair);
+                            }
+                            i += 2;
+                            continue;
+                        }
+                    }
+                }
+                
+                // Handle 0 (mirror)
+                if (digit1 === '0') {
+                    pair = digit2 + digit2;
+                    finalPairs.push(pair);
+                }
+                else if (digit2 === '0') {
+                    pair = digit1 + digit1;
+                    finalPairs.push(pair);
+                }
+                // Normal pairing
+                else {
+                    pair = digit1 + digit2;
+                    finalPairs.push(pair);
+                }
+                
+                i++;
+            }
+            
+            return {
+                pairs: finalPairs
+            };
+        }
+        
+        function categorizePairs(pairs) {
+            let results = {};
+            
+            for (let category in energyCategories) {
+                results[category] = {
+                    count: 0,
+                    pairs: []
+                };
+            }
+            
+            for (let pair of pairs) {
+                let pairNum = parseInt(pair);
+                let found = false;
+                
+                for (let category in energyCategories) {
+                    if (energyCategories[category].numbers.includes(pairNum)) {
+                        results[category].count++;
+                        results[category].pairs.push(pair);
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            
+            return results;
+        }
+        
+        function displayGeneralAdvice() {
+            const adviceDiv = document.getElementById('generalAdvice');
+            adviceDiv.style.display = 'block';
+        }
+        
+        function analyzeNumber() {
+            const input = document.getElementById('numberInput').value.trim();
+            
+            if (!input) {
+                alert('Sila masukkan nombor untuk dianalisis.');
+                return;
+            }
+            
+            document.getElementById('analyzeText').style.display = 'none';
+            document.getElementById('loadingSpinner').style.display = 'inline-block';
+            
+            setTimeout(() => {
+                const processed = processNumber(input);
+                const analysis = categorizePairs(processed.pairs);
+                
+                displayResults(processed, analysis);
+                
+                document.getElementById('analyzeText').style.display = 'inline';
+                document.getElementById('loadingSpinner').style.display = 'none';
+            }, 500);
+        }
+        
+        function displayResults(processed, analysis) {
+            document.getElementById('results').style.display = 'block';
+            
+            const analysisDiv = document.getElementById('energyAnalysis');
+            analysisDiv.innerHTML = '';
+            
+            const sortedCategories = Object.keys(energyCategories)
+                .filter(cat => analysis[cat] && analysis[cat].count > 0)
+                .sort((a, b) => analysis[b].count - analysis[a].count);
+            
+            for (let category of sortedCategories) {
+                const card = createEnergyCard(category, analysis[category]);
+                analysisDiv.appendChild(card);
+            }
+            
+            displayGeneralAdvice();
+        }
+        
+        function createEnergyCard(category, data) {
+            const categoryInfo = energyCategories[category];
+            const card = document.createElement('div');
+            card.className = `energy-card ${category}`;
+            
+            const typeClass = categoryInfo.type === 'positive' ? 'positive' : 'negative';
+            const typeColor = categoryInfo.type === 'positive' ? '#6ee7b7' : '#fca5a5';
+            
+            card.innerHTML = `
+                <h4><span class="emoji">${categoryInfo.emoji}</span>${categoryInfo.name}</h4>
+                <p style="font-size: 0.95em; color: #cbd5e1; margin-top: 12px;">${categoryInfo.description}</p>
+            `;
+            
+            return card;
+        }
+        
+        function clearAll() {
+            document.getElementById('numberInput').value = '';
+            document.getElementById('results').style.display = 'none';
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            
+            // Add enter key support
+            document.getElementById('numberInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    analyzeNumber();
+                }
+            });
+            
+            // Auto-focus input
+            document.getElementById('numberInput').focus();
+        });
+    </script>
+</body>
+</html>
