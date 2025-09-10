@@ -3,50 +3,251 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Forex & Indices Sniper Signal</title>
+  <title>Sniper Entry Forex Malaysia | Sistem OHLC Harian</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; }
-    .container { background: #f0f0f0; padding: 20px; border-radius: 10px; }
-    label { display: block; margin: 10px 0 5px; }
-    input, select, button { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
-    button { background: #007bff; color: white; border: none; cursor: pointer; }
-    button:hover { background: #0056b3; }
-    #result { background: #fff; padding: 15px; border-radius: 5px; display: none; }
-    #live-price { text-align: center; color: #007bff; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Calibri', sans-serif;
+      background: linear-gradient(to right, #ffffff, #e6e6e6);
+      padding: 40px;
+      margin: 0;
+      color: #000;
+      user-select: none;
+    }
+    body::selection { background: none; }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: linear-gradient(145deg, #d4e4ff, #f2f7ff);
+      padding: 30px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      border-radius: 25px;
+      border: 1px solid #0000ff;
+      position: relative;
+    }
+    .container::before {
+      content: "";
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 160px;
+      height: 6px;
+      background: #ff0000;
+      border-radius: 10px;
+      box-shadow: 0 0 15px #ff0000;
+    }
+    h2 {
+      text-align: center;
+      color: #000;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+      font-size: 1.6rem;
+      margin: 0.25rem 0;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+      color: #000;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      border-radius: 10px;
+      border: 1px solid #0000ff;
+      background: #ffffff;
+      color: #000;
+      font-size: 1rem;
+      box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1);
+    }
+    button {
+      margin-top: 25px;
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(45deg, #ff0000, #0000ff);
+      border: none;
+      color: #fff;
+      font-size: 1.1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+      transition: transform 0.3s;
+    }
+    button:hover { transform: scale(1.05); }
+    .result {
+      margin-top: 30px;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 20px;
+      border-left: 6px solid #0000ff;
+      border-radius: 12px;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.1);
+      color: #000;
+    }
+    .result p { margin: 10px 0; }
+    strong { color: #ff0000; }
+    #live-price {
+      text-align: center;
+      margin-top: 10px;
+      color: #0000ff;
+      font-size: 0.9rem;
+    }
+    .instructions {
+      margin: 16px auto 0;
+      background: #ffffff;
+      border: 1px solid #0000ff;
+      border-radius: 14px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+      overflow: hidden;
+    }
+    .instructions .hdr {
+      background: linear-gradient(90deg, #0000ff, #4d79ff);
+      color: #fff;
+      padding: 14px 18px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .instructions .body { padding: 18px; color: #000; }
+    .instructions ol { margin: 0; padding-left: 18px; }
+    .note {
+      margin-top: 12px;
+      padding: 12px;
+      background: #f6f9ff;
+      border-left: 4px solid #ff0000;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+    details.disc {
+      margin-top: 14px;
+      background: #fff;
+      border: 1px dashed #b3c6ff;
+      border-radius: 10px;
+      padding: 10px 14px;
+    }
+    details.disc summary { font-weight: 700; cursor: pointer; }
   </style>
 </head>
 <body>
   <div class="container">
-    <label for="pair">Select Instrument:</label>
+    <h2>OHLC D1 & W1</h2>
+    <h2>Untuk VIP – Fokus sepenuhnya pada <u>“Sniper Entry”</u> sahaja, masuk besar & agresif hanya pada ruang tersebut</h2>
+
+    <!-- Panel Arahan -->
+    <section class="instructions" aria-labelledby="arahan-title">
+      <div class="hdr">
+        <span>📘</span>
+        <span id="arahan-title">Arahan Penggunaan</span>
+      </div>
+      <div class="body">
+        <ol>
+          <li>Pilih <em>Forex Pair</em> yang dikehendaki.</li>
+          <li>Klik <strong>Fetch OHLC (D1)</strong> untuk tarik data harian terbaru (for majors/minors).<br>
+              If API fails (e.g., metals/cryptos/indices), enter <strong>Open/High/Low/Close (D1)</strong> manually from TradingView/MT4.</li>
+          <li>Tetapkan <strong>Account Balance (USD)</strong> dan <strong>Risk Per Trade (%)</strong>.</li>
+          <li>Pilih <strong>H4 Confirmation Candle</strong> (optional) mengikut analisis anda.</li>
+          <li>Klik <strong>Calculate</strong> untuk hasil <em>Signal</em>, <em>TP</em>, <em>Entry Zone</em>, <em>SL</em> dan <em>lot size</em>.</li>
+          <li>Klik <strong>Copy Signal</strong> untuk salin keputusan ke papan klip.</li>
+        </ol>
+        <div class="note">
+          <strong>📌 Arahan Trading D1 (Timezone Malaysia UTC+8)</strong>
+          <ul>
+            <li>Candle D1 <strong>tutup setiap hari pada 08:00 pagi</strong>.</li>
+            <li><strong>Tunggu hingga 08:02 pagi</strong> untuk pastikan data close lengkap.</li>
+            <li><strong>Selepas 08:02 pagi</strong> → buat analisis/entry/pending order.</li>
+            <li><strong>Jangan guna signal D1 sebelum 08:00 pagi</strong>.</li>
+          </ul>
+        </div>
+        <details class="disc">
+          <summary>Nasihat & Sikap Dagangan</summary>
+          <p>Elakkan sikap tergesa-gesa untuk meraih keuntungan besar dalam masa singkat. Trading yang berkesan memerlukan <strong>disiplin, kesabaran, dan konsistensi</strong>, bukan sekadar keberanian mengambil risiko tinggi.</p>
+          <ul>
+            <li><strong>Pengurusan risiko</strong> — Tetapkan saiz lot dan <em>stop loss</em> yang sesuai dengan modal.</li>
+            <li><strong>Fokus pada proses</strong> — Ukur kejayaan berdasarkan kepatuhan pada strategi, bukan jumlah profit harian.</li>
+            <li><strong>Kesedaran emosi</strong> — Jangan biarkan euforia atau panik mengawal keputusan.</li>
+            <li><strong>Pertumbuhan berterusan</strong> — Asah analisis dan disiplin; profit akan datang secara beransur-ansur bila asas kukuh.</li>
+          </ul>
+          <blockquote>Trading bukan perlumbaan jangka pendek, tetapi perjalanan maraton.</blockquote>
+        </details>
+      </div>
+    </section>
+
+    <!-- Full Pilihan pair -->
+    <label for="pair">Select Trading Instrument:</label>
     <select id="pair">
-      <optgroup label="Major Forex Pairs">
-        <option value="EUR/USD">EUR/USD</option>
-        <option value="GBP/USD">GBP/USD</option>
-        <option value="USD/JPY">USD/JPY</option>
-        <option value="USD/CHF">USD/CHF</option>
-        <option value="AUD/USD">AUD/USD</option>
-        <option value="USD/CAD">USD/CAD</option>
-        <option value="NZD/USD">NZD/USD</option>
+      <optgroup label="Major Pairs">
+        <option value="EURUSD">EUR/USD</option>
+        <option value="USDJPY">USD/JPY</option>
+        <option value="GBPUSD">GBP/USD</option>
+        <option value="USDCHF">USD/CHF</option>
+        <option value="USDCAD">USD/CAD</option>
+        <option value="AUDUSD">AUD/USD</option>
+        <option value="NZDUSD">NZD/USD</option>
       </optgroup>
-      <optgroup label="Precious Metals">
-        <option value="XAU/USD">XAU/USD (Gold/USD)</option>
-        <option value="XAU/EUR">XAU/EUR (Gold/EUR)</option>
+      <optgroup label="Minor Pairs">
+        <option value="AUDCAD">AUD/CAD</option>
+        <option value="AUDCHF">AUD/CHF</option>
+        <option value="AUDJPY">AUD/JPY</option>
+        <option value="AUDNZD">AUD/NZD</option>
+        <option value="CADCHF">CAD/CHF</option>
+        <option value="CADJPY">CAD/JPY</option>
+        <option value="CHFJPY">CHF/JPY</option>
+        <option value="EURAUD">EUR/AUD</option>
+        <option value="EURCAD">EUR/CAD</option>
+        <option value="EURCHF">EUR/CHF</option>
+        <option value="EURGBP">EUR/GBP</option>
+        <option value="EURJPY">EUR/JPY</option>
+        <option value="EURNZD">EUR/NZD</option>
+        <option value="GBPAUD">GBP/AUD</option>
+        <option value="GBPCAD">GBP/CAD</option>
+        <option value="GBPCHF">GBP/CHF</option>
+        <option value="GBPJPY">GBP/JPY</option>
+        <option value="GBPNZD">GBP/NZD</option>
+        <option value="NZDCAD">NZD/CAD</option>
+        <option value="NZDCHF">NZD/CHF</option>
+        <option value="NZDJPY">NZD/JPY</option>
+      </optgroup>
+      <optgroup label="Exotic Pairs">
+        <option value="EURTRY">EUR/TRY</option>
+        <option value="USDHKD">USD/HKD</option>
+        <option value="USDSGD">USD/SGD</option>
+        <option value="USDTRY">USD/TRY</option>
+        <option value="USDZAR">USD/ZAR</option>
+      </optgroup>
+      <optgroup label="Metals">
+        <option value="XAUUSD">XAU/USD (Gold)</option>
+        <option value="XAUEUR">XAU/EUR (Gold/EUR)</option>
+        <option value="XAGUSD">XAG/USD (Silver)</option>
+        <option value="XPTUSD">XPT/USD (Platinum)</option>
+      </optgroup>
+      <optgroup label="Cryptocurrencies">
+        <option value="ADAUSD">ADA/USD (Cardano)</option>
+        <option value="BTCUSD">BTC/USD (Bitcoin)</option>
+        <option value="DOGEUSD">DOGE/USD (Dogecoin)</option>
+        <option value="ETHUSD">ETH/USD (Ethereum)</option>
+        <option value="LTCUSD">LTC/USD (Litecoin)</option>
+        <option value="XRPUSD">XRP/USD (Ripple)</option>
       </optgroup>
       <optgroup label="Indices">
-        <option value="^GSPC">S&P 500 (^GSPC)</option>
-        <option value="^DJI">Dow Jones (^DJI)</option>
-        <option value="^IXIC">NASDAQ (^IXIC)</option>
-        <option value="^FTSE">FTSE 100 (^FTSE)</option>
-        <option value="^GDAXI">DAX (^GDAXI)</option>
-        <option value="^N225">Nikkei 225 (^N225)</option>
+        <option value="AUS200">AUS200 (Australia 200)</option>
+        <option value="DE30">DE30 (DAX Germany)</option>
+        <option value="FRA40">FRA40 (France 40)</option>
+        <option value="HK50">HK50 (Hong Kong 50)</option>
+        <option value="JP225">JP225 (Nikkei 225)</option>
+        <option value="SPX500">SPX500 (S&P 500)</option>
+        <option value="UK100">UK100 (FTSE 100)</option>
+        <option value="US30">US30 (Dow Jones)</option>
+        <option value="NAS100">US100 (Nasdaq 100)</option>
       </optgroup>
     </select>
+
     <p id="live-price">Live price will appear here...</p>
     <button onclick="fetchOHLC()">Fetch OHLC (D1)</button>
-    <label for="balance">Balance (USD):</label>
-    <input type="number" id="balance" value="1000">
+    <label for="balance">Account Balance (USD):</label>
+    <input type="number" id="balance" value="144.00">
     <label for="risk">Risk Per Trade (%):</label>
-    <input type="number" id="risk" value="2" step="0.1">
+    <input type="number" id="risk" value="2.1" step="0.1" min="0.1" max="10">
     <label for="open">Open (D1):</label>
     <input type="number" id="open" step="0.0001">
     <label for="high">High (D1):</label>
@@ -55,68 +256,69 @@
     <input type="number" id="low" step="0.0001">
     <label for="close">Close (D1):</label>
     <input type="number" id="close" step="0.0001">
+    <label for="h4confirm">H4 Confirmation Candle (Manual):</label>
+    <select id="h4confirm">
+      <option value="none">No Confirmation</option>
+      <option value="engulfing">Engulfing</option>
+      <option value="pinbar">Pin Bar</option>
+      <option value="insidebar">Inside Bar</option>
+    </select>
     <button onclick="calculateSniper()">Calculate</button>
     <button onclick="copySignal()">Copy Signal</button>
-    <div id="result"></div>
+    <div class="result" id="result" style="display: none;"></div>
   </div>
 
   <script>
-    async function fetchOHLC() {
-      const apiKey = 'Q8FAF56UJCU8492D'; // Your Alpha Vantage API key
-      const pair = document.getElementById('pair').value;
-      let url, isIndex = pair.startsWith('^');
-      let from, to;
+    // Sekatan interaksi
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', function (e) {
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && ["I", "J", "C"].includes(e.key)) ||
+        (e.ctrlKey && e.key === "U")
+      ) { e.preventDefault(); }
+    });
+    document.addEventListener("dragstart", e => e.preventDefault());
 
-      if (pair === 'XAU/EUR') {
-        // Handle XAU/EUR by fetching XAU/USD and EUR/USD
+    async function fetchOHLC() {
+      const apiKey = 'Q8FAF56UJCU8492D'; // Your Alpha Vantage key
+      const pair = document.getElementById('pair').value;
+      const isForex = ['EURUSD', 'USDJPY', 'GBPUSD', 'USDCHF', 'USDCAD', 'AUDUSD', 'NZDUSD',
+                       'AUDCAD', 'AUDCHF', 'AUDJPY', 'AUDNZD', 'CADCHF', 'CADJPY', 'CHFJPY',
+                       'EURAUD', 'EURCAD', 'EURCHF', 'EURGBP', 'EURJPY', 'EURNZD', 'GBPAUD',
+                       'GBPCAD', 'GBPCHF', 'GBPJPY', 'GBPNZD', 'NZDCAD', 'NZDCHF', 'NZDJPY'].includes(pair);
+      const isMetal = ['XAUUSD', 'XAUEUR', 'XAGUSD', 'XPTUSD'].includes(pair);
+      const isCrypto = ['ADAUSD', 'BTCUSD', 'DOGEUSD', 'ETHUSD', 'LTCUSD', 'XRPUSD'].includes(pair);
+      const isIndex = ['AUS200', 'DE30', 'FRA40', 'HK50', 'JP225', 'SPX500', 'UK100', 'US30', 'NAS100'].includes(pair);
+
+      if (isForex) {
+        const url = `https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=${pair.slice(0, 3)}&to_symbol=${pair.slice(3)}&apikey=${apiKey}&outputsize=compact`;
         try {
-          const [xauusdRes, eurusdRes] = await Promise.all([
-            fetch(`https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=XAU&to_symbol=USD&apikey=${apiKey}`),
-            fetch(`https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=EUR&to_symbol=USD&apikey=${apiKey}`)
-          ]);
-          const xauusdData = await xauusdRes.json();
-          const eurusdData = await eurusdRes.json();
-          if (xauusdData['Time Series FX (Daily)'] && eurusdData['Time Series FX (Daily)']) {
-            const xauusd = Object.values(xauusdData['Time Series FX (Daily)'])[0];
-            const eurusd = Object.values(eurusdData['Time Series FX (Daily)'])[0];
-            // Calculate XAU/EUR = XAU/USD ÷ EUR/USD
-            document.getElementById('open').value = (parseFloat(xauusd['1. open']) / parseFloat(eurusd['1. open'])).toFixed(2);
-            document.getElementById('high').value = (parseFloat(xauusd['2. high']) / parseFloat(eurusd['2. high'])).toFixed(2);
-            document.getElementById('low').value = (parseFloat(xauusd['3. low']) / parseFloat(eurusd['3. low'])).toFixed(2);
-            document.getElementById('close').value = (parseFloat(xauusd['4. close']) / parseFloat(eurusd['4. close'])).toFixed(2);
-            document.getElementById('live-price').innerText = `(${pair}) Live Price: ${(parseFloat(xauusd['4. close']) / parseFloat(eurusd['4. close'])).toFixed(2)}`;
+          const res = await fetch(url);
+          const data = await res.json();
+          if (data['Time Series FX (Daily)']) {
+            const dates = Object.keys(data['Time Series FX (Daily)']);
+            const latest = data['Time Series FX (Daily)'][dates[0]];
+            document.getElementById('open').value = parseFloat(latest['1. open']).toFixed(5);
+            document.getElementById('high').value = parseFloat(latest['2. high']).toFixed(5);
+            document.getElementById('low').value = parseFloat(latest['3. low']).toFixed(5);
+            document.getElementById('close').value = parseFloat(latest['4. close']).toFixed(5);
+            document.getElementById('live-price').innerText = `${pair} D1 Close: ${parseFloat(latest['4. close']).toFixed(5)}`;
           } else {
-            alert('Data unavailable for XAU/EUR.');
+            alert(`Failed to fetch ${pair}: ${data['Error Message'] || 'No data'}. Use manual entry.`);
+            document.getElementById('live-price').innerText = `Enter ${pair} OHLC manually`;
           }
         } catch (e) {
-          alert('Failed to fetch XAU/EUR data.');
+          alert(`Fetch failed for ${pair}. Use manual entry.`);
+          document.getElementById('live-price').innerText = `Enter ${pair} OHLC manually`;
         }
-        return;
-      }
-
-      if (isIndex) {
-        url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${pair}&apikey=${apiKey}`;
       } else {
-        [from, to] = pair.split('/');
-        url = `https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=${from}&to_symbol=${to}&apikey=${apiKey}`;
-      }
-
-      try {
-        const res = await fetch(url);
-        const data = await res.json();
-        const key = isIndex ? 'Time Series (Daily)' : 'Time Series FX (Daily)';
-        if (data[key]) {
-          const latest = Object.values(data[key])[0];
-          document.getElementById('open').value = latest['1. open'];
-          document.getElementById('high').value = latest['2. high'];
-          document.getElementById('low').value = latest['3. low'];
-          document.getElementById('close').value = latest['4. close'];
-          document.getElementById('live-price').innerText = `(${pair}) Live Price: ${latest['4. close']}`;
-        } else {
-          alert('Invalid API key or data unavailable.');
-        }
-      } catch (e) {
-        alert('Failed to fetch OHLC.');
+        alert(`Manual entry required for ${pair} (metals/cryptos/indices not supported by free API).`);
+        document.getElementById('live-price').innerText = `Enter ${pair} OHLC manually (e.g., from TradingView)`;
+        document.getElementById('open').value = '';
+        document.getElementById('high').value = '';
+        document.getElementById('low').value = '';
+        document.getElementById('close').value = '';
       }
     }
 
@@ -127,24 +329,25 @@
       const high = parseFloat(document.getElementById('high').value);
       const low = parseFloat(document.getElementById('low').value);
       const close = parseFloat(document.getElementById('close').value);
+      const h4confirm = document.getElementById('h4confirm').value;
       const pair = document.getElementById('pair').value;
 
       if ([balance, riskPercent, open, high, low, close].some(isNaN)) {
-        alert('Please enter all values.');
+        alert("Please enter all values correctly.");
         return;
       }
 
-      // Adjust pipValue based on instrument
       let pipValue, pipMultiplier;
-      if (pair.includes('XAU')) {
-        pipValue = 1; // Gold: $1 per 0.01 move (100 pips = 1.0)
-        pipMultiplier = 100; // Gold uses 2 decimal places
-      } else if (pair.startsWith('^')) {
-        pipValue = 50; // Indices: ~$50 per point (e.g., S&P 500)
-        pipMultiplier = 1; // Indices use whole numbers
+      if (pair.includes('XAU') || pair.includes('XAG') || pair.includes('XPT')) {
+        pipValue = 1; pipMultiplier = 100; // Metals: $1 per 0.01
+      } else if (['AUS200', 'DE30', 'FRA40', 'HK50', 'JP225', 'SPX500', 'UK100', 'US30', 'NAS100'].some(idx => pair.includes(idx))) {
+        pipValue = 50; pipMultiplier = 1; // Indices: $50 per point
+      } else if (pair.includes('DOGE')) {
+        pipValue = 0.01; pipMultiplier = 10000; // DOGE: $0.01 per 0.0001
+      } else if (pair.includes('ADA') || pair.includes('BTC') || pair.includes('ETH') || pair.includes('LTC') || pair.includes('XRP')) {
+        pipValue = 0.1; pipMultiplier = 100; // Cryptos: $0.1 per 0.01
       } else {
-        pipValue = pair.includes('JPY') ? 9 : 10; // Forex: $10/pip, JPY ~$9
-        pipMultiplier = 10000; // Forex uses 4-5 decimal places
+        pipValue = pair.includes('JPY') ? 9 : 10; pipMultiplier = 10000; // Forex: $10/pip, JPY $9
       }
 
       const signal = close > open ? 'BUY' : 'SELL';
@@ -164,14 +367,19 @@
         entryZoneLow = (open - body * 0.5).toFixed(5);
       }
 
+      const confirmationNote = h4confirm !== 'none'
+        ? `<p><strong>H4 Confirmation:</strong> ${h4confirm.charAt(0).toUpperCase() + h4confirm.slice(1)}</p>`
+        : `<p><strong>H4 Confirmation:</strong> None – Trade entry not recommended</p>`;
+
       const resultBox = document.getElementById('result');
       resultBox.innerHTML = `
         <p><strong>Signal:</strong> ${signal}</p>
-        <p><strong>Take Profit:</strong> ${tp.toFixed(5)}</p>
-        <p><strong>Sniper Entry:</strong> ${sl.toFixed(5)}</p>
-        <p><strong>Entry Zone:</strong> ${entryZoneLow} - ${entryZoneHigh}</p>
+        <p><strong>Take Profit (TP):</strong> ${tp.toFixed(5)}</p>
+        <p><strong>SNIPER ENTRY:</strong> ${sl.toFixed(5)}</p>
+        <p><strong>ENTRY 2 dan ENTRY 1:</strong> ${entryZoneLow} - ${entryZoneHigh}</p>
         <p><strong>Stop Loss (Pips/Points):</strong> ${sl_pips}</p>
-        <p><strong>Lot Size:</strong> ${lot}</p>
+        <p><strong>Recommended Lot Size:</strong> ${lot}</p>
+        ${confirmationNote}
       `;
       resultBox.style.display = 'block';
     }
@@ -179,12 +387,12 @@
     function copySignal() {
       const resultBox = document.getElementById('result');
       if (resultBox.style.display === 'none') {
-        alert('No signal to copy.');
+        alert("No signal to copy. Please run a calculation first.");
         return;
       }
       navigator.clipboard.writeText(resultBox.innerText)
-        .then(() => alert('Signal copied!'))
-        .catch(() => alert('Copy failed.'));
+        .then(() => alert("Signal copied to clipboard!"))
+        .catch(() => alert("Copy failed."));
     }
   </script>
 </body>
