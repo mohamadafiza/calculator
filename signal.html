@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forex & Indices Sniper Signal</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; }
+    .container { background: #f0f0f0; padding: 20px; border-radius: 10px; }
+    label { display: block; margin: 10px 0 5px; }
+    input, select, button { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
+    button { background: #007bff; color: white; border: none; cursor: pointer; }
+    button:hover { background: #0056b3; }
+    #result { background: #fff; padding: 15px; border-radius: 5px; display: none; }
+    #live-price { text-align: center; color: #007bff; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <label for="pair">Select Instrument:</label>
+    <select id="pair">
+      <optgroup label="Major Forex Pairs">
+        <option value="EUR/USD">EUR/USD</option>
+        <option value="GBP/USD">GBP/USD</option>
+        <option value="USD/JPY">USD/JPY</option>
+        <option value="USD/CHF">USD/CHF</option>
+        <option value="AUD/USD">AUD/USD</option>
+        <option value="USD/CAD">USD/CAD</option>
+        <option value="NZD/USD">NZD/USD</option>
+      </optgroup>
+      <optgroup label="Precious Metals">
+        <option value="XAU/USD">XAU/USD (Gold/USD)</option>
+        <option value="XAU/EUR">XAU/EUR (Gold/EUR)</option>
+      </optgroup>
+      <optgroup label="Indices">
+        <option value="^GSPC">S&P 500 (^GSPC)</option>
+        <option value="^DJI">Dow Jones (^DJI)</option>
+        <option value="^IXIC">NASDAQ (^IXIC)</option>
+        <option value="^FTSE">FTSE 100 (^FTSE)</option>
+        <option value="^GDAXI">DAX (^GDAXI)</option>
+        <option value="^N225">Nikkei 225 (^N225)</option>
+      </optgroup>
+    </select>
+    <p id="live-price">Live price will appear here...</p>
+    <button onclick="fetchOHLC()">Fetch OHLC (D1)</button>
+    <label for="balance">Balance (USD):</label>
+    <input type="number" id="balance" value="1000">
+    <label for="risk">Risk Per Trade (%):</label>
+    <input type="number" id="risk" value="2" step="0.1">
+    <label for="open">Open (D1):</label>
+    <input type="number" id="open" step="0.0001">
+    <label for="high">High (D1):</label>
+    <input type="number" id="high" step="0.0001">
+    <label for="low">Low (D1):</label>
+    <input type="number" id="low" step="0.0001">
+    <label for="close">Close (D1):</label>
+    <input type="number" id="close" step="0.0001">
+    <button onclick="calculateSniper()">Calculate</button>
+    <button onclick="copySignal()">Copy Signal</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    async function fetchOHLC() {
+      const apiKey = 'Q8FAF56UJCU8492D'; // Your Alpha Vantage API key
+      const pair = document.getElementById('pair').value;
+      let url, isIndex = pair.startsWith('^');
+      let from, to;
+
+      if (pair === 'XAU/EUR') {
+        // Handle XAU/EUR by fetching XAU/USD and EUR/USD
+        try {
+          const [xauusdRes, eurusdRes] = await Promise.all([
+            fetch(`https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=XAU&to_symbol=USD&apikey=${apiKey}`),
+            fetch(`https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=EUR&to_symbol=USD&apikey=${apiKey}`)
+          ]);
+          const xauusdData = await xauusdRes.json();
+          const eurusdData = await eurusdRes.json();
+          if (xauusdData['Time Series FX (Daily)'] && eurusdData['Time Series FX (Daily)']) {
+            const xauusd = Object.values(xauusdData['Time Series FX (Daily)'])[0];
+            const eurusd = Object.values(eurusdData['Time Series FX (Daily)'])[0];
+            // Calculate XAU/EUR = XAU/USD ÷ EUR/USD
+            document.getElementById('open').value = (parseFloat(xauusd['1. open']) / parseFloat(eurusd['1. open'])).toFixed(2);
+            document.getElementById('high').value = (parseFloat(xauusd['2. high']) / parseFloat(eurusd['2. high'])).toFixed(2);
+            document.getElementById('low').value = (parseFloat(xauusd['3. low']) / parseFloat(eurusd['3. low'])).toFixed(2);
+            document.getElementById('close').value = (parseFloat(xauusd['4. close']) / parseFloat(eurusd['4. close'])).toFixed(2);
+            document.getElementById('live-price').innerText = `(${pair}) Live Price: ${(parseFloat(xauusd['4. close']) / parseFloat(eurusd['4. close'])).toFixed(2)}`;
+          } else {
+            alert('Data unavailable for XAU/EUR.');
+          }
+        } catch (e) {
+          alert('Failed to fetch XAU/EUR data.');
+        }
+        return;
+      }
+
+      if (isIndex) {
+        url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${pair}&apikey=${apiKey}`;
+      } else {
+        [from, to] = pair.split('/');
+        url = `https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=${from}&to_symbol=${to}&apikey=${apiKey}`;
+      }
+
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        const key = isIndex ? 'Time Series (Daily)' : 'Time Series FX (Daily)';
+        if (data[key]) {
+          const latest = Object.values(data[key])[0];
+          document.getElementById('open').value = latest['1. open'];
+          document.getElementById('high').value = latest['2. high'];
+          document.getElementById('low').value = latest['3. low'];
+          document.getElementById('close').value = latest['4. close'];
+          document.getElementById('live-price').innerText = `(${pair}) Live Price: ${latest['4. close']}`;
+        } else {
+          alert('Invalid API key or data unavailable.');
+        }
+      } catch (e) {
+        alert('Failed to fetch OHLC.');
+      }
+    }
+
+    function calculateSniper() {
+      const balance = parseFloat(document.getElementById('balance').value);
+      const riskPercent = parseFloat(document.getElementById('risk').value) / 100;
+      const open = parseFloat(document.getElementById('open').value);
+      const high = parseFloat(document.getElementById('high').value);
+      const low = parseFloat(document.getElementById('low').value);
+      const close = parseFloat(document.getElementById('close').value);
+      const pair = document.getElementById('pair').value;
+
+      if ([balance, riskPercent, open, high, low, close].some(isNaN)) {
+        alert('Please enter all values.');
+        return;
+      }
+
+      // Adjust pipValue based on instrument
+      let pipValue, pipMultiplier;
+      if (pair.includes('XAU')) {
+        pipValue = 1; // Gold: $1 per 0.01 move (100 pips = 1.0)
+        pipMultiplier = 100; // Gold uses 2 decimal places
+      } else if (pair.startsWith('^')) {
+        pipValue = 50; // Indices: ~$50 per point (e.g., S&P 500)
+        pipMultiplier = 1; // Indices use whole numbers
+      } else {
+        pipValue = pair.includes('JPY') ? 9 : 10; // Forex: $10/pip, JPY ~$9
+        pipMultiplier = 10000; // Forex uses 4-5 decimal places
+      }
+
+      const signal = close > open ? 'BUY' : 'SELL';
+      const tp = signal === 'BUY' ? high : low;
+      const sl = signal === 'BUY' ? low : high;
+      const risk = balance * riskPercent;
+      const sl_pips = (Math.abs(open - sl) * pipMultiplier).toFixed(2);
+      const lot = (risk / (sl_pips * pipValue)).toFixed(2);
+
+      const body = Math.abs(close - open);
+      let entryZoneLow, entryZoneHigh;
+      if (signal === 'BUY') {
+        entryZoneLow = open.toFixed(5);
+        entryZoneHigh = (open + body * 0.5).toFixed(5);
+      } else {
+        entryZoneHigh = open.toFixed(5);
+        entryZoneLow = (open - body * 0.5).toFixed(5);
+      }
+
+      const resultBox = document.getElementById('result');
+      resultBox.innerHTML = `
+        <p><strong>Signal:</strong> ${signal}</p>
+        <p><strong>Take Profit:</strong> ${tp.toFixed(5)}</p>
+        <p><strong>Sniper Entry:</strong> ${sl.toFixed(5)}</p>
+        <p><strong>Entry Zone:</strong> ${entryZoneLow} - ${entryZoneHigh}</p>
+        <p><strong>Stop Loss (Pips/Points):</strong> ${sl_pips}</p>
+        <p><strong>Lot Size:</strong> ${lot}</p>
+      `;
+      resultBox.style.display = 'block';
+    }
+
+    function copySignal() {
+      const resultBox = document.getElementById('result');
+      if (resultBox.style.display === 'none') {
+        alert('No signal to copy.');
+        return;
+      }
+      navigator.clipboard.writeText(resultBox.innerText)
+        .then(() => alert('Signal copied!'))
+        .catch(() => alert('Copy failed.'));
+    }
+  </script>
+</body>
+</html>
