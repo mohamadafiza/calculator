@@ -138,13 +138,13 @@
     <section class="instructions" aria-labelledby="arahan-title">
       <div class="hdr">
         <span>📘</span>
-        <span id="arahan-title">Arahan Penggunaan</span>
+        <span id="arahan-title">Arahan Penggunaan (Limit 25 kali sehari)</span>
       </div>
       <div class="body">
         <ol>
           <li>Pilih <em>Forex Pair</em> yang dikehendaki.</li>
           <li>Klik <strong>Fetch OHLC (D1)</strong> untuk tarik data harian terbaru (for majors/minors).<br>
-              If API fails (e.g., metals/cryptos/indices), enter <strong>Open/High/Low/Close (D1)</strong> manually from TradingView/MT4.</li>
+              Jika API fails (e.g., metals/cryptos/indices), masukkan nilai <strong>Open/High/Low/Close (D1)</strong> manually from TradingView/MT4.</li>
           <li>Tetapkan <strong>Account Balance (USD)</strong> dan <strong>Risk Per Trade (%)</strong>.</li>
           <li>Pilih <strong>H4 Confirmation Candle</strong> (optional) mengikut analisis anda.</li>
           <li>Klik <strong>Calculate</strong> untuk hasil <em>Signal</em>, <em>TP</em>, <em>Entry Zone</em>, <em>SL</em> dan <em>lot size</em>.</li>
@@ -287,11 +287,12 @@
                        'AUDCAD', 'AUDCHF', 'AUDJPY', 'AUDNZD', 'CADCHF', 'CADJPY', 'CHFJPY',
                        'EURAUD', 'EURCAD', 'EURCHF', 'EURGBP', 'EURJPY', 'EURNZD', 'GBPAUD',
                        'GBPCAD', 'GBPCHF', 'GBPJPY', 'GBPNZD', 'NZDCAD', 'NZDCHF', 'NZDJPY'].includes(pair);
+      const isExotic = ['EURTRY', 'USDHKD', 'USDSGD', 'USDTRY', 'USDZAR'].includes(pair);
       const isMetal = ['XAUUSD', 'XAUEUR', 'XAGUSD', 'XPTUSD'].includes(pair);
       const isCrypto = ['ADAUSD', 'BTCUSD', 'DOGEUSD', 'ETHUSD', 'LTCUSD', 'XRPUSD'].includes(pair);
       const isIndex = ['AUS200', 'DE30', 'FRA40', 'HK50', 'JP225', 'SPX500', 'UK100', 'US30', 'NAS100'].includes(pair);
 
-      if (isForex) {
+      if (isForex || isExotic) {
         const url = `https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=${pair.slice(0, 3)}&to_symbol=${pair.slice(3)}&apikey=${apiKey}&outputsize=compact`;
         try {
           const res = await fetch(url);
@@ -303,7 +304,7 @@
             document.getElementById('high').value = parseFloat(latest['2. high']).toFixed(5);
             document.getElementById('low').value = parseFloat(latest['3. low']).toFixed(5);
             document.getElementById('close').value = parseFloat(latest['4. close']).toFixed(5);
-            document.getElementById('live-price').innerText = `${pair} D1 Close: ${parseFloat(latest['4. close']).toFixed(5)}`;
+            document.getElementById('live-price').innerText = `${pair} D1 Close (Sept 9): ${parseFloat(latest['4. close']).toFixed(5)}`;
           } else {
             alert(`Failed to fetch ${pair}: ${data['Error Message'] || 'No data'}. Use manual entry.`);
             document.getElementById('live-price').innerText = `Enter ${pair} OHLC manually`;
@@ -312,7 +313,7 @@
           alert(`Fetch failed for ${pair}. Use manual entry.`);
           document.getElementById('live-price').innerText = `Enter ${pair} OHLC manually`;
         }
-      } else {
+      } else if (isMetal || isCrypto || isIndex) {
         alert(`Manual entry required for ${pair} (metals/cryptos/indices not supported by free API).`);
         document.getElementById('live-price').innerText = `Enter ${pair} OHLC manually (e.g., from TradingView)`;
         document.getElementById('open').value = '';
