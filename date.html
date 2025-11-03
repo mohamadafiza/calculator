@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Calculator</title>
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:system-ui;background:#e0f7fa;color:#222;padding:20px}
+        h1,h2{text-align:center;color:#00695c;margin-bottom:20px}
+        .card{background:#fff;border-radius:20px;padding:24px;margin:20px 0;box-shadow:0 8px 30px rgba(0,0,0,0.12)}
+        .row{display:flex;gap:12px;align-items:center;margin:16px 0}
+        input[type=text]{flex:1;padding:16px;font-size:18px;border:3px solid #00bfa5;border-radius:14px}
+        .btn{padding:16px 24px;background:#00bfa5;color:#fff;border:none;border-radius:14px;font-weight:600;cursor:pointer}
+        .days-row input[type=number]{flex:1;padding:18px;font-size:28px;font-weight:900;text-align:center;border:3px solid #00bfa5;border-radius:14px}
+        select{flex:2;padding:18px;font-size:18px;border:3px solid #00bfa5;border-radius:14px}
+        .res{margin-top:20px;padding:24px;background:#e0f2f1;border-radius:16px;text-align:center;min-height:100px;display:flex;flex-direction:column;justify-content:center}
+        .BIG{font-size:46px;font-weight:900;color:#00695c;line-height:1.1}
+        .small{font-size:22px;color:#004d40;margin-top:6px}
+        .date-picker-container {
+            position: relative;
+            flex: 1;
+        }
+        .date-picker-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #00bfa5;
+            font-size: 20px;
+        }
+        .date-picker-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        .date-picker-content {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            width: 320px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .date-picker-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .date-picker-nav {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #00bfa5;
+            padding: 8px;
+        }
+        .date-picker-title {
+            font-weight: bold;
+            color: #00695c;
+        }
+        .date-picker-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #004d40;
+        }
+        .date-picker-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+        .date-picker-day {
+            padding: 12px 0;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+        .date-picker-day:hover {
+            background: #e0f2f1;
+        }
+        .date-picker-day.selected {
+            background: #00bfa5;
+            color: white;
+        }
+        .date-picker-day.other-month {
+            color: #ccc;
+        }
+        .date-picker-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 16px;
+        }
+        @media(max-width:480px){.row{flex-direction:column}.btn,input,select{width:100%}}
+    </style>
+</head>
+<body>
+
+<h1>Smart Date Calculator</h1>
+
+<!-- ADD / SUBTRACT -->
+<div class="card">
+    <h2>Add or Subtract Days</h2>
+    <div class="row">
+        <div class="date-picker-container">
+            <input type="text" id="base" placeholder="DD/MM/YYYY">
+            <span class="date-picker-icon" onclick="openDatePicker('base')">📅</span>
+        </div>
+        <button class="btn" onclick="setToday('base')">Today</button>
+    </div>
+    <div class="row days-row">
+        <input type="number" id="days" placeholder=" ">
+        <select id="dir">
+            <option value="+">days AFTER</option>
+            <option value="-">days BEFORE</option>
+        </select>
+    </div>
+    <div class="res" id="addRes"></div>
+</div>
+
+<!-- DAYS BETWEEN -->
+<div class="card">
+    <h2>Days Between Two Dates</h2>
+    <div class="row">
+        <div class="date-picker-container">
+            <input type="text" id="s1" placeholder="DD/MM/YYYY">
+            <span class="date-picker-icon" onclick="openDatePicker('s1')">📅</span>
+        </div>
+        <button class="btn" onclick="setToday('s1')">Today</button>
+    </div>
+    <div class="row">
+        <div class="date-picker-container">
+            <input type="text" id="s2" placeholder="DD/MM/YYYY">
+            <span class="date-picker-icon" onclick="openDatePicker('s2')">📅</span>
+        </div>
+        <button class="btn" onclick="setToday('s2')">Today</button>
+    </div>
+    <div class="res" id="rangeRes"></div>
+</div>
+
+<!-- Date Picker Modal -->
+<div class="date-picker-modal" id="datePickerModal">
+    <div class="date-picker-content">
+        <div class="date-picker-header">
+            <button class="date-picker-nav" onclick="changeMonth(-1)">←</button>
+            <div class="date-picker-title" id="datePickerTitle">Month Year</div>
+            <button class="date-picker-nav" onclick="changeMonth(1)">→</button>
+        </div>
+        <div class="date-picker-weekdays">
+            <div>Su</div>
+            <div>Mo</div>
+            <div>Tu</div>
+            <div>We</div>
+            <div>Th</div>
+            <div>Fr</div>
+            <div>Sa</div>
+        </div>
+        <div class="date-picker-days" id="datePickerDays"></div>
+        <div class="date-picker-footer">
+            <button class="btn" onclick="closeDatePicker()">Close</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const weekdays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+
+let currentDatePicker = null;
+let currentDate = new Date();
+let selectedDate = null;
+
+function parseDMY(str){
+    const parts = str.trim().split('/');
+    if(parts.length!==3) return null;
+    const d = parseInt(parts[0],10);
+    const m = parseInt(parts[1],10);
+    const y = parseInt(parts[2],10);
+    if(isNaN(d)||isNaN(m)||isNaN(y)||m<1||m>12||d<1||d>31) return null;
+    const date = new Date(y, m-1, d);
+    if(date.getDate()!==d || date.getMonth()!==m-1 || date.getFullYear()!==y) return null;
+    return date;
+}
+
+function DDMMYYYY(d){
+    return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+}
+
+function fullMonth(d){
+    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+function setToday(id){
+    const today = new Date();
+    document.getElementById(id).value = DDMMYYYY(today);
+    go();
+}
+
+function go(){
+    // ADD / SUBTRACT → BIG DATE
+    const b = parseDMY(document.getElementById('base').value);
+    const n = parseInt(document.getElementById('days').value)||0;
+    const sign = document.getElementById('dir').value;
+    const r = document.getElementById('addRes');
+    if(b && n!==0){
+        const res = new Date(b);
+        res.setDate(res.getDate() + (sign==='+' ? n : -n));
+        r.innerHTML = `
+            <div class="BIG">${DDMMYYYY(res)}</div>
+            <div class="small">— ${fullMonth(res)} —<br>
+            ${Math.abs(n)} day${Math.abs(n)===1?'':'s'} ${sign==='+'?'after':'before'}</div>`;
+    }else r.innerHTML = '';
+
+    // BETWEEN → BIG DAYS
+    const s = parseDMY(document.getElementById('s1').value);
+    const e = parseDMY(document.getElementById('s2').value);
+    const rr = document.getElementById('rangeRes');
+    if(s && e){
+        const diff = Math.round((e - s) / 86400000);
+        const abs = Math.abs(diff);
+        rr.innerHTML = `
+            <div class="BIG">${abs} day${abs===1?'':'s'} ${diff>=0?'→':'←'}</div>
+            <div class="small">${DDMMYYYY(s)} → ${DDMMYYYY(e)}</div>`;
+    }else rr.innerHTML = '';
+}
+
+// Date Picker Functions
+function openDatePicker(inputId) {
+    currentDatePicker = inputId;
+    const input = document.getElementById(inputId);
+    const value = input.value;
+    
+    if (value) {
+        const date = parseDMY(value);
+        if (date) {
+            currentDate = new Date(date);
+            selectedDate = new Date(date);
+        }
+    } else {
+        selectedDate = null;
+    }
+    
+    renderDatePicker();
+    document.getElementById('datePickerModal').style.display = 'flex';
+}
+
+function closeDatePicker() {
+    document.getElementById('datePickerModal').style.display = 'none';
+}
+
+function changeMonth(direction) {
+    currentDate.setMonth(currentDate.getMonth() + direction);
+    renderDatePicker();
+}
+
+function renderDatePicker() {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    
+    document.getElementById('datePickerTitle').textContent = `${months[month]} ${year}`;
+    
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    
+    const daysContainer = document.getElementById('datePickerDays');
+    daysContainer.innerHTML = '';
+    
+    // Add empty cells for days before the first day of the month
+    for (let i = 0; i < firstDay.getDay(); i++) {
+        const emptyDay = document.createElement('div');
+        emptyDay.className = 'date-picker-day other-month';
+        daysContainer.appendChild(emptyDay);
+    }
+    
+    // Add days of the month
+    for (let day = 1; day <= lastDay.getDate(); day++) {
+        const dayElement = document.createElement('div');
+        dayElement.className = 'date-picker-day';
+        dayElement.textContent = day;
+        
+        const thisDate = new Date(year, month, day);
+        
+        // Check if this day is selected
+        if (selectedDate && 
+            selectedDate.getDate() === day && 
+            selectedDate.getMonth() === month && 
+            selectedDate.getFullYear() === year) {
+            dayElement.classList.add('selected');
+        }
+        
+        dayElement.onclick = function() {
+            selectDate(thisDate);
+        };
+        
+        daysContainer.appendChild(dayElement);
+    }
+}
+
+function selectDate(date) {
+    selectedDate = date;
+    document.getElementById(currentDatePicker).value = DDMMYYYY(date);
+    closeDatePicker();
+    go();
+}
+
+// Real-time update
+document.querySelectorAll('input, select').forEach(el => el.addEventListener('input', go));
+
+// Close date picker when clicking outside
+document.getElementById('datePickerModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeDatePicker();
+    }
+});
+</script>
+</body>
+</html>
