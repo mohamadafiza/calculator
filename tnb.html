@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Kos Elektrik TNB Peralatan Rumah</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px auto; 
+            max-width: 90%; 
+            padding: 10px; 
+        }
+        h2, h3 { text-align: center; }
+        label { 
+            display: block; 
+            margin-top: 10px; 
+            font-size: 16px; 
+        }
+        select, input { 
+            width: 100%; 
+            padding: 8px; 
+            margin-bottom: 10px; 
+            box-sizing: border-box; 
+            font-size: 16px; 
+        }
+        button { 
+            width: 100%; 
+            padding: 12px; 
+            background-color: #4CAF50; 
+            color: white; 
+            border: none; 
+            cursor: pointer; 
+            font-size: 16px; 
+        }
+        #output { 
+            margin-top: 20px; 
+            font-weight: bold; 
+            font-size: 16px; 
+            text-align: center; 
+        }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 20px; 
+        }
+        th, td { 
+            border: 1px solid #ddd; 
+            padding: 8px; 
+            text-align: left; 
+        }
+        th { background-color: #f2f2f2; }
+        @media (max-width: 600px) { 
+            body { font-size: 14px; } 
+            label { font-size: 14px; } 
+            select, input { font-size: 14px; } 
+            button { font-size: 14px; } 
+            #output { font-size: 14px; } 
+        }
+    </style>
+</head>
+<body>
+    <h2>Kalkulator Kos Elektrik TNB</h2>
+    
+    <label for="appliance">Pilih peralatan (atau input manual):</label>
+    <select id="appliance" onchange="updateWattage()">
+        <option value="">-- Pilih --</option>
+        <option value="9">Lampu LED (9W)</option>
+        <option value="65">Kipas siling (65W)</option>
+        <option value="150">Peti sejuk (150W)</option>
+        <option value="40">TV LED 32" (40W)</option>
+        <option value="1000">Air Conditioner (1000W)</option>
+        <option value="1000">Microwave (1000W)</option>
+        <option value="2000">Kettle elektrik (2000W)</option>
+        <option value="500">Mesin basuh (500W)</option>
+        <option value="1000">Seterika (1000W)</option>
+        <option value="500">Periuk nasi (500W)</option>
+        <option value="350">Blender (350W)</option>
+        <option value="1300">Toaster (1300W)</option>
+        <option value="2000">Hair dryer (2000W)</option>
+    </select>
+    
+    <label for="wattage">Wattage (W) - boleh juga ubah manual:</label>
+    <input type="number" id="wattage" min="1" placeholder="Masukkan wattage" oninput="calculate()">
+    
+    <label for="hours">Jam penggunaan sehari:</label>
+    <input type="number" id="hours" min="0" max="24" step="0.1" placeholder="Contoh: 0.5" oninput="calculate()">
+    
+    <label for="days">Hari sebulan (default 30):</label>
+    <input type="number" id="days" value="30" min="1" max="31" oninput="calculate()">
+    
+    <label for="rate">Kadar elektrik rumah (RM/kWh, default 0.2703):</label>
+    <input type="number" id="rate" value="0.2703" step="0.01" oninput="calculate()">
+    
+    <button onclick="calculate()">Auto Kira</button>
+    
+    <div id="output"></div>
+    
+    <h3>Struktur Tariff Domestik TNB Terkini</h3>
+    <p>(Berkuat kuasa mulai Julai 2025 di bawah RP4. Ini adalah anggaran; bil sebenar boleh berbeza berdasarkan total penggunaan rumah.)</p>
+    <table>
+        <tr><th>Komponen</th><th>Kadar</th></tr>
+        <tr><td>Energy (Generation) Charge (≤1,500 kWh)</td><td>27.03 sen/kWh</td></tr>
+        <tr><td>Energy (Generation) Charge (>1,500 kWh)</td><td>37.03 sen/kWh</td></tr>
+        <tr><td>Capacity Charge</td><td>4.55 sen/kWh</td></tr>
+        <tr><td>Network Charge</td><td>12.85 sen/kWh</td></tr>
+        <tr><td>Retail Charge</td><td>RM10/bulan (dikecualikan jika ≤600 kWh)</td></tr>
+        <tr><td>AFA (Automatic Fuel Adjustment) untuk Disember 2025</td><td>-6.42 sen/kWh (rebate; dikecualikan jika ≤600 kWh)</td></tr>
+    </table>
+    <p>Nota: SST 8% dikenakan pada bil keseluruhan jika penggunaan melebihi 600 kWh sebulan. Jika ≤600 kWh, dikecualikan daripada SST. Sumber: Laman rasmi TNB dan pengumuman ST.<grok-card data-id="823f2a" data-type="citation_card"></grok-card><grok-card data-id="6652dd" data-type="citation_card"></grok-card><grok-card data-id="79307a" data-type="citation_card"></grok-card></p>
+    
+    <script>
+        function updateWattage() {
+            const select = document.getElementById('appliance');
+            const wattageInput = document.getElementById('wattage');
+            if (select.value) {
+                wattageInput.value = select.value;
+                calculate(); // Auto hitung bila pilih dropdown
+            }
+        }
+        
+        function calculate() {
+            const wattage = parseFloat(document.getElementById('wattage').value);
+            const hours = parseFloat(document.getElementById('hours').value);
+            const days = parseFloat(document.getElementById('days').value);
+            const rate = parseFloat(document.getElementById('rate').value);
+            
+            if (isNaN(wattage) || isNaN(hours) || isNaN(days) || isNaN(rate)) {
+                document.getElementById('output').innerHTML = 'Sila masukkan semua nilai yang betul.';
+                return;
+            }
+            
+            const kWhDaily = (wattage / 1000) * hours;
+            const kWhMonthly = kWhDaily * days;
+            const costMonthly = kWhMonthly * rate;
+            
+            document.getElementById('output').innerHTML = `
+                kWh sehari: ${kWhDaily.toFixed(2)}<br>
+                kWh sebulan: ${kWhMonthly.toFixed(2)}<br>
+                Kos sebulan: RM ${costMonthly.toFixed(2)}
+            `;
+        }
+    </script>
+</body>
+</html>
