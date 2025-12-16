@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalkulator Elektrik Rumah (Realistik)</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;max-width:420px;margin:auto;padding:12px;background:#f5f7fa}
+h2{text-align:center;font-size:20px}
+label{display:block;margin-top:12px;font-weight:600}
+select,input{width:100%;padding:10px;margin-top:6px;border-radius:10px;border:1px solid #ccc;font-size:15px}
+.mode-box{display:flex;gap:8px;margin-top:8px}
+.mode-box label{flex:1}
+.mode-box span{display:block;text-align:center;background:#e0e0e0;padding:8px;border-radius:12px;font-weight:600;font-size:14px}
+.mode-box input{display:none}
+.mode-box input:checked+span{background:#2e7d32;color:#fff}
+#output,#list{margin-top:16px;padding:12px;background:#fff;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,.1);font-size:14px}
+</style>
+</head>
+<body>
+<h2>Kalkulator Kos Elektrik Rumah</h2>
+
+<label>Tambah Peralatan</label>
+<select id="appliance">
+<option value="">-- pilih --</option>
+<optgroup label="Lampu">
+<option value="9">LED Bulb (9W)</option>
+<option value="18">LED Tube 2 kaki (18W)</option>
+<option value="24">LED Tube 4 kaki (24W)</option>
+</optgroup>
+<optgroup label="24 Jam">
+<option value="15">Router WiFi</option>
+<option value="120">Penapis Air (Coway / CUCKOO)</option>
+</optgroup>
+<optgroup label="Peralatan Besar">
+<option value="80">Kipas Siling</option>
+<option value="300">Peti Sejuk</option>
+<option value="700">Aircond 1HP</option>
+<option value="3500">Water Heater</option>
+<option value="2000">Air Fryer</option>
+</optgroup>
+</select>
+
+<label>Watt</label>
+<input type="number" id="watt">
+
+<label>Jam sehari</label>
+<input type="number" id="hours" step="0.1">
+
+<label>Hari sebulan</label>
+<input type="number" id="days" value="30">
+
+<label>Mode kiraan</label>
+<div class="mode-box">
+<label><input type="radio" name="mode" value="1" checked><span>Average</span></label>
+<label><input type="radio" name="mode" value="1.3"><span>Realistik</span></label>
+<label><input type="radio" name="mode" value="1.6"><span>Worst</span></label>
+</div>
+
+<label>Kadar elektrik (RM/kWh)</label>
+<input type="number" id="rate" value="0.2703" step="0.0001">
+
+<label>Anggaran bil rumah sebulan (RM)</label>
+<input type="number" id="totalBill" value="150">
+
+<button onclick="addItem()" style="margin-top:12px;width:100%;padding:12px;border:none;background:#2e7d32;color:#fff;border-radius:12px;font-size:16px">Tambah</button>
+
+<div id="list"></div>
+<div id="output"></div>
+
+<script>
+let items=[];
+
+appliance.addEventListener('change',()=>{
+  watt.value=appliance.value;
+});
+
+function addItem(){
+  let w=+watt.value,h=+hours.value,d=+days.value;
+  let r=+rate.value,t=+totalBill.value;
+  let m=+document.querySelector('input[name="mode"]:checked').value;
+  if(!w||!h) return alert('Isi watt & jam penggunaan');
+  let kwh=(w/1000)*h*d*m;
+  let cost=kwh*r;
+  items.push({w,h,d,m,kwh,cost});
+  render();
+}
+
+function render(){
+  let totalKwh=0,totalCost=0;
+  let html='<b>Senarai Peralatan</b><br>';
+  items.forEach((i,idx)=>{
+    totalKwh+=i.kwh;
+    totalCost+=i.cost;
+    html+=`#${idx+1} ${i.w}W × ${i.h}j → RM ${i.cost.toFixed(2)}<br>`;
+  });
+  list.innerHTML=html;
+  let percent=(totalCost/+totalBill.value)*100;
+  output.innerHTML=`Jumlah penggunaan: ${totalKwh.toFixed(1)} kWh<br>Jumlah kos: RM ${totalCost.toFixed(2)}<br><b>Sumbangan bil rumah: ${percent.toFixed(1)}%</b>`;
+}
+
+rate.addEventListener('input',render);
+totalBill.addEventListener('input',render);
+</script>
+</body>
+</html>
