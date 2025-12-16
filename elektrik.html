@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Bil Elektrik TNB Lengkap (RP4 Dis 2025)</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px auto; 
+            max-width: 90%; 
+            padding: 10px; 
+        }
+        h2, h3 { text-align: center; }
+        label { 
+            display: block; 
+            margin-top: 10px; 
+            font-size: 16px; 
+        }
+        input { 
+            width: 100%; 
+            padding: 8px; 
+            margin-bottom: 10px; 
+            box-sizing: border-box; 
+            font-size: 16px; 
+        }
+        #output { 
+            margin-top: 20px; 
+            font-size: 16px; 
+        }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 20px; 
+        }
+        th, td { 
+            border: 1px solid #ddd; 
+            padding: 8px; 
+            text-align: left; 
+        }
+        th { background-color: #f2f2f2; }
+        @media (max-width: 600px) { 
+            body { font-size: 14px; } 
+            label { font-size: 14px; } 
+            input { font-size: 14px; } 
+            #output { font-size: 14px; } 
+        }
+    </style>
+</head>
+<body>
+    <h2>Kalkulator Bil Elektrik TNB (RP4 Dis 2025)</h2>
+    
+    <label for="total_kwh">Jumlah Penggunaan (kWh):</label>
+    <input type="number" id="total_kwh" min="0" placeholder="Contoh: 202" oninput="calculate()">
+    
+    <label for="get_kwh">Green Electricity Tariff (kWh, default 0):</label>
+    <input type="number" id="get_kwh" min="0" value="0" placeholder="Contoh: 0" oninput="calculate()">
+    
+    <label for="afa_rate">AFA Rate (sen/kWh, default -6.42 untuk Dis 2025):</label>
+    <input type="number" id="afa_rate" value="-6.42" step="0.01" oninput="calculate()">
+    
+    <div id="output"></div>
+    
+    <h3>Struktur Tariff Domestik RP4 (Jul 2025 - Dis 2027)</h3>
+    <p>Aggaran; bil sebenar boleh berbeza. Sumber: Dokumen TNB & ST.</p>
+    <table>
+        <tr><th>Komponen</th><th>Kadar</th><th>Nota</th></tr>
+        <tr><td>Energy Charge</td><td>27.03 sen/kWh (≤1500 kWh); 37.03 sen/kWh (>1500)</td><td>Untuk semua kWh</td></tr>
+        <tr><td>Capacity Charge</td><td>4.55 sen/kWh</td><td>Untuk semua kWh</td></tr>
+        <tr><td>Network Charge</td><td>12.85 sen/kWh</td><td>Untuk semua kWh</td></tr>
+        <tr><td>Retail Charge</td><td>RM10/bulan</td><td>Dikecualikan jika ≤600 kWh</td></tr>
+        <tr><td>EEI (Rebate)</td><td>Hingga 25 sen/kWh tiered (≤1000 kWh)</td><td>Rebate pada Energy Charge</td></tr>
+        <tr><td>AFA</td><td>-6.42 sen/kWh (Dis 2025)</td><td>Dikecualikan jika ≤600 kWh</td></tr>
+        <tr><td>KWTBB</td><td>1.6% daripada bil</td><td>Dikecualikan jika ≤300 kWh</td></tr>
+        <tr><td>SST</td><td>8% daripada bil</td><td>Dikecualikan jika ≤600 kWh</td></tr>
+        <tr><td>GET</td><td>3.7 sen/kWh tambahan</td><td>Untuk kWh hijau yang dipilih</td></tr>
+    </table>
+    
+    <script>
+        function calculate() {
+            const total = parseFloat(document.getElementById('total_kwh').value) || 0;
+            const get = parseFloat(document.getElementById('get_kwh').value) || 0;
+            const afa_sen = parseFloat(document.getElementById('afa_rate').value) || -6.42;
+            const afa = afa_sen / 100; // sen to RM
+            
+            if (total < 0) return;
+            
+            // Energy Charge
+            let energy = total <= 1500 ? total * 0.2703 : 1500 * 0.2703 + (total - 1500) * 0.3703;
+            
+            // EEI Rebate (tiered, only if <=1000 kWh)
+            let eei = 0;
+            if (total <= 1000) {
+                const tiers = [
+                    {max: 200, rate: 0.25},
+                    {max: 250, rate: 0.245},
+                    {max: 300, rate: 0.225},
+                    {max: 350, rate: 0.21},
+                    {max: 400, rate: 0.17},
+                    {max: 450, rate: 0.145},
+                    {max: 500, rate: 0.12},
+                    {max: 550, rate: 0.105},
+                    {max: 600, rate: 0.09},
+                    {max: 650, rate: 0.075},
+                    {max: 700, rate: 0.055},
+                    {max: 750, rate: 0.045},
+                    {max: 800, rate: 0.04},
+                    {max: 850, rate: 0.025},
+                    {max: 900, rate: 0.01},
+                    {max: 1000, rate: 0.005}
+                ];
+                let remaining = total;
+                let prevMax = 0;
+                for (let tier of tiers) {
+                    const block = Math.min(remaining, tier.max - prevMax);
+                    eei += block * tier.rate;
+                    remaining -= block;
+                    prevMax = tier.max;
+                    if (remaining <= 0) break;
+                }
+            }
+            energy -= eei; // Apply rebate to energy
+            
+            // Capacity & Network
+            const capacity = total * 0.0455;
+            const network = total * 0.1285;
+            
+            // Retail Charge
+            const retail = total > 600 ? 10 : 0;
+            
+            // GET
+            const get_charge = get * 0.037;
+            
+            // Subtotal before AFA
+            let subtotal = energy + capacity + network + retail + get_charge;
+            
+            // AFA (exempted if <=600 kWh)
+            const afa_charge = total > 600 ? total * afa : 0;
+            subtotal += afa_charge;
+            
+            // KWTBB 1.6% if >300 kWh
+            const kwtbb = total > 300 ? subtotal * 0.016 : 0;
+            let bill_before_sst = subtotal + kwtbb;
+            
+            // SST 8% if >600 kWh
+            const sst = total > 600 ? bill_before_sst * 0.08 : 0;
+            
+            // Total Bill
+            const total_bill = bill_before_sst + sst;
+            
+            document.getElementById('output').innerHTML = `
+                <b>Breakdown Bil:</b><br>
+                Energy Charge (selepas EEI): RM ${energy.toFixed(2)}<br>
+                Capacity Charge: RM ${capacity.toFixed(2)}<br>
+                Network Charge: RM ${network.toFixed(2)}<br>
+                Retail Charge: RM ${retail.toFixed(2)}<br>
+                GET Charge: RM ${get_charge.toFixed(2)}<br>
+                AFA: RM ${afa_charge.toFixed(2)}<br>
+                Subtotal: RM ${subtotal.toFixed(2)}<br>
+                KWTBB (1.6%): RM ${kwtbb.toFixed(2)}<br>
+                Bill sebelum SST: RM ${bill_before_sst.toFixed(2)}<br>
+                SST (8%): RM ${sst.toFixed(2)}<br>
+                <b>Total Bil: RM ${total_bill.toFixed(2)}</b>
+            `;
+        }
+    </script>
+</body>
+</html>
