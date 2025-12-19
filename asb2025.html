@@ -17,15 +17,15 @@
         input[type="number"] { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
         label { display: block; margin: 15px 0 5px; font-weight: bold; font-size: 14px; }
         .big-input { width: 100%; padding: 10px; font-size: 18px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
-        .result { margin-top: 30px; padding: 20px; background: #f0fff0; border: 2px solid #90ee90; border-radius: 10px; position: relative; font-size: 14px; }
+        .result { margin-top: 30px; padding: 20px; background: #f0fff0; border: 2px solid #90ee90; border-radius: 10px; font-size: 14px; }
         .info { margin-top: 30px; padding: 15px; background: #fffacd; border: 1px solid #ffd700; border-radius: 10px; font-size: 14px; }
         .zakat-note { font-size: 13px; color: #555; margin-top: 10px; }
         .scenario-result { margin-top: 20px; padding: 15px; background: #e0ffe0; border: 2px solid #228b22; border-radius: 10px; font-size: 16px; text-align: center; }
-        button.copy-btn { position: absolute; top: 10px; right: 10px; padding: 8px 12px; background: #228b22; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; }
+        button.copy-btn { display: block; margin: 20px auto 0; padding: 10px 20px; background: #228b22; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; }
         button.copy-btn:hover { background: #006400; }
         .note { font-size: 13px; color: #555; font-style: italic; margin-top: 10px; }
 
-        /* Tab style - lebih mobile friendly */
+        /* Tab style - mobile friendly */
         .tab-buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 20px 0; }
         .tab-button { flex: 1 1 100px; padding: 12px 8px; background: #ddd; border: none; border-radius: 8px 8px 0 0; cursor: pointer; font-size: 14px; text-align: center; min-width: 100px; }
         .tab-button.active { background: #228b22; color: white; }
@@ -34,7 +34,7 @@
 
         /* Jadual ringkas - mobile friendly */
         .example-table { overflow-x: auto; }
-        .example-table table { min-width: 600px; }
+        .example-table table { min-width: auto; }
 
         @media (max-width: 600px) {
             .container { padding: 15px; }
@@ -60,13 +60,13 @@
         <h2>Jadual Ringkas Contoh Pendapatan</h2>
         <div class="example-table">
             <table>
-                <tr><th>Bilangan Unit</th><th>Pendapatan Kasar (RM)</th><th>Unit Tambahan</th><th>Zakat Anggaran (2.57% pada pendapatan)</th></tr>
-                <tr><td>100</td><td>5.75</td><td>5.75</td><td>0.15</td></tr>
-                <tr><td>1,000</td><td>57.50</td><td>57.50</td><td>1.48</td></tr>
-                <tr><td>10,000</td><td>575.00</td><td>575.00</td><td>14.78</td></tr>
-                <tr><td>100,000</td><td>5,750.00</td><td>5,750.00</td><td>147.78</td></tr>
-                <tr><td>200,000</td><td>11,500.00</td><td>11,500.00</td><td>295.55</td></tr>
-                <tr><td>300,000</td><td>17,250.00</td><td>17,250.00</td><td>443.33</td></tr>
+                <tr><th>Bilangan Unit</th><th>Pendapatan (RM)</th><th>Zakat Anggaran (2.57%)</th></tr>
+                <tr><td>100</td><td>5.75</td><td>0.15</td></tr>
+                <tr><td>1,000</td><td>57.50</td><td>1.48</td></tr>
+                <tr><td>10,000</td><td>575.00</td><td>14.78</td></tr>
+                <tr><td>100,000</td><td>5,750.00</td><td>147.78</td></tr>
+                <tr><td>200,000</td><td>11,500.00</td><td>295.55</td></tr>
+                <tr><td>300,000</td><td>17,250.00</td><td>443.33</td></tr>
             </table>
         </div>
       
@@ -79,28 +79,28 @@
             <button class="tab-button" onclick="openTab('senario3')">Senario 3</button>
             <button class="tab-button" onclick="openTab('senario4')">Senario 4</button>
         </div>
+
         <!-- Tab Kiraan Cepat -->
         <div id="manual" class="tab-content active">
             <h3>Kiraan Cepat (Anggaran Simple)</h3>
             <p><strong>Berdasarkan jumlah unit semasa × 5.75 sen (reinvesmen automatik)</strong></p>
             <label for="units">Masukkan bilangan unit ASB anda:</label>
             <input type="number" class="big-input" id="units" placeholder="Contoh: 100000" min="0" value="100000">
-           
+            
             <div class="result" id="result">
-                <button class="copy-btn" onclick="copyResult()">Copy ke Clipboard</button>
                 <h2>Hasil Pengiraan Anda</h2>
                 <table>
                     <tr><td>Bilangan unit anda</td><td id="displayUnits"></td></tr>
                     <tr><td>Pengagihan pendapatan</td><td>5.75 sen seunit</td></tr>
-                    <tr><td>Pendapatan kasar</td><td id="grossIncome"></td></tr>
-                    <tr><td>Unit tambahan (reinvesmen)</td><td id="extraUnits"></td></tr>
-                    <tr><td>Jumlah unit baru</td><td id="totalUnits"></td></tr>
-                    <tr><td>Zakat anggaran (2.57% pada pendapatan)</td><td id="zakat"></td></tr>
+                    <tr><td>Pendapatan (RM)</td><td id="grossIncome"></td></tr>
+                    <tr><td>Zakat anggaran (2.57% pada profit)</td><td id="zakat"></td></tr>
                     <tr><td><strong>Baki bersih selepas zakat</strong></td><td id="netIncome"></td></tr>
                 </table>
                 <p class="zakat-note">Nota: Zakat anggaran berdasarkan kaedah al-Mustaghallat (baru diluluskan 2025). Auto-deduction bermula pertengahan 2026. Rujuk pusat zakat negeri untuk pengiraan tepat.</p>
+                <button class="copy-btn" onclick="copyResult()">Copy ke Clipboard</button>
             </div>
         </div>
+
         <!-- Senario 1 -->
         <div id="senario1" class="tab-content">
             <h3>Senario 1: Pelaburan Melalui Auto Labur (Contoh RM100 sebulan)</h3>
@@ -126,33 +126,29 @@
                 (606,600 unit ÷ 12 × 5.75 sen)
             </div>
         </div>
-        <!-- Senario 2 - Pembiayaan ASB -->
+
+        <!-- Senario 2 -->
         <div id="senario2" class="tab-content">
             <h3>Senario 2: Pelaburan Menerusi Pembiayaan ASB</h3>
             <p class="note">Contoh: Baki tetap melalui pembiayaan (tiada perubahan bulanan). Anggaran kos pembiayaan (berdasarkan kadar purata bank 2025).</p>
             <label for="s2-amount">Jumlah Pembiayaan / Unit ASB (RM):</label>
             <input type="number" id="s2-amount" value="30000" min="0">
-           
+            
             <label for="s2-rate">Kadar Keuntungan Tahunan (% p.a.) - Purata 4.5%:</label>
             <input type="number" step="0.01" id="s2-rate" value="4.5" min="0">
-           
+            
             <label for="s2-tenure">Tempoh Pembiayaan (tahun):</label>
             <input type="number" id="s2-tenure" value="30" min="1" max="40">
-           
+            
             <label for="s2-takaful">Peratus Caj Takaful (% daripada jumlah - biasanya 5%):</label>
             <input type="number" step="0.01" id="s2-takaful" value="5">
-           
+            
             <div class="scenario-result" id="resultS2">
-                Pendapatan Pengagihan ASB Anggaran (5.75%): <strong>RM1,725.00</strong><br>
-                Jumlah dengan Takaful: RM31,500.00<br>
-                Ansuran Bulanan Anggaran: <strong>RM159.61</strong><br>
-                Total Bayaran Keseluruhan (360 bulan): RM57,459.60<br>
-                Kos Keuntungan Keseluruhan: RM27,459.60<br>
-                Lebihan Bulanan Anggaran (Dividen - Ansuran): <strong>RM-15.86</strong><br>
-                Top Up Tahunan Anggaran (jika defisit): <strong>RM190.32</strong>
+                <!-- Result akan diupdate oleh JS -->
             </div>
             <p class="note">Nota: Pengiraan anggaran sahaja. Kadar sebenar bergantung bank (Maybank/CIMB/RHB ~4.0%-4.8% pada 2025). Dividen ASB boleh offset ansuran di kebanyakan bank. Rujuk bank untuk kadar tepat.</p>
         </div>
+
         <!-- Senario 3 -->
         <div id="senario3" class="tab-content">
             <h3>Senario 3: Pelaburan Dengan Pengeluaran Setiap Bulan</h3>
@@ -178,6 +174,7 @@
                 (244,200 unit ÷ 12 × 5.75 sen)
             </div>
         </div>
+
         <!-- Senario 4 -->
         <div id="senario4" class="tab-content">
             <h3>Senario 4: Tiada Baki Dalam Akaun ASB</h3>
@@ -204,6 +201,7 @@
             </div>
             <p class="note">*Bonus hanya untuk akaun ASB yang berbaki minimum 1 unit sebelum tarikh pengumuman kadar pengagihan pendapatan.</p>
         </div>
+
         <div class="info">
             <h2>Maklumat Keseluruhan Fund</h2>
             <ul>
@@ -215,12 +213,15 @@
             </ul>
             <p>Transaksi ditangguh: 27 - 31 Disember 2025</p>
         </div>
-      
+       
         <p>#ASNB #ASB #ASBDividen</p>
+        
+        <br><br><sub><details><summary>.</summary><p><center>
+                        <img src="https://counter1.optistats.ovh/private/freecounterstat.php?c=7zt8sk72are17fu3bphxu9c1b1g724wl" border="0"></a>
+                    </center></p></sub></details>
     </div>
 
     <script>
-        // Tab function
         function openTab(tabName) {
             const tabContents = document.getElementsByClassName("tab-content");
             for (let i = 0; i < tabContents.length; i++) {
@@ -234,31 +235,24 @@
             event.currentTarget.classList.add("active");
         }
 
-        // Copy result
         function copyResult() {
-            const text = `Bilangan unit: ${document.getElementById('displayUnits').innerText}\nPengagihan: 5.75 sen seunit\nPendapatan kasar: ${document.getElementById('grossIncome').innerText}\nUnit tambahan: ${document.getElementById('extraUnits').innerText}\nJumlah unit baru: ${document.getElementById('totalUnits').innerText}\nZakat anggaran: ${document.getElementById('zakat').innerText}\nBaki bersih selepas zakat: ${document.getElementById('netIncome').innerText}`;
+            const text = `Bilangan unit: ${document.getElementById('displayUnits').innerText}\nPengagihan: 5.75 sen seunit\nProfit (RM): ${document.getElementById('grossIncome').innerText}\nZakat anggaran: ${document.getElementById('zakat').innerText}\nBaki bersih selepas zakat: ${document.getElementById('netIncome').innerText}`;
             navigator.clipboard.writeText(text).then(() => alert('Hasil pengiraan telah dicopy ke clipboard!'));
         }
 
-        // Manual Cepat
         function calculateManual() {
             let units = parseFloat(document.getElementById('units').value) || 0;
             let rate = 5.75 / 100;
             let gross = units * rate;
-            let extra = gross;
-            let totalNew = units + extra;
             let zakat = gross * (2.57 / 100);
             let net = gross - zakat;
             
             document.getElementById('displayUnits').innerText = units.toLocaleString('en-MY') + ' unit';
             document.getElementById('grossIncome').innerText = 'RM ' + gross.toLocaleString('en-MY', {minimumFractionDigits: 2});
-            document.getElementById('extraUnits').innerText = extra.toLocaleString('en-MY', {minimumFractionDigits: 0}) + ' unit';
-            document.getElementById('totalUnits').innerText = totalNew.toLocaleString('en-MY', {minimumFractionDigits: 0}) + ' unit';
             document.getElementById('zakat').innerText = 'RM ' + zakat.toLocaleString('en-MY', {minimumFractionDigits: 2});
             document.getElementById('netIncome').innerText = 'RM ' + net.toLocaleString('en-MY', {minimumFractionDigits: 2});
         }
 
-        // Scenario calculation
         function calculateScenario(className, totalId, resultId, rateSen = 5.75) {
             const inputs = document.querySelectorAll('.' + className);
             let total = 0;
@@ -268,7 +262,6 @@
             document.getElementById(resultId).innerHTML = `Pendapatan Pengagihan: <strong>RM${income.toLocaleString('en-MY', {minimumFractionDigits: 2})}</strong><br>(${total.toLocaleString('en-MY')} unit ÷ 12 × ${rateSen} sen)` + (rateSen === 5.50 ? ' - Bonus khas' : '');
         }
 
-        // Senario 2 - Pembiayaan ASB
         function calculateS2() {
             let amount = parseFloat(document.getElementById('s2-amount').value) || 0;
             let rate = parseFloat(document.getElementById('s2-rate').value) / 100 / 12 || 0;
@@ -307,7 +300,6 @@
                 ${topUpText}`;
         }
 
-        // Load & Listeners
         window.onload = function() {
             calculateManual();
             calculateScenario('s1', 'totalS1', 'resultS1', 5.75);
