@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nanopods Stok</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 15px;
+      color: #333;
+    }
+    h2 {
+      text-align: center;
+      margin: 15px 0;
+      color: #444;
+    }
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      padding: 12px 15px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .flavor {
+      flex: 1;
+      font-weight: 500;
+    }
+    input[type="number"] {
+      width: 80px;
+      text-align: center;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .copy-area {
+      margin-top: 25px;
+      text-align: center;
+    }
+    button {
+      background: #0066cc;
+      color: white;
+      border: none;
+      padding: 14px 30px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0055aa;
+    }
+    #result {
+      margin-top: 15px;
+      white-space: pre-wrap;
+      background: #fff;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      min-height: 80px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Stok Nanopods</h2>
+
+  <div class="item"><div class="flavor">Coffee</div><input type="number" min="0" data-flavor="Coffee"></div>
+  <div class="item"><div class="flavor">Grape</div><input type="number" min="0" data-flavor="Grape"></div>
+  <div class="item"><div class="flavor">Mango</div><input type="number" min="0" data-flavor="Mango"></div>
+  <div class="item"><div class="flavor">Apple</div><input type="number" min="0" data-flavor="Apple"></div>
+  <div class="item"><div class="flavor">Coffee Hazelnut</div><input type="number" min="0" data-flavor="Coffee Hazelnut"></div>
+  <div class="item"><div class="flavor">Grapple</div><input type="number" min="0" data-flavor="Grapple"></div>
+  <div class="item"><div class="flavor">Strawberry Apple</div><input type="number" min="0" data-flavor="Strawberry Apple"></div>
+  <div class="item"><div class="flavor">Strawberry Vanilla</div><input type="number" min="0" data-flavor="Strawberry Vanilla"></div>
+  <div class="item"><div class="flavor">Banana Vanilla</div><input type="number" min="0" data-flavor="Banana Vanilla"></div>
+  <div class="item"><div class="flavor">Honeydew</div><input type="number" min="0" data-flavor="Honeydew"></div>
+  <div class="item"><div class="flavor">Tabac Classic</div><input type="number" min="0" data-flavor="Tabac Classic"></div>
+  <div class="item"><div class="flavor">Lychee</div><input type="number" min="0" data-flavor="Lychee"></div>
+  <div class="item"><div class="flavor">Guava</div><input type="number" min="0" data-flavor="Guava"></div>
+  <div class="item"><div class="flavor">Jackfruit</div><input type="number" min="0" data-flavor="Jackfruit"></div>
+  <div class="item"><div class="flavor">Butterscotch</div><input type="number" min="0" data-flavor="Butterscotch"></div>
+  <div class="item"><div class="flavor">Popcorn Caramel</div><input type="number" min="0" data-flavor="Popcorn Caramel"></div>
+  <div class="item"><div class="flavor">Buttercake</div><input type="number" min="0" data-flavor="Buttercake"></div>
+  <div class="item"><div class="flavor">Angoor</div><input type="number" min="0" data-flavor="Angoor"></div>
+  <div class="item"><div class="flavor">Stoberi</div><input type="number" min="0" data-flavor="Stoberi"></div>
+  <div class="item"><div class="flavor">Mystic Gold Coffee</div><input type="number" min="0" data-flavor="Mystic Gold Coffee"></div>
+  <div class="item"><div class="flavor">Tabac Creamy Sweet Corn</div><input type="number" min="0" data-flavor="Tabac Creamy Sweet Corn"></div>
+  <div class="item"><div class="flavor">Tabac Creamy Strawberry</div><input type="number" min="0" data-flavor="Tabac Creamy Strawberry"></div>
+  <div class="item"><div class="flavor">Tropix Markisa Twist</div><input type="number" min="0" data-flavor="Tropix Markisa Twist"></div>
+  <div class="item"><div class="flavor">Blueberry</div><input type="number" min="0" data-flavor="Blueberry"></div>
+
+  <div class="copy-area">
+    <button onclick="copyToClipboard()">Copy Stok ke Clipboard</button>
+    <div id="result"></div>
+  </div>
+</div>
+
+<script>
+function copyToClipboard() {
+  const inputs = document.querySelectorAll('input[type="number"]');
+  let text = "*Nanopods*\n";
+  let hasItem = false;
+
+  inputs.forEach(input => {
+    const qty = input.value.trim();
+    const flavor = input.getAttribute('data-flavor');
+    
+    if (qty !== "" && qty !== "0" && !isNaN(qty)) {
+      text += `${flavor} - ${qty}\n`;
+      hasItem = true;
+    }
+  });
+
+  if (!hasItem) {
+    text = "Tiada stok dimasukkan / semua 0";
+  }
+
+  // Copy ke clipboard
+  navigator.clipboard.writeText(text).then(() => {
+    const resultDiv = document.getElementById('result');
+    resultDiv.textContent = text;
+    resultDiv.style.display = 'block';
+    
+    setTimeout(() => {
+      resultDiv.style.display = 'none';
+    }, 8000);
+  }).catch(err => {
+    alert("Gagal copy: " + err);
+  });
+}
+</script>
+</body>
+</html>
