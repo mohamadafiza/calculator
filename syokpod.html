@@ -79,6 +79,7 @@
 <body>
 <div class="container">
   <h2>Stok Syokpod Cartridge</h2>
+  
   <div class="item"><div class="flavor">Banana Vanilla</div><input type="number" min="0" data-flavor="Banana Vanilla"></div>
   <div class="item"><div class="flavor">Blackcurrant Lychee (Rybena Lychee)</div><input type="number" min="0" data-flavor="Blackcurrant Lychee (Rybena Lychee)"></div>
   <div class="item"><div class="flavor">Cinnamon (Creme Brulee)</div><input type="number" min="0" data-flavor="Cinnamon (Creme Brulee)"></div>
@@ -112,6 +113,13 @@
   <div class="item"><div class="flavor">Teh</div><input type="number" min="0" data-flavor="Teh"></div>
   <div class="item"><div class="flavor">Jackfruit</div><input type="number" min="0" data-flavor="Jackfruit"></div>
   
+  <!-- Rasa baru ditambah -->
+  <div class="item"><div class="flavor">Mango Vanilla (Mango Ice Cream)</div><input type="number" min="0" data-flavor="Mango Vanilla (Mango Ice Cream)"></div>
+  <div class="item"><div class="flavor">Pineapple Blackcurrant</div><input type="number" min="0" data-flavor="Pineapple Blackcurrant"></div>
+  <div class="item"><div class="flavor">Lemon (Ice Lemon Tea)</div><input type="number" min="0" data-flavor="Lemon (Ice Lemon Tea)"></div>
+  <div class="item"><div class="flavor">Strawberry Peach</div><input type="number" min="0" data-flavor="Strawberry Peach"></div>
+  <div class="item"><div class="flavor">Apple Plum</div><input type="number" min="0" data-flavor="Apple Plum"></div>
+
   <div class="copy-area">
     <button onclick="copyToClipboard()">Copy To Clipboard</button>
     <div id="result"></div>
@@ -126,7 +134,7 @@ function copyToClipboard() {
   inputs.forEach(input => {
     const qty = input.value.trim();
     const flavor = input.getAttribute('data-flavor');
-   
+  
     if (qty !== "" && qty !== "0" && !isNaN(qty)) {
       text += `${flavor} - ${qty}\n`;
       hasItem = true;
@@ -140,7 +148,7 @@ function copyToClipboard() {
     const resultDiv = document.getElementById('result');
     resultDiv.textContent = text;
     resultDiv.style.display = 'block';
-   
+  
     setTimeout(() => {
       resultDiv.style.display = 'none';
     }, 8000);
